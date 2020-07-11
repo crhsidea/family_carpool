@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'create_new_task_page.dart';
 import 'package:family_carpool/dates_list.dart';
 import 'package:family_carpool/themes/colors.dart';
-import 'package:family_carpool/widgets/calendar_dates.dart';
-import 'package:family_carpool/widgets/task_container.dart';
-import 'package:family_carpool/widgets/back_button.dart';
+import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/calendar_dates.dart';
+import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/task_container.dart';
+import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/back_button.dart';
 
 
 class CalendarPage extends StatelessWidget {

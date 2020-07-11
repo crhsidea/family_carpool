@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
-import 'package:family_carpool/widgets/top_container.dart';
-import 'package:family_carpool/widgets/back_button.dart';
-import 'package:family_carpool/widgets/my_textfield.dart';
+import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/top_container.dart';
+import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/back_button.dart';
+import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/my_textfield.dart';
 import 'package:family_carpool/screens/home_page.dart';
+import 'package:family_carpool/geolocation_test.dart';
 
 class CreateNewTaskPage extends StatelessWidget {
   @override
@@ -131,35 +132,35 @@ class CreateNewTaskPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
+                      ),
+                      Container(
+                        height: 300,
+                        width: width,
+                        child: GeoLocator(),
+                      ),
+                      Container(
+                        height: 80,
+                        width: width,
+                        child: Container(
+                          child: Text(
+                            'Create Task',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18),
+                          ),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                          width: width - 40,
+                          decoration: BoxDecoration(
+                            color: LightColors.kBlue,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 )),
-            Container(
-              height: 80,
-              width: width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      'Create Task',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18),
-                    ),
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                    width: width - 40,
-                    decoration: BoxDecoration(
-                      color: LightColors.kBlue,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/home_page.dart';
+import 'screens/welcome_page.dart';
 import 'themes/colors.dart';
 import 'package:flutter/services.dart';
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: HomePage(),
+      home: WelcomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:http/http.dart' as http;
 
 class GeoLocator extends StatefulWidget {
   @override
@@ -11,7 +14,7 @@ class GeoLocator extends StatefulWidget {
 
 class _GeoLocatorState extends State<GeoLocator> {
 
-  LatLng location;
+  LatLng location = LatLng(30, -95);
   // ignore: close_sinks
   StreamController<double> controller;
   Stream stream;
@@ -20,9 +23,10 @@ class _GeoLocatorState extends State<GeoLocator> {
   Locator() async {
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if(position!=null) {
-      setState(() {
-        location = new LatLng(position.latitude, position.longitude);
-      });
+      if(!isViewer)
+        setState(() {
+          location = new LatLng(position.latitude, position.longitude);
+        });
 
 
       updateMarker();
@@ -31,7 +35,7 @@ class _GeoLocatorState extends State<GeoLocator> {
         mapController.animateCamera(
             CameraUpdate.newCameraPosition(new CameraPosition(
                 target: location,
-                zoom: 18.00
+                zoom: 19.00
             )));
       }
 
@@ -61,6 +65,8 @@ class _GeoLocatorState extends State<GeoLocator> {
 
   GoogleMapController mapController;
 
+  String baseaddr = "http://192.168.0.12:8080/";
+
   final LatLng _center = const LatLng(45.521563, -122.677433);
 
   bool streaming = false;
@@ -69,12 +75,35 @@ class _GeoLocatorState extends State<GeoLocator> {
     mapController = controller;
   }
 
+  String password = "12345678";
+  String userdata = "{rating:4}";
+  String name = "Prasann";
+
+  bool isViewer = true;
+
+
   Stream<Map<String, dynamic>> streamLocation() async* {
 
-    while (true) {
-      if (location!=null){
-        await Future.delayed(Duration(seconds: 1));
-        yield {'lat':location.latitude, 'long':location.longitude};
+    if (!isViewer)
+      while (true) {
+        if (location!=null){
+          await Future.delayed(Duration(milliseconds: 2000));
+          await http.get(baseaddr+"users/update/1/"+name+"/"+password+"/"+location.latitude.toString()+"/"+location.longitude.toString()+"/"+userdata);
+          print(baseaddr+"users/update/1/"+name+"/"+password+"/"+location.latitude.toString()+"/"+location.longitude.toString()+"/"+userdata);
+          yield {'lat':location.latitude, 'long':location.longitude};
+        }
+      }
+    else{
+      while (true) {
+        if (location!=null){
+          await Future.delayed(Duration(milliseconds: 2000));
+          var h = await http.get(baseaddr+"users/byname/"+name);
+
+          setState(() {
+            location = LatLng(json.decode(h.body)["lat"], json.decode(h.body)["lng"]);
+          });
+          yield {'lat':location.latitude, 'long':location.longitude};
+        }
       }
     }
 

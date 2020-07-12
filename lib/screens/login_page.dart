@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:family_carpool/widgets/login/bezier_container.dart';
+import 'package:family_carpool/models/user.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       onPressed: () {
-
+        User(email: email.text, password: password.text);
       },
     );
   }

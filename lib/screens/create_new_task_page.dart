@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
-import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/top_container.dart';
-import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/back_button.dart';
-import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/my_textfield.dart';
+import 'package:family_carpool/widgets/home/top_container.dart';
+import 'package:family_carpool/widgets/home/back_button.dart';
+import 'package:family_carpool/widgets/home/my_textfield.dart';
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/geolocation_test.dart';
 

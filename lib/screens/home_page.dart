@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:family_carpool/screens/calendar_Page.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/task_column.dart';
-import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/actice_project_card.dart';
-import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/top_container.dart';
+import 'package:family_carpool/widgets/home/task_column.dart';
+import 'package:family_carpool/widgets/home/actice_project_card.dart';
+import 'package:family_carpool/widgets/home/top_container.dart';
 
 class HomePage extends StatelessWidget {
   Text subheading(String title) {

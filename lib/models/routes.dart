@@ -11,8 +11,14 @@ class Routes {
 
   Routes({this.dates, this.addresses, this.users, this.lat, this.lng, this.routedata});
 
-  get() {
-    http.get('users/byname/name?');
+  post() {
+    http.post(
+      'users/byname/name?',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: toJson(),
+    );
     //todo: put name later
   }
 

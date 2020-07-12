@@ -11,8 +11,14 @@ class User {
 
   User({this.name, this.email, this.password, this.lat, this.lng});
 
-  get() {
-    http.get('users/byname/name?');
+  post() {
+    http.post(
+      'users/byname/name?',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: toJson(),
+    );
     //todo: put name later
   }
 

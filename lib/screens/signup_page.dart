@@ -1,7 +1,14 @@
+
+import 'dart:io';
+
+import 'package:family_carpool/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/widgets/login/bezier_container.dart';
+import 'package:path_provider/path_provider.dart';
 import 'login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key, this.title}) : super(key: key);
@@ -17,6 +24,28 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController name = new TextEditingController();
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
+
+
+
+  String baseaddr = "http://192.168.0.12:8080/";
+
+  setUser(BuildContext context) async{
+    print("changing language");
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final File file = File('${directory.path}/language.txt');
+    await file.writeAsString(name.text.toString());
+
+    await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+"{email:${email.text.toString()}");
+
+
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+  }
+
+
 
   Widget _backButton() {
     return InkWell(
@@ -64,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _submitButton() {
+  Widget _submitButton(BuildContext context) {
     return FlatButton(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -89,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
       onPressed: () {
-        
+        setUser(context);
       },
     );
   }
@@ -190,7 +219,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    _submitButton(),
+                    _submitButton(context),
                     SizedBox(height: height * .14),
                     _loginAccountLabel(),
                   ],

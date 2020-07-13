@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:family_carpool/screens/home_page.dart';
+import 'package:family_carpool/screens/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:path_provider/path_provider.dart';
 //import the page that comes after onboarding... likely login
 
 
@@ -203,6 +208,37 @@ class _IntroScreen extends State<IntroScreen> {
 }
 
 class FinalScreen extends StatelessWidget {
+  getSetLanguage()async{
+    int val = 0;
+
+  }
+
+  Future checkSso(BuildContext context)async{
+
+    String val = "";
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/language.txt');
+      String temp = await file.readAsString();
+      val = temp;
+    } catch (e) {
+      print("Couldn't read file");
+    }
+    if(val!="")
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    else{
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomePage()),
+      );
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -246,17 +282,15 @@ class FinalScreen extends StatelessWidget {
                     color: Colors.white,
                     icon: Icon(Icons.arrow_forward_ios),
                     iconSize: 40,
-                    //onPressed:(){
-                      //Navigator.push(
-                        //context,
-                        //MaterialPageRoute(builder: (context) => (StudentProfilePage(3,4,5,"Samuel"))),
-                      //);
-                    //},
-                  )
-                ])));
-  }
-}
+                    onPressed:(){
+                      checkSso(context);
+                    }
+    )
+    ])));
+    }
 
+
+}
 class FirstScreen extends StatefulWidget {
   final String title;
 

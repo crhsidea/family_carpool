@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:family_carpool/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:family_carpool/widgets/login/bezier_container.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -16,6 +20,18 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
+
+  String baseaddr = "http://192.168.0.12:8080/";
+
+  Future authenticate(BuildContext context) async{
+    var h = await http.get(baseaddr+"users/byname/"+email.text.toString());
+    if (json.decode(h.body)["password"]==password.text.toString()){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }
+  }
 
   Widget _backButton() {
     return InkWell(
@@ -63,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _submitButton() {
+  Widget _submitButton(BuildContext context) {
     return FlatButton(
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -88,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       onPressed: () {
-
+        authenticate(context);
       },
     );
   }
@@ -153,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Email", email),
+        _entryField("Name", email),
         _entryField("Password", password, isPassword: true),
       ],
     );
@@ -183,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 50),
                       _emailPasswordWidget(),
                       SizedBox(height: 20),
-                      _submitButton(),
+                      _submitButton(context),
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         alignment: Alignment.centerRight,

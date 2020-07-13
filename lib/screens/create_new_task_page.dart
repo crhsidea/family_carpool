@@ -1,12 +1,86 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:family_carpool/widgets/home/top_container.dart';
 import 'package:family_carpool/widgets/home/back_button.dart';
 import 'package:family_carpool/widgets/home/my_textfield.dart';
+import 'package:http/http.dart' as http;
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/geolocation_test.dart';
+import 'package:path_provider/path_provider.dart';
 
-class CreateNewTaskPage extends StatelessWidget {
+class CreateNewTaskPage extends StatefulWidget {
+  @override
+  _CreateNewTaskPageState createState() => _CreateNewTaskPageState();
+}
+
+class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
+
+  DateTime _date;
+  TimeOfDay initTime;
+  TimeOfDay endTime;
+  TextEditingController startController;
+  TextEditingController endController;
+  TextEditingController descriptController;
+  TextEditingController nameController;
+  double lat = 0;
+  double lng = 0;
+
+  String baseaddr = "http://192.168.0.12:8080/";
+
+
+
+  int combinetime(TimeOfDay t){
+    return  DateTime(_date.year, _date.month, _date.day, t.hour, t.minute).millisecondsSinceEpoch;
+  }
+
+
+  //TODO add so that it stores the rest of the route as json
+  String getRouteJson(){
+    var routeJson = {
+      'description':descriptController.text.toString(),
+      'title':nameController.text.toString()
+    };
+    //edit this line to add route waypoints (map string dynamic)
+    //routeJson['points'] = ...
+    return routeJson.toString();
+
+  }
+
+  Future<String> getUserName()async{
+
+    String val = "";
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/language.txt');
+      String temp = await file.readAsString();
+      val = temp;
+    } catch (e) {
+      print("Couldn't read file");
+    }
+
+    return val;
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    startController = new TextEditingController();
+    endController = new TextEditingController();
+    descriptController = new TextEditingController();
+    nameController = new TextEditingController();
+  }
+
+
+  Future submitRoute()async{
+    var timelist = [combinetime(initTime), combinetime(endTime)];
+    var namelist =[await getUserName()];
+    var addrlist = [startController.text.toString(), endController.text.toString()];
+    await http.get(baseaddr+"routes/add/1/"+timelist.toString()+"/"+namelist.toString()+"/"+addrlist.toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -31,7 +105,7 @@ class CreateNewTaskPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Create new task',
+                        'Schedule New Trip',
                         style: TextStyle(
                             fontSize: 30.0, fontWeight: FontWeight.w700),
                       ),
@@ -42,18 +116,44 @@ class CreateNewTaskPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          MyTextField(label: 'Title'),
+                          MyTextField(label: 'Title', controller: nameController,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
                               Expanded(
-                                child: MyTextField(
-                                  label: 'Date',
-                                  icon: downwardIcon,
+                                child: Text(
+                                  _date!=null?_date.toIso8601String().toString():"Date"
                                 ),
                               ),
-                              HomePage.calendarIcon(),
+                              IconButton(
+                                icon: Icon(Icons.calendar_today),
+                                onPressed:(){
+                                  showDatePicker(context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime(2222)
+                                  ).then((date){
+                                    setState((){
+                                      _date = date;
+                                    });
+                                    showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute)).then((value){
+                                      setState(() {
+                                        initTime = value;
+                                      });
+                                    });
+                                    showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute)).then((value){
+                                      setState(() {
+                                        endTime = value;
+                                      });
+                                    });
+                                  });
+                                }
+                              )
                             ],
                           )
                         ],
@@ -70,24 +170,35 @@ class CreateNewTaskPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Expanded(
-                              child: MyTextField(
-                                label: 'Start Time',
-                                icon: downwardIcon,
+                              child: Text(
+                                initTime!=null?initTime.format(context).toString():"Start Time"
                               )),
                           SizedBox(width: 40),
                           Expanded(
-                            child: MyTextField(
-                              label: 'End Time',
-                              icon: downwardIcon,
-                            ),
+                              child: Text(
+                                  endTime!=null?endTime.format(context).toString():"End Time"
+                              ),
                           ),
                         ],
                       ),
                       SizedBox(height: 20),
                       MyTextField(
+                        label: 'Start Address',
+                        minLines: 3,
+                        maxLines: 3,
+                        controller: startController,
+                      ),
+                      MyTextField(
+                        label: 'End Address',
+                        minLines: 3,
+                        maxLines: 3,
+                        controller: endController,
+                      ),
+                      MyTextField(
                         label: 'Description',
                         minLines: 3,
                         maxLines: 3,
+                        controller: descriptController,
                       ),
                       SizedBox(height: 20),
                       Container(
@@ -136,7 +247,7 @@ class CreateNewTaskPage extends StatelessWidget {
                       Container(
                         height: 300,
                         width: width,
-                        child: GeoLocator(),
+                        child: Text("I'm the Map"),
                       ),
                       Container(
                         height: 80,

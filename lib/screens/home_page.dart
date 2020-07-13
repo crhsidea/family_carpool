@@ -5,6 +5,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/task_column.dart';
 import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/actice_project_card.dart';
 import 'file:///C:/Users/micha/AndroidStudioProjects/family_carpool/lib/widgets/home/top_container.dart';
+import 'package:family_carpool/widgets/bottom_bar.dart';
 
 class HomePage extends StatelessWidget {
   Text subheading(String title) {
@@ -33,82 +34,84 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: LightColors.kLightYellow,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            TopContainer(
-              height: 200,
-              width: width,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      color: LightColors.kLightYellow,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TopContainer(
+            height: 200,
+            width: width,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Icon(Icons.menu,
+                          color: LightColors.kDarkBlue, size: 30.0),
+                      Icon(Icons.search,
+                          color: LightColors.kDarkBlue, size: 25.0),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0, vertical: 0.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Icon(Icons.menu,
-                            color: LightColors.kDarkBlue, size: 30.0),
-                        Icon(Icons.search,
-                            color: LightColors.kDarkBlue, size: 25.0),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 0.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          CircularPercentIndicator(
-                            radius: 90.0,
-                            lineWidth: 5.0,
-                            animation: true,
-                            percent: 0.75,
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: LightColors.kRed,
-                            backgroundColor: LightColors.kDarkYellow,
-                            center: CircleAvatar(
-                              backgroundColor: LightColors.kBlue,
-                              radius: 35.0,
-                              backgroundImage: AssetImage(
-                                'assets/images/Obama.PNG',
-                              ),
+                        CircularPercentIndicator(
+                          radius: 90.0,
+                          lineWidth: 5.0,
+                          animation: true,
+                          percent: 0.75,
+                          circularStrokeCap: CircularStrokeCap.round,
+                          progressColor: LightColors.kRed,
+                          backgroundColor: LightColors.kDarkYellow,
+                          center: CircleAvatar(
+                            backgroundColor: LightColors.kBlue,
+                            radius: 35.0,
+                            backgroundImage: AssetImage(
+                              'assets/images/Obama.PNG',
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                child: Text(
-                                  'Obama',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize: 22.0,
-                                    color: LightColors.kDarkBlue,
-                                    fontWeight: FontWeight.w800,
-                                  ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Text(
+                                'Obama',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: 22.0,
+                                  color: LightColors.kDarkBlue,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
-                              Container(
-                                child: Text(
-                                  'App Developer',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black45,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                            ),
+                            Container(
+                              child: Text(
+                                'App Developer',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ]),
-            ),
-            Expanded(
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ]),
+          ),
+          Expanded(
+            child: Container(
+              height: 500,
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -211,8 +214,8 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

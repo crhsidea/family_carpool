@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'screens/welcome_page.dart';
 import 'themes/colors.dart';
 import 'package:flutter/services.dart';
+import 'screens/home_page.dart';
+import 'widgets/bottom_bar.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: LightColors.kLightYellow, // navigation bar color
-    statusBarColor: Color(0xffffb969), // status bar color
-  ));
-
   return runApp(MyApp());
 }
 
@@ -26,7 +23,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: WelcomePage(),
+      home: BottomBar(),
       debugShowCheckedModeBanner: false,
     );
   }

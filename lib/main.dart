@@ -1,9 +1,9 @@
-import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:flutter/material.dart';
 import 'screens/welcome_page.dart';
 import 'themes/colors.dart';
 import 'package:flutter/services.dart';
+import 'notification_test.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: HomePage(),
+      home: Notify(),
       debugShowCheckedModeBanner: false,
     );
   }

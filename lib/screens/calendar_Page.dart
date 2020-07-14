@@ -1,17 +1,28 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:family_carpool/widgets/home/back_button.dart';
 import 'package:family_carpool/widgets/home/calendar_dates.dart';
 import 'package:family_carpool/widgets/home/task_container.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'create_new_task_page.dart';
 import 'package:family_carpool/dates_list.dart';
 import 'package:family_carpool/themes/colors.dart';
+import 'package:validators/sanitizers.dart';
+import 'package:http/http.dart' as http;
 
 
 
-class CalendarPage extends StatelessWidget {
+class CalendarPage extends StatefulWidget {
+  @override
+  _CalendarPageState createState() => _CalendarPageState();
+}
+
+class _CalendarPageState extends State<CalendarPage> {
   Widget _dashedText() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 15),
+      padding: EdgeInsets.symmetric(vertical: 13),
       child: Text(
         '------------------------------------------',
         maxLines: 1,
@@ -21,6 +32,88 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
+  List<DateTime> dateList = new List<DateTime>();
+
+  List<TimeOfDay> initTimeList = new List<TimeOfDay>();
+
+  List<TimeOfDay> endTimeList = new List<TimeOfDay>();
+
+  List<String> startAddressList = new List<String>();
+
+  List<String> endAddressList = new List<String>();
+
+  List<String> titleList = new List<String>();
+
+  List<String> descriptionList = new List<String>();
+
+  List<String> namesList = new List<String>();
+
+  List<double> latList = new List<double>();
+
+  List<double> lngList = new List<double>();
+
+  String baseaddr = 'http://192.168.0.12:8080/';
+
+  int SelectedDate = DateTime.now().day;
+
+  Future<String> getCurUser() async {
+
+    String val = "";
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/language.txt');
+      String temp = await file.readAsString();
+      val = temp;
+    } catch (e) {
+      print("Couldn't read file");
+    }
+    return val;
+
+  }
+
+
+  bool loaded = false;
+
+
+  Future getRoutes() async{
+
+    //Route Data Receive Here
+    var username = await getCurUser();
+
+    var h = await http.get(baseaddr+"routes/name/"+username);
+
+
+    print(json.encode(["6", "hello", "hi"]));
+
+    for (var data in json.decode(h.body)){
+      print(data);
+      setState(() {
+        dateList.add(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0]));
+        initTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0])));
+        endTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[1])));
+        startAddressList.add(json.decode(data['addresses'])[0]);
+        endAddressList.add(json.decode(data['addresses'])[1]);
+        titleList.add(json.decode(data['routedata'])['title']);
+        descriptionList.add(json.decode(data['routedata'])['description']);
+        namesList.add(data['users'].toString());
+        latList.add(data['lat']);
+        lngList.add(data['lng']);
+      });
+    }
+
+    setState(() {
+      loaded = true;
+    });
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRoutes();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +184,7 @@ class CalendarPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'April, 2020',
+                  '${month[DateTime.now().month]}, ${DateTime.now().year}',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
                 ),
               ),
@@ -100,14 +193,27 @@ class CalendarPage extends StatelessWidget {
                 height: 58.0,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: days.length,
+                  itemCount: days.length-1,
                   itemBuilder: (BuildContext context, int index) {
-                    return CalendarDates(
-                      day: days[index],
-                      date: dates[index],
-                      dayColor: index == 0 ? LightColors.kRed : Colors.black54,
-                      dateColor:
-                      index == 0 ? LightColors.kRed : LightColors.kDarkBlue,
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          SelectedDate = toInt(dates[index]);
+                        });
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 20,
+                          ),
+                          CalendarDates(
+                            day:  days[DateTime.now().weekday+index],
+                            date: dates[index],
+                            dayColor: days[DateTime.now().weekday+index] == 'Sun' ? LightColors.kRed : Colors.black54,
+                            dateColor: days[DateTime.now().weekday+index] == 'Sun' ? LightColors.kRed : LightColors.kDarkBlue,
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -127,58 +233,91 @@ class CalendarPage extends StatelessWidget {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) =>
-                                Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(vertical: 15.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '${time[index]} ${time[index] > 8 ? 'PM' : 'AM'}',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(vertical: 15.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '${time[index]} ${index == 0 || index > 11 && index < 24 ? 'PM' : 'AM'}',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.black54,
                                   ),
                                 ),
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(
                           width: 20,
                         ),
-                        Expanded(
-                          flex: 5,
-                          child: ListView(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            children: <Widget>[
-                              _dashedText(),
-                              TaskContainer(
-                                title: 'Project Research',
-                                subtitle:
-                                'Discuss with the colleagues about the future plan',
-                                boxColor: LightColors.kLightYellow2,
+                        Stack(
+                          children: <Widget>[
+                            Container(
+                              height: 1223.5,
+                              width: MediaQuery.of(context).size.width-110,
+                              child: ListView(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                children: <Widget>[
+                                  Container(
+                                    height: 3,
+                                  ),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                ],
                               ),
-                              _dashedText(),
-                              TaskContainer(
-                                title: 'Work on Medical App',
-                                subtitle: 'Add medicine tab',
-                                boxColor: LightColors.kLavender,
-                              ),
-                              TaskContainer(
-                                title: 'Call',
-                                subtitle: 'Call to david',
-                                boxColor: LightColors.kPalePink,
-                              ),
-                              TaskContainer(
-                                title: 'Design Meeting',
-                                subtitle:
-                                'Discuss with designers for new task for the medical app',
-                                boxColor: LightColors.kLightGreen,
-                              ),
-                            ],
-                          ),
-                        )
+                            ),
+                            loaded?
+                                Container(
+                                  height: 1212.5,
+                                  width: 280,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: titleList.length,
+                                      itemBuilder: (BuildContext context, int i){
+                                      print("CURRENT DATE IS"+ SelectedDate.toString());
+                                      if(dateList[i].day==SelectedDate)
+                                        return
+                                            Container(
+                                              child: TaskContainer(
+                                                title: titleList[i],
+                                                subtitle: descriptionList[i],
+                                                boxColor: LightColors.kPalePink,
+                                                size: 48.5*((endTimeList[i].hour*60+endTimeList[i].minute)-(initTimeList[i].hour*60+initTimeList[i].minute)/60),
+                                              ),
+                                        );
+                                      else
+                                        return Container();
+                                      }),
+
+                            ):Center( child:CircularProgressIndicator()),
+                          ],
+                        ),
                       ],
                     ),
                   ),

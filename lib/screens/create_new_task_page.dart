@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
     };
     //edit this line to add route waypoints (map string dynamic)
     //routeJson['points'] = ...
-    return routeJson.toString();
+    return json.encode(routeJson).toString();
 
   }
 
@@ -80,8 +81,8 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
     var timelist = [combinetime(initTime), combinetime(endTime)];
     var namelist =[await getUserName(), "grandpa"];
     var addrlist = [startController.text.toString(), endController.text.toString()];
-    print(baseaddr+"routes/add/1/"+timelist.toString()+"/"+namelist.toString()+"/"+addrlist.toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
-    await http.get(baseaddr+"routes/add/1/"+timelist.toString()+"/"+namelist.toString()+"/"+addrlist.toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
+    print(baseaddr+"routes/add/1/"+json.encode(timelist).toString()+"/"+json.encode(namelist).toString()+"/"+json.encode(addrlist).toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
+    await http.get(baseaddr+"routes/add/1/"+json.encode(timelist).toString()+"/"+json.encode(namelist).toString()+"/"+json.encode(addrlist).toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
   }
 
   @override

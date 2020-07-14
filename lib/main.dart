@@ -1,5 +1,7 @@
+import 'package:family_carpool/screens/community_page.dart';
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/screens/onBoarding.dart';
+import 'package:family_carpool/screens/route_page.dart';
 import 'package:flutter/material.dart';
 import 'screens/welcome_page.dart';
 import 'themes/colors.dart';
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: IntroScreen(),
+      home: RoutePage(),
       debugShowCheckedModeBanner: false,
     );
   }

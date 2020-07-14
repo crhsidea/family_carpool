@@ -114,6 +114,9 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     getRoutes();
   }
+
+  int tmphour = 0;
+  int tmpmin = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,6 +202,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       onTap: () {
                         setState(() {
                           SelectedDate = toInt(dates[index]);
+                          tmpmin = 0;
+                          tmphour = 0;
                         });
                       },
                       child: Row(
@@ -301,16 +306,26 @@ class _CalendarPageState extends State<CalendarPage> {
                                     itemCount: titleList.length,
                                       itemBuilder: (BuildContext context, int i){
                                       print("CURRENT DATE IS"+ SelectedDate.toString());
-                                      if(dateList[i].day==SelectedDate)
+                                      if(dateList[i].day==SelectedDate){
+                                        var tm = tmpmin;
+                                        var th = tmphour;
+                                        tmpmin = endTimeList[i].minute;
+                                        tmphour = endTimeList[i].hour;
                                         return
-                                            Container(
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 50*((endTimeList[i].hour)-th+((endTimeList[i].minute-tm)/60))
+                                            ),
+                                            child: Container(
                                               child: TaskContainer(
                                                 title: titleList[i],
                                                 subtitle: descriptionList[i],
                                                 boxColor: LightColors.kPalePink,
-                                                size: 48.5*((endTimeList[i].hour*60+endTimeList[i].minute)-(initTimeList[i].hour*60+initTimeList[i].minute)/60),
+                                                size: 50*((endTimeList[i].hour+endTimeList[i].minute/60)-(initTimeList[i].hour+initTimeList[i].minute/60)).abs(),
                                               ),
-                                        );
+                                            ),
+                                          );
+                                      }
                                       else
                                         return Container();
                                       }),

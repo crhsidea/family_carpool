@@ -61,6 +61,8 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
       print("Couldn't read file");
     }
 
+
+    print("value is "+val);
     return val;
   }
 
@@ -76,8 +78,9 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
   Future submitRoute()async{
     var timelist = [combinetime(initTime), combinetime(endTime)];
-    var namelist =[await getUserName()];
+    var namelist =[await getUserName(), "grandpa"];
     var addrlist = [startController.text.toString(), endController.text.toString()];
+    print(baseaddr+"routes/add/1/"+timelist.toString()+"/"+namelist.toString()+"/"+addrlist.toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
     await http.get(baseaddr+"routes/add/1/"+timelist.toString()+"/"+namelist.toString()+"/"+addrlist.toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
   }
 
@@ -249,23 +252,26 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                         width: width,
                         child: Text("I'm the Map"),
                       ),
-                      Container(
-                        height: 80,
-                        width: width,
+                      GestureDetector(
+                        onTap: submitRoute,
                         child: Container(
-                          child: Text(
-                            'Create Task',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18),
-                          ),
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                          width: width - 40,
-                          decoration: BoxDecoration(
-                            color: LightColors.kBlue,
-                            borderRadius: BorderRadius.circular(30),
+                          height: 80,
+                          width: width,
+                          child: Container(
+                            child: Text(
+                              'Create Trip',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18),
+                            ),
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                            width: width - 40,
+                            decoration: BoxDecoration(
+                              color: LightColors.kBlue,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
                           ),
                         ),
                       ),

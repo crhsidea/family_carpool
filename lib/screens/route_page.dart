@@ -1,21 +1,41 @@
+import 'dart:convert';
+
+import 'package:family_carpool/screens/home_page.dart';
+import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/widgets/home/show_routes.dart';
 import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dio/dio.dart';
 
+import 'package:http/http.dart' as http;
+
+
 class RoutePage extends StatefulWidget {
+
+  final bool isFirst;
+  final String name;
+  final String description;
+  final List<String> addrList;
+  final String base;
+
+  const RoutePage({Key key, this.isFirst, this.base, this.name, this.description, this.addrList}) : super(key: key);
+
   @override
   _RoutePageState createState() => _RoutePageState();
 }
 
 class _RoutePageState extends State<RoutePage> {
 
+
   List<LatLng> route = new List<LatLng>();
   Set<Polyline> polyline = {};
   GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(apiKey: 'AIzaSyCMg5dMbyzuuuBArqp7A0BArFxH80f2BJQ');
   Dio dio = new Dio();
   String estimated = '';
+
+  double endlat = 0;
+  double endlng = 0;
 
   createRoute(LatLng origin, LatLng destination) async {
     if(origin!=null&&destination!=null) {
@@ -52,6 +72,25 @@ class _RoutePageState extends State<RoutePage> {
     });
   }
 
+  Future submitRoute(BuildContext context) async{
+    //TODO add the route points data here as well
+    if (widget.isFirst){
+      var routeJson = {
+        'title':widget.name,
+        'description':widget.description,
+        'eta':estimated,
+      };
+      await http.get(widget.base+endlat.toString()+"/"+endlng.toString()+"/"+json.encode(routeJson));
+    }
+
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
+
+  }
+
   createRouteAddress(String origin, String destination) async {
     if(origin!=null&&destination!=null) {
       print('orgin: ${origin.toString()}');
@@ -86,6 +125,7 @@ class _RoutePageState extends State<RoutePage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -97,6 +137,31 @@ class _RoutePageState extends State<RoutePage> {
                   polyline != null ? RouteViewer(
                     routes: polyline,
                   ) : Container(),
+                  GestureDetector(
+                    onTap: () {
+                      submitRoute(context);
+                    },
+                    child: Container(
+                      height: 80,
+                      width: width,
+                      child: Container(
+                        child: Text(
+                          'Continue',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18),
+                        ),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                        width: width - 40,
+                        decoration: BoxDecoration(
+                          color: LightColors.kBlue,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     alignment: Alignment.center,
                     constraints: BoxConstraints(),
@@ -201,7 +266,8 @@ class _RoutePageState extends State<RoutePage> {
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
+
                               ]
                           ),
 

@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: RoutePage(),
+      home: IntroScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

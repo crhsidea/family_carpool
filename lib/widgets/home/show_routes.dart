@@ -9,13 +9,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class RouteViewer extends StatefulWidget {
+
+  Set<Polyline> routes;
+
+  RouteViewer({this.routes});
+
   @override
   _RouteViewerState createState() => _RouteViewerState();
 }
 
 class _RouteViewerState extends State<RouteViewer> {
-
-  Set<Polyline> polyline = new Set<Polyline>();
 
   LatLng location = LatLng(30, -95);
   // ignore: close_sinks
@@ -44,13 +47,6 @@ class _RouteViewerState extends State<RouteViewer> {
             )));
       }*/
 
-      if(!streaming){
-        streaming = true;
-        streamLocation().listen((value){
-          print(value);
-        });
-      }
-
     }
 
   }
@@ -70,8 +66,6 @@ class _RouteViewerState extends State<RouteViewer> {
 
   GoogleMapController mapController;
 
-  String baseaddr = "http://192.168.0.12:8080/";
-
   final LatLng _center = const LatLng(45.521563, -122.677433);
 
   bool streaming = false;
@@ -81,23 +75,8 @@ class _RouteViewerState extends State<RouteViewer> {
       print('1');
       mapController = controller;
 
-      getRoute(location, LatLng(29.7353, -95.4609));
-      getETA(location, LatLng(29.7353, -95.4609));
-
       print('here');
-      if(route!=null) {
-        polyline.add(
-          Polyline(
-            polylineId: PolylineId('route'),
-            visible: true,
-            points: route,
-            width: 4,
-            color: Colors.lightBlue,
-            startCap: Cap.roundCap,
-            endCap: Cap.buttCap,
-          ),
-        );
-      }
+
       print('here 1');
     });
   }
@@ -107,34 +86,6 @@ class _RouteViewerState extends State<RouteViewer> {
   String name = "Prasann";
 
   bool isViewer = false;
-
-
-  Stream<Map<String, dynamic>> streamLocation() async* {
-
-    if (!isViewer)
-      while (true) {
-        if (location!=null){
-          await Future.delayed(Duration(milliseconds: 2000));
-          await http.get(baseaddr+"users/update/1/"+name+"/"+password+"/"+location.latitude.toString()+"/"+location.longitude.toString()+"/"+userdata);
-          print(baseaddr+"users/update/1/"+name+"/"+password+"/"+location.latitude.toString()+"/"+location.longitude.toString()+"/"+userdata);
-          yield {'lat':location.latitude, 'long':location.longitude};
-        }
-      }
-    else{
-      while (true) {
-        if (location!=null){
-          await Future.delayed(Duration(milliseconds: 2000));
-          var h = await http.get(baseaddr+"users/byname/"+name);
-
-          setState(() {
-            location = LatLng(json.decode(h.body)["lat"], json.decode(h.body)["lng"]);
-          });
-          yield {'lat':location.latitude, 'long':location.longitude};
-        }
-      }
-    }
-
-  }
 
   @override
   void initState() {
@@ -150,57 +101,26 @@ class _RouteViewerState extends State<RouteViewer> {
   }
 
   String id = "Pointer";
-  Set<Circle> circles (){
-    return Set.from([Circle(
-      circleId: CircleId(id),
-      center: location,
-      radius: 4000,
-    )]);
-  }
-
-  List<LatLng> route;
+  
   GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(apiKey: 'AIzaSyCMg5dMbyzuuuBArqp7A0BArFxH80f2BJQ');
 
-  getRoute(LatLng origin, LatLng destination) async {
-    if(origin!=null&&destination!=null) {
-      print('orgin: ${origin.toString()}');
-      print('destination: ${destination.toString()}');
-      route = await googleMapPolyline.getCoordinatesWithLocation(
-        origin: origin,
-        destination: destination,
-        mode: RouteMode.driving,
-      );
-    }
-  }
-
-  getETA(LatLng origin, LatLng destination) async {
-    Response etaResponse = await dio.get(
-        'https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.latitude},${origin.longitude}&destinations=${destination.latitude},${destination.longitude}&key=AIzaSyCMg5dMbyzuuuBArqp7A0BArFxH80f2BJQ'
-    );
-    print('getting eta');
-    print(etaResponse.data['rows'][0]['elements'][0]['duration']['text']);
-    return etaResponse.toString();
-
-  }
 
 
   @override
   Widget build(BuildContext context) {
     Locator();
     if(location!=null) {
-      print(location.toString());
       print('it\'s this');
       return Scaffold(
         body: GoogleMap(
           markers: Set.of((marker!=null)?[marker]:[]),
           onMapCreated: _onMapCreated(mapController),
-          polylines: polyline,
+          polylines: widget.routes,
           initialCameraPosition: CameraPosition(
-            target: location,
-            zoom: 1,
+            target: widget.routes.first.points[widget.routes.first.points.length~/2],
+            zoom: 20,
           ),
           mapType: MapType.normal,
-          circles: circles(),
           buildingsEnabled: true,
         ),
       );

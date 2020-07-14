@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:family_carpool/widgets/home/show_routes.dart';
+import 'package:google_map_polyline/google_map_polyline.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:dio/dio.dart';
 
 class RoutePage extends StatefulWidget {
   @override
@@ -6,6 +10,80 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
+
+  List<LatLng> route = new List<LatLng>();
+  Set<Polyline> polyline = {};
+  GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(apiKey: 'AIzaSyCMg5dMbyzuuuBArqp7A0BArFxH80f2BJQ');
+  Dio dio = new Dio();
+  String estimated = '';
+
+  createRoute(LatLng origin, LatLng destination) async {
+    if(origin!=null&&destination!=null) {
+      print('orgin: ${origin.toString()}');
+      print('destination: ${destination.toString()}');
+      route = await googleMapPolyline.getCoordinatesWithLocation(
+        origin: origin,
+        destination: destination,
+        mode: RouteMode.driving,
+      );
+      polyline.add(
+        Polyline(
+          polylineId: PolylineId('route'),
+          visible: true,
+          points: route,
+          width: 4,
+          color: Colors.lightBlue,
+          startCap: Cap.roundCap,
+          endCap: Cap.buttCap,
+        ),
+      );
+    }
+  }
+
+  Future getETA() async {
+    print('running eta');
+    Response etaResponse = await dio.get(
+        'https://maps.googleapis.com/maps/api/distancematrix/json?origins=${polyline.first.points[0].latitude},${polyline.first.points[0].longitude}&destinations=${polyline.last.points[polyline.last.points.length-1].latitude},${polyline.last.points[polyline.last.points.length-1].longitude}&key=AIzaSyCMg5dMbyzuuuBArqp7A0BArFxH80f2BJQ'
+    );
+    print('getting eta');
+    print(etaResponse.data['rows'][0]['elements'][0]['duration']['text']);
+    setState(() {
+      estimated = etaResponse.data['rows'][0]['elements'][0]['duration']['text'].toString();
+    });
+  }
+
+  createRouteAddress(String origin, String destination) async {
+    if(origin!=null&&destination!=null) {
+      print('orgin: ${origin.toString()}');
+      print('destination: ${destination.toString()}');
+      route = await googleMapPolyline.getPolylineCoordinatesWithAddress(
+        origin: origin,
+        destination: destination,
+        mode: RouteMode.driving,
+      );
+      setState(() {
+        polyline.add(
+          Polyline(
+            polylineId: PolylineId('route'),
+            visible: true,
+            points: route,
+            width: 4,
+            color: Colors.lightBlue,
+            startCap: Cap.roundCap,
+            endCap: Cap.buttCap,
+          ),
+        );
+      });
+      await getETA();
+    }
+  }
+
+  @override
+  void initState() {
+    createRouteAddress('2800 Post Oak Blvd, Houston, TX 77056', '600 Travis St, Houston, TX 77002');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,119 +92,125 @@ class _RoutePageState extends State<RoutePage> {
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                constraints: BoxConstraints(),
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: 450.0,
-                      height: 500.0,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Container(
-                      decoration: new BoxDecoration(color: Colors.white,
-                        borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(25.0),
-                            topRight: const Radius.circular(25.0),
-                            bottomLeft: const Radius.circular(25.0),
-                            bottomRight:const Radius.circular(25.0) ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.pink.withOpacity(1),
-                            spreadRadius: 2,
-                            blurRadius: 7,
-                            offset: Offset(0, 0), // changes position of shadow
-                          ),
-                        ],),
-
-                      width: 500.0,
-                      height: 190.0,
-                      child: Column(
-                          children: <Widget>[
-                            Container(
-                                alignment: Alignment.centerLeft,
-                                width: 50.0,
-                                height: 75.0,
-                                decoration: new BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: new DecorationImage(
-                                        alignment: Alignment.bottomLeft,
-
-                                        fit: BoxFit.fill,
-                                        image: new NetworkImage(
-                                            "https://i.thecartoonist.me/cartoon-face-of-white-male.png")
-                                    )
-                                )),
-                            Text(
-                              "Mr.Swift",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30.0,
+              child: Stack(
+                children: <Widget>[
+                  polyline != null ? RouteViewer(
+                    routes: polyline,
+                  ) : Container(),
+                  Container(
+                    alignment: Alignment.center,
+                    constraints: BoxConstraints(),
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          width: 450.0,
+                          height: MediaQuery.of(context).size.height-260,
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Container(
+                          decoration: new BoxDecoration(color: Colors.white,
+                            borderRadius: new BorderRadius.only(
+                                topLeft: const Radius.circular(25.0),
+                                topRight: const Radius.circular(25.0),
+                                bottomLeft: const Radius.circular(25.0),
+                                bottomRight:const Radius.circular(25.0) ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.pink.withOpacity(1),
+                                spreadRadius: 2,
+                                blurRadius: 7,
+                                offset: Offset(0, 0), // changes position of shadow
                               ),
-                            ),
+                            ],),
 
-                            Row(
+                          width: 500.0,
+                          height: 190.0,
+                          child: Column(
                               children: <Widget>[
+                                Container(
+                                    alignment: Alignment.centerLeft,
+                                    width: 50.0,
+                                    height: 75.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                            alignment: Alignment.bottomLeft,
+
+                                            fit: BoxFit.fill,
+                                            image: new NetworkImage(
+                                                "https://i.thecartoonist.me/cartoon-face-of-white-male.png")
+                                        )
+                                    )),
                                 Text(
-                                  "           Driver Age: 28     ",
+                                  "Mr.Swift",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  "     Driving EXP: 5 Yrs",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30.0,
                                   ),
                                 ),
 
-                              ],
-                            ),
-
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            InkWell(
-                              onTap: () {},
-                              child: Hero(
-                                tag: "search",
-                                child: Container(
-                                  height: 50.0,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 15.0,
-                                  ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Text(
-                                          "Destination: 3056 Green Street, Katy, TX",
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "           Route ETA: $estimated     ",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Text(
+                                      "     Driving EXP: 5 Yrs",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                  ],
                                 ),
-                              ),
-                            )
-                          ]
-                      ),
 
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Hero(
+                                    tag: "search",
+                                    child: Container(
+                                      height: 50.0,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 15.0,
+                                      ),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Text(
+                                              "Destination: ${polyline != null ? polyline.last.points[polyline.last.points.length-1].toString() : 'loading'}",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ]
+                          ),
+
+                        ),
+
+                      ],
                     ),
-
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -1,16 +1,25 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:family_carpool/widgets/home/back_button.dart';
 import 'package:family_carpool/widgets/home/calendar_dates.dart';
 import 'package:family_carpool/widgets/home/task_container.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'create_new_task_page.dart';
 import 'package:family_carpool/dates_list.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:validators/sanitizers.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 
 
-class CalendarPage extends StatelessWidget {
+class CalendarPage extends StatefulWidget {
+  @override
+  _CalendarPageState createState() => _CalendarPageState();
+}
+
+class _CalendarPageState extends State<CalendarPage> {
   Widget _dashedText() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 13),
@@ -24,37 +33,90 @@ class CalendarPage extends StatelessWidget {
   }
 
   List<DateTime> dateList = new List<DateTime>();
+
   List<TimeOfDay> initTimeList = new List<TimeOfDay>();
+
   List<TimeOfDay> endTimeList = new List<TimeOfDay>();
+
   List<String> startAddressList = new List<String>();
+
   List<String> endAddressList = new List<String>();
+
   List<String> titleList = new List<String>();
+
   List<String> descriptionList = new List<String>();
+
   List<String> namesList = new List<String>();
+
   List<double> latList = new List<double>();
+
   List<double> lngList = new List<double>();
 
-  String baseddr = 'http://192.168.0.12:8080/';
+  String baseaddr = 'http://192.168.0.12:8080/';
 
   int SelectedDate = DateTime.now().day;
 
-  Future getRoute() {
-    DateTime date;
-    TimeOfDay initTime;
-    TimeOfDay endTime;
-    String startAddress;
-    String endAddress;
-    String title = '';
-    String description = '';
-    String names;
-    double lat = 0;
-    double lng = 0;
+  Future<String> getCurUser() async {
 
-    //Route Data Receive Here
+    String val = "";
 
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/language.txt');
+      String temp = await file.readAsString();
+      val = temp;
+    } catch (e) {
+      print("Couldn't read file");
+    }
+    return val;
 
   }
 
+
+  bool loaded = false;
+
+
+  Future getRoutes() async{
+
+    //Route Data Receive Here
+    var username = await getCurUser();
+
+    var h = await http.get(baseaddr+"routes/name/"+username);
+
+
+    print(json.encode(["6", "hello", "hi"]));
+
+    for (var data in json.decode(h.body)){
+      print(data);
+      setState(() {
+        dateList.add(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0]));
+        initTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0])));
+        endTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[1])));
+        startAddressList.add(json.decode(data['addresses'])[0]);
+        endAddressList.add(json.decode(data['addresses'])[1]);
+        titleList.add(json.decode(data['routedata'])['title']);
+        descriptionList.add(json.decode(data['routedata'])['description']);
+        namesList.add(data['users'].toString());
+        latList.add(data['lat']);
+        lngList.add(data['lng']);
+      });
+    }
+
+    setState(() {
+      loaded = true;
+    });
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRoutes();
+  }
+
+  int tmphour = 0;
+  int tmpmin = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +200,11 @@ class CalendarPage extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(
                       onTap: () {
-                        SelectedDate = toInt(dates[index]);
+                        setState(() {
+                          SelectedDate = toInt(dates[index]);
+                          tmpmin = 0;
+                          tmphour = 0;
+                        });
                       },
                       child: Row(
                         children: <Widget>[
@@ -231,36 +297,40 @@ class CalendarPage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 13.5,
-                                ),
+                            loaded?
                                 Container(
                                   height: 1212.5,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      for(int i=0;i<titleList.length;i++)
-                                        dateList[i].day == SelectedDate ? Column(
-                                          children: <Widget>[
-                                            Container(
-                                              height: 49.0*5,
+                                  width: 280,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: titleList.length,
+                                      itemBuilder: (BuildContext context, int i){
+                                      print("CURRENT DATE IS"+ SelectedDate.toString());
+                                      if(dateList[i].day==SelectedDate){
+                                        var tm = tmpmin;
+                                        var th = tmphour;
+                                        tmpmin = endTimeList[i].minute;
+                                        tmphour = endTimeList[i].hour;
+                                        return
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 50*((endTimeList[i].hour)-th+((endTimeList[i].minute-tm)/60))
                                             ),
-                                            Container(
+                                            child: Container(
                                               child: TaskContainer(
                                                 title: titleList[i],
                                                 subtitle: descriptionList[i],
                                                 boxColor: LightColors.kPalePink,
-                                                size: 48.5*((endTimeList[i].hour*60+endTimeList[i].minute)-(initTimeList[i].hour*60+initTimeList[i].minute)/60),
+                                                size: 50*((endTimeList[i].hour+endTimeList[i].minute/60)-(initTimeList[i].hour+initTimeList[i].minute/60)).abs(),
                                               ),
                                             ),
-                                          ],
-                                        ) : Container()
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                                          );
+                                      }
+                                      else
+                                        return Container();
+                                      }),
+
+                            ):Center( child:CircularProgressIndicator()),
                           ],
                         ),
                       ],

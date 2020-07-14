@@ -78,7 +78,9 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
     var timelist = [combinetime(initTime), combinetime(endTime)];
     var namelist =[await getUserName()];
     var addrlist = [startController.text.toString(), endController.text.toString()];
+    print('create');
     await http.get(baseaddr+"routes/add/1/"+timelist.toString()+"/"+namelist.toString()+"/"+addrlist.toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
+    print('task has been created');
   }
 
   @override
@@ -249,25 +251,30 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                         width: width,
                         child: Text("I'm the Map"),
                       ),
-                      Container(
-                        height: 80,
-                        width: width,
+                      FlatButton(
                         child: Container(
-                          child: Text(
-                            'Create Task',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18),
-                          ),
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
-                          width: width - 40,
-                          decoration: BoxDecoration(
-                            color: LightColors.kBlue,
-                            borderRadius: BorderRadius.circular(30),
+                          height: 80,
+                          width: width,
+                          child: Container(
+                            child: Text(
+                              'Create Task',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18),
+                            ),
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.fromLTRB(20, 10, 20, 20),
+                            width: width - 40,
+                            decoration: BoxDecoration(
+                              color: LightColors.kBlue,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
                           ),
                         ),
+                        onPressed: () async {
+                          await submitRoute();
+                        },
                       ),
                     ],
                   ),

@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'create_new_task_page.dart';
 import 'package:family_carpool/dates_list.dart';
 import 'package:family_carpool/themes/colors.dart';
+import 'package:validators/sanitizers.dart';
+import 'package:http/http.dart';
 
 
 
 class CalendarPage extends StatelessWidget {
   Widget _dashedText() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 15),
+      padding: EdgeInsets.symmetric(vertical: 13),
       child: Text(
         '------------------------------------------',
         maxLines: 1,
@@ -19,6 +21,38 @@ class CalendarPage extends StatelessWidget {
         TextStyle(fontSize: 20.0, color: Colors.black12, letterSpacing: 5),
       ),
     );
+  }
+
+  List<DateTime> dateList = new List<DateTime>();
+  List<TimeOfDay> initTimeList = new List<TimeOfDay>();
+  List<TimeOfDay> endTimeList = new List<TimeOfDay>();
+  List<String> startAddressList = new List<String>();
+  List<String> endAddressList = new List<String>();
+  List<String> titleList = new List<String>();
+  List<String> descriptionList = new List<String>();
+  List<String> namesList = new List<String>();
+  List<double> latList = new List<double>();
+  List<double> lngList = new List<double>();
+
+  String baseddr = 'http://192.168.0.12:8080/';
+
+  int SelectedDate = DateTime.now().day;
+
+  Future getRoute() {
+    DateTime date;
+    TimeOfDay initTime;
+    TimeOfDay endTime;
+    String startAddress;
+    String endAddress;
+    String title = '';
+    String description = '';
+    String names;
+    double lat = 0;
+    double lng = 0;
+
+    //Route Data Receive Here
+
+
   }
 
   @override
@@ -91,7 +125,7 @@ class CalendarPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'April, 2020',
+                  '${month[DateTime.now().month]}, ${DateTime.now().year}',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
                 ),
               ),
@@ -100,14 +134,25 @@ class CalendarPage extends StatelessWidget {
                 height: 58.0,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: days.length,
+                  itemCount: days.length-1,
                   itemBuilder: (BuildContext context, int index) {
-                    return CalendarDates(
-                      day: days[index],
-                      date: dates[index],
-                      dayColor: index == 0 ? LightColors.kRed : Colors.black54,
-                      dateColor:
-                      index == 0 ? LightColors.kRed : LightColors.kDarkBlue,
+                    return InkWell(
+                      onTap: () {
+                        SelectedDate = toInt(dates[index]);
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 20,
+                          ),
+                          CalendarDates(
+                            day:  days[DateTime.now().weekday+index],
+                            date: dates[index],
+                            dayColor: days[DateTime.now().weekday+index] == 'Sun' ? LightColors.kRed : Colors.black54,
+                            dateColor: days[DateTime.now().weekday+index] == 'Sun' ? LightColors.kRed : LightColors.kDarkBlue,
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -127,58 +172,97 @@ class CalendarPage extends StatelessWidget {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) =>
-                                Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(vertical: 15.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '${time[index]} ${time[index] > 8 ? 'PM' : 'AM'}',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.symmetric(vertical: 15.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '${time[index]} ${index == 0 || index > 11 && index < 24 ? 'PM' : 'AM'}',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.black54,
                                   ),
                                 ),
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(
                           width: 20,
                         ),
-                        Expanded(
-                          flex: 5,
-                          child: ListView(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            children: <Widget>[
-                              _dashedText(),
-                              TaskContainer(
-                                title: 'Project Research',
-                                subtitle:
-                                'Discuss with the colleagues about the future plan',
-                                boxColor: LightColors.kLightYellow2,
+                        Stack(
+                          children: <Widget>[
+                            Container(
+                              height: 1223.5,
+                              width: MediaQuery.of(context).size.width-110,
+                              child: ListView(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                children: <Widget>[
+                                  Container(
+                                    height: 3,
+                                  ),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                  _dashedText(),
+                                ],
                               ),
-                              _dashedText(),
-                              TaskContainer(
-                                title: 'Work on Medical App',
-                                subtitle: 'Add medicine tab',
-                                boxColor: LightColors.kLavender,
-                              ),
-                              TaskContainer(
-                                title: 'Call',
-                                subtitle: 'Call to david',
-                                boxColor: LightColors.kPalePink,
-                              ),
-                              TaskContainer(
-                                title: 'Design Meeting',
-                                subtitle:
-                                'Discuss with designers for new task for the medical app',
-                                boxColor: LightColors.kLightGreen,
-                              ),
-                            ],
-                          ),
-                        )
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  height: 13.5,
+                                ),
+                                Container(
+                                  height: 1212.5,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      for(int i=0;i<titleList.length;i++)
+                                        dateList[i].day == SelectedDate ? Column(
+                                          children: <Widget>[
+                                            Container(
+                                              height: 49.0*5,
+                                            ),
+                                            Container(
+                                              child: TaskContainer(
+                                                title: titleList[i],
+                                                subtitle: descriptionList[i],
+                                                boxColor: LightColors.kPalePink,
+                                                size: 48.5*((endTimeList[i].hour*60+endTimeList[i].minute)-(initTimeList[i].hour*60+initTimeList[i].minute)/60),
+                                              ),
+                                            ),
+                                          ],
+                                        ) : Container()
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

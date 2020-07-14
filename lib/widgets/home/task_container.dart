@@ -5,14 +5,17 @@ class TaskContainer extends StatelessWidget {
   final String title;
   final String subtitle;
   final Color boxColor;
+  final double size;
 
   TaskContainer({
-    this.title, this.subtitle, this.boxColor,
+    this.title, this.subtitle, this.boxColor, this.size
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: size,
+      width: MediaQuery.of(context).size.width-110,
       margin: EdgeInsets.symmetric(vertical: 15.0),
       padding: EdgeInsets.all(20.0),
 

@@ -23,14 +23,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
         textTheme: Theme.of(context).textTheme.apply(
             bodyColor: LightColors.kDarkBlue,
             displayColor: LightColors.kDarkBlue,
             fontFamily: 'Poppins'
         ),
       ),
-      home: RoutePage(),
+      home: CommunityPage(),
       debugShowCheckedModeBanner: false,
     );
   }

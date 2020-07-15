@@ -1,10 +1,5 @@
-import 'package:family_carpool/screens/chat_page.dart';
-import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:flutter/material.dart';
-import 'screens/welcome_page.dart';
 import 'themes/colors.dart';
-import 'package:flutter/services.dart';
-import 'screens/home_page.dart';
 import 'widgets/bottom_bar.dart';
 
 void main() {

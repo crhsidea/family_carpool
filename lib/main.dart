@@ -1,3 +1,4 @@
+import 'package:family_carpool/screens/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'screens/welcome_page.dart';
 import 'themes/colors.dart';
@@ -23,7 +24,10 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: BottomBar(),
+      home: ChatScreen(
+        chatId: '1',
+        user: 'p',
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

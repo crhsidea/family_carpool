@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:family_carpool/screens/home_page.dart';
+import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'signup_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     if (json.decode(h.body)["password"]==password.text.toString()){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => BottomBar()),
       );
     }
   }

@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:family_carpool/screens/home_page.dart';
+import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/widgets/login/bezier_container.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => BottomBar()),
     );
   }
 

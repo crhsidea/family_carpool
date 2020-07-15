@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/screens/welcome_page.dart';
+import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
@@ -228,7 +229,7 @@ class FinalScreen extends StatelessWidget {
     if(val!="")
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => BottomBar()),
       );
     else{
       Navigator.push(

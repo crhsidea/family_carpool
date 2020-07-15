@@ -1,10 +1,14 @@
+import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:flutter/material.dart';
 import 'themes/colors.dart';
 import 'widgets/bottom_bar.dart';
+import 'package:http/http.dart' as http;
+
 
 void main() {
   return runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: BottomBar(),
+      home: IntroScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

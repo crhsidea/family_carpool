@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:family_carpool/screens/route_page.dart';
+import 'package:family_carpool/screens/route_preview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:family_carpool/widgets/home/top_container.dart';

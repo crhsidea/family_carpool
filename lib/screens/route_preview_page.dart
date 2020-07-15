@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/themes/colors.dart';
+import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/widgets/home/show_routes.dart';
 import 'package:geocoder/geocoder.dart';
@@ -90,7 +91,7 @@ class _RoutePageState extends State<RoutePage> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => BottomBar()),
     );
 
   }

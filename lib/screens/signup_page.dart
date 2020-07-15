@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_carpool/screens/home_page.dart';
@@ -36,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final File file = File('${directory.path}/language.txt');
     await file.writeAsString(name.text.toString());
 
-    await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+"{email:${email.text.toString()}");
+    await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+"{email:${email.text.toString()}}"+"/"+json.encode([]));
 
 
 

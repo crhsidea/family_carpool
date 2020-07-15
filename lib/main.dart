@@ -1,18 +1,11 @@
-import 'package:family_carpool/screens/home_page.dart';
-import 'package:family_carpool/screens/onBoarding.dart';
-import 'package:family_carpool/screens/route_page.dart';
 import 'package:flutter/material.dart';
 import 'screens/welcome_page.dart';
 import 'themes/colors.dart';
 import 'package:flutter/services.dart';
-import 'notification_test.dart';
+import 'screens/home_page.dart';
+import 'widgets/bottom_bar.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: LightColors.kLightYellow, // navigation bar color
-    statusBarColor: Color(0xffffb969), // status bar color
-  ));
-
   return runApp(MyApp());
 }
 
@@ -30,7 +23,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: IntroScreen(),
+      home: BottomBar(),
       debugShowCheckedModeBanner: false,
     );
   }

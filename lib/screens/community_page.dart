@@ -1,3 +1,4 @@
+import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class CommunityPage extends StatelessWidget {
@@ -8,7 +9,7 @@ class CommunityPage extends StatelessWidget {
         width: 450.0,
         height: 70.0,
         decoration: new BoxDecoration(
-          color: Colors.white,
+          color: LightColors.kLightYellow2,
           borderRadius: new BorderRadius.only(
               topLeft: const Radius.circular(25.0),
               topRight: const Radius.circular(25.0),
@@ -16,7 +17,7 @@ class CommunityPage extends StatelessWidget {
               bottomRight: const Radius.circular(25.0)),
           boxShadow: [
             BoxShadow(
-              color: Colors.pink.withOpacity(1),
+              color: LightColors.kRed,
               spreadRadius: 1,
               blurRadius: 7,
               offset: Offset(0, 0), // changes position of shadow
@@ -71,8 +72,20 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData _theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: LightColors.kLightYellow,
       appBar: AppBar(
-        backgroundColor: _theme.scaffoldBackgroundColor,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              // do something
+            },
+          )
+        ],
+        backgroundColor: LightColors.kLightYellow,
         automaticallyImplyLeading: false,
         elevation: 0.0,
       ),
@@ -82,7 +95,7 @@ class CommunityPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              "Community CarPools",
+              " Carpools",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 35.0,

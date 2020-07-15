@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:geocoder/geocoder.dart';
 
 class RouteViewer extends StatefulWidget {
 
@@ -36,9 +37,6 @@ class _RouteViewerState extends State<RouteViewer> {
           print(location.toString());
         });
 
-
-      updateMarker();
-
       /*if(false) {
         mapController.animateCamera(
             CameraUpdate.newCameraPosition(new CameraPosition(
@@ -51,15 +49,24 @@ class _RouteViewerState extends State<RouteViewer> {
 
   }
 
+  Set<Marker> stops = {};
 
-  Marker marker;
-
-
-  void updateMarker(){
+  void addStops(){
     setState(() {
-      marker = Marker(
-        markerId: MarkerId("Home"),
-        position: location,
+      var iter = widget.routes.iterator;
+      while(iter.moveNext()) {
+        stops.add(
+          Marker(
+            markerId: MarkerId('Marker ${iter.hashCode}'),
+            position: iter.current.points[0]
+          ),
+        );
+      }
+      stops.add(
+        Marker(
+          markerId: MarkerId('destination'),
+          position: widget.routes.last.points[widget.routes.last.points.length-1]
+        ),
       );
     });
   }
@@ -72,6 +79,7 @@ class _RouteViewerState extends State<RouteViewer> {
 
   _onMapCreated(GoogleMapController controller) {
     setState(() {
+      addStops();
       print('1');
       mapController = controller;
 
@@ -113,7 +121,7 @@ class _RouteViewerState extends State<RouteViewer> {
       print('it\'s this');
       return Scaffold(
         body: GoogleMap(
-          markers: Set.of((marker!=null)?[marker]:[]),
+          markers: stops,
           onMapCreated: _onMapCreated(mapController),
           polylines: widget.routes,
           initialCameraPosition: CameraPosition(

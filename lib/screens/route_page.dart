@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:family_carpool/widgets/home/show_routes.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dio/dio.dart';
@@ -16,6 +17,9 @@ class _RoutePageState extends State<RoutePage> {
   GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(apiKey: 'AIzaSyCMg5dMbyzuuuBArqp7A0BArFxH80f2BJQ');
   Dio dio = new Dio();
   String estimated = '';
+  List<String> addresses = ['2800 Post Oak Blvd, Houston, TX 77056', '600 Travis St, Houston, TX 77002', '1500 McKinney St, Houston, TX 77010', '6100 Main St, Houston, TX 77005', 'NRG Pkwy, Houston, TX 77054'];
+  double nlat;
+  double nlong;
 
   createRoute(LatLng origin, LatLng destination) async {
     if(origin!=null&&destination!=null) {
@@ -52,7 +56,7 @@ class _RoutePageState extends State<RoutePage> {
     });
   }
 
-  createRouteAddress(String origin, String destination) async {
+  createRouteAddress(String origin, String destination, int index) async {
     if(origin!=null&&destination!=null) {
       print('orgin: ${origin.toString()}');
       print('destination: ${destination.toString()}');
@@ -64,7 +68,7 @@ class _RoutePageState extends State<RoutePage> {
       setState(() {
         polyline.add(
           Polyline(
-            polylineId: PolylineId('route'),
+            polylineId: PolylineId('route $index'),
             visible: true,
             points: route,
             width: 4,
@@ -75,12 +79,19 @@ class _RoutePageState extends State<RoutePage> {
         );
       });
       await getETA();
+      setState(() {
+        nlat = polyline.last.points[polyline.last.points.length-1].latitude;
+        nlat = polyline.last.points[polyline.last.points.length-1].longitude;
+      });
     }
   }
 
   @override
   void initState() {
-    createRouteAddress('2800 Post Oak Blvd, Houston, TX 77056', '600 Travis St, Houston, TX 77002');
+    for(int i=0;i<addresses.length-1;i++) {
+      createRouteAddress(addresses[i], addresses[i+1], i);
+      print('created route: ${addresses[i]} to ${addresses[i+1]}');
+    }
     super.initState();
   }
 
@@ -188,13 +199,30 @@ class _RoutePageState extends State<RoutePage> {
                                       child: Row(
                                         children: <Widget>[
                                           Expanded(
-                                            child: Text(
-                                              "Destination: ${polyline != null ? polyline.last.points[polyline.last.points.length-1].toString() : 'loading'}",
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                            child: FutureBuilder(
+                                              future: Geocoder.local.findAddressesFromCoordinates(Coordinates(polyline.last.points[polyline.last.points.length-1].latitude, polyline.last.points[polyline.last.points.length-1].longitude)),
+                                              builder: (context, snapshots) {
+                                                if(snapshots.connectionState == ConnectionState.done) {
+                                                  return Text(
+                                                    "Destination: ${snapshots.data.first.addressLine}",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18.0,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  );
+                                                }
+                                                else {
+                                                  return Text(
+                                                    "Destination: loading",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18.0,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  );
+                                                }
+                                              },
                                             ),
                                           ),
                                         ],

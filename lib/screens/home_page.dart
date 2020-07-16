@@ -1,12 +1,34 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:family_carpool/screens/calendar_Page.dart';
 import 'package:family_carpool/themes/colors.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:family_carpool/widgets/home/task_column.dart';
 import 'package:family_carpool/widgets/home/actice_project_card.dart';
 import 'package:family_carpool/widgets/home/top_container.dart';
+import 'package:http/http.dart' as http;
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  static CircleAvatar calendarIcon() {
+    return CircleAvatar(
+      radius: 25.0,
+      backgroundColor: LightColors.kGreen,
+      child: Icon(
+        Icons.calendar_today,
+        size: 20.0,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   Text subheading(String title) {
     return Text(
       title,
@@ -18,16 +40,65 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  static CircleAvatar calendarIcon() {
-    return CircleAvatar(
-      radius: 25.0,
-      backgroundColor: LightColors.kGreen,
-      child: Icon(
-        Icons.calendar_today,
-        size: 20.0,
-        color: Colors.white,
-      ),
-    );
+  @override
+  void initState(){
+    super.initState();
+
+    getRoutes();
+  }
+
+  List<dynamic> suggested = [];
+
+  List<dynamic> personal = [];
+
+  String baseaddr = "http://192.168.0.12:8080/";
+
+  Future<String> getCurUser() async {
+    String val = "";
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/language.txt');
+      String temp = await file.readAsString();
+      val = temp;
+    } catch (e) {
+      print("Couldn't read file");
+    }
+    return val;
+  }
+
+  bool loaded = false;
+  int indivs = 0;
+  int pools = 0;
+
+  String uname = "";
+
+  Future getRoutes() async {
+    //Route Data Receive Here
+    var username = await getCurUser();
+
+    setState(() {
+      uname = username;
+    });
+
+    var h = await http.get(baseaddr + "routes/name/" + username);
+
+    print(h.body.toString());
+    for (var data in json.decode(h.body)) {
+      print(data);
+      if(json.decode(data['users']).length>1)
+        pools++;
+      else
+        indivs++;
+      setState(() {
+        personal.add(data);
+      });
+    }
+
+    setState(() {
+      loaded = true;
+    });
+
   }
 
   @override
@@ -81,7 +152,7 @@ class HomePage extends StatelessWidget {
                           children: <Widget>[
                             Container(
                               child: Text(
-                                'Obama',
+                                uname,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 22.0,
@@ -92,7 +163,7 @@ class HomePage extends StatelessWidget {
                             ),
                             Container(
                               child: Text(
-                                'App Developer',
+                                'App User',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 16.0,
@@ -124,7 +195,7 @@ class HomePage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              subheading('My Tasks'),
+                              subheading('My Carpools'),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -133,7 +204,7 @@ class HomePage extends StatelessWidget {
                                         builder: (context) => CalendarPage()),
                                   );
                                 },
-                                child: calendarIcon(),
+                                child: HomePage.calendarIcon(),
                               ),
                             ],
                           ),
@@ -141,8 +212,8 @@ class HomePage extends StatelessWidget {
                           TaskColumn(
                             icon: Icons.alarm,
                             iconBackgroundColor: LightColors.kRed,
-                            title: 'To Do',
-                            subtitle: '5 tasks now. 1 started',
+                            title: 'Individual',
+                            subtitle: indivs.toString()+' trips now. ',
                           ),
                           SizedBox(
                             height: 15.0,
@@ -150,15 +221,15 @@ class HomePage extends StatelessWidget {
                           TaskColumn(
                             icon: Icons.blur_circular,
                             iconBackgroundColor: LightColors.kDarkYellow,
-                            title: 'In Progress',
+                            title: 'Suggested',
                             subtitle: '1 tasks now. 1 started',
                           ),
                           SizedBox(height: 15.0),
                           TaskColumn(
                             icon: Icons.check_circle_outline,
                             iconBackgroundColor: LightColors.kBlue,
-                            title: 'Done',
-                            subtitle: '18 tasks now. 13 started',
+                            title: 'Confirmed',
+                            subtitle: pools.toString()+' carpools now',
                           ),
                         ],
                       ),

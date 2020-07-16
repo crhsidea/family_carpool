@@ -14,6 +14,7 @@ List<String> days = [
   'Sat',
   'Sun',
 ];
+
 List<String> dates = [
   (DateTime.now().day).toString(),
   (DateTime.now().day+1).toString(),

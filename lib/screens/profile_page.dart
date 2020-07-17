@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+
+
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   final color = LightColors.kDarkYellow;
 
   @override

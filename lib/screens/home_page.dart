@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:family_carpool/screens/calendar_Page.dart';
@@ -73,6 +74,115 @@ class _HomePageState extends State<HomePage> {
 
   String uname = "";
 
+  List<Widget> recItems = [
+  Text(
+  "Recommended",
+  style: TextStyle(
+  color: LightColors.kDarkBlue,
+  fontSize: 20.0,
+  fontWeight: FontWeight.w700,
+  letterSpacing: 1.2),
+  ),
+    SizedBox(height: 5.0),];
+
+  List<Color> colors = [LightColors.kGreen, LightColors.kRed, LightColors.kDarkYellow, LightColors.kDarkYellow];
+  
+  Future addCarpool (dynamic route)async{
+
+    _displayDialog();
+
+    List<String> users = json.decode(route['users']);
+    users.add(uname);
+    List<String> addrs = json.decode(route['addresses']);
+    addrs.insert(0, addrController.text.toString());
+    await http.get(baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates']+"/"+json.encode(users).toString()+"/"+json.encode(addrs).toString()+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata']);
+  }
+
+  TextEditingController addrController = TextEditingController();
+
+  _displayDialog() async {
+    return showDialog(
+        context: cont,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Address'),
+            content: TextField(
+              controller: addrController,
+              decoration: InputDecoration(hintText: "Place the address you want to join from "),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+  
+  
+  Future getRecs() async{
+    List<double> lats = [];
+    List<double> lngs = [];
+    for (dynamic m in personal){
+      lats.add(m['lat']);
+      lngs.add(m['lng']);
+    }
+    
+    for (int i = 0; i< lats.length; i++){
+      var h = await http.get(baseaddr+"routes/rec/"+lats[i].toString()+"/"+lngs[i].toString());
+      for (dynamic recdata in json.decode(h.body)){
+        print(recdata.toString());
+        if (!recdata['users'].contains(uname)){
+          setState(() {
+            suggested.add(recdata);
+          });
+        }
+      }
+    }
+
+    bool on = false;
+    List<Widget> temp = [];
+    int ind = 0;
+
+    for (dynamic item in suggested){
+      if(on){
+        temp.add(
+            GestureDetector(
+              onTap:(){
+                addCarpool(item);
+              },
+              child: ActiveProjectsCard(
+          cardColor: colors[ind%4],
+          loadingPercent: Random().nextDouble(),
+          title: json.decode(item['routedata'])['title'],
+          subtitle:json.decode(item['routedata'])['description'],
+        ),
+            ));
+        on = false;
+      }
+      else{
+        temp.add(
+            ActiveProjectsCard(
+              cardColor: colors[ind%4],
+              loadingPercent: Random().nextDouble(),
+              title: json.decode(item['routedata'])['title'],
+              subtitle:json.decode(item['routedata'])['description'],
+            ));
+        on = true;
+        setState(() {
+          recItems.add(Row(
+            children: temp,
+          ));
+        });
+        temp = [];
+      }
+      ind++;
+    }
+  }
+
   Future getRoutes() async {
     //Route Data Receive Here
     var username = await getCurUser();
@@ -80,6 +190,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       uname = username;
     });
+
+    var u = await http.get(baseaddr + "users/byname/" + username);
+
 
     var h = await http.get(baseaddr + "routes/name/" + username);
 
@@ -99,10 +212,16 @@ class _HomePageState extends State<HomePage> {
       loaded = true;
     });
 
+    await getRecs();
+
   }
+  
+  BuildContext cont;
+  
 
   @override
   Widget build(BuildContext context) {
+    cont = context;
     double width = MediaQuery.of(context).size.width;
     return Container(
       color: LightColors.kLightYellow,
@@ -222,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                             icon: Icons.blur_circular,
                             iconBackgroundColor: LightColors.kDarkYellow,
                             title: 'Suggested',
-                            subtitle: '1 tasks now. 1 started',
+                            subtitle: suggested.length.toString()+' trip',
                           ),
                           SizedBox(height: 15.0),
                           TaskColumn(
@@ -240,44 +359,7 @@ class _HomePageState extends State<HomePage> {
                           horizontal: 20.0, vertical: 10.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          subheading('Active Projects'),
-                          SizedBox(height: 5.0),
-                          Row(
-                            children: <Widget>[
-                              ActiveProjectsCard(
-                                cardColor: LightColors.kGreen,
-                                loadingPercent: 0.25,
-                                title: 'Medical App',
-                                subtitle: '9 hours progress',
-                              ),
-                              SizedBox(width: 20.0),
-                              ActiveProjectsCard(
-                                cardColor: LightColors.kRed,
-                                loadingPercent: 0.6,
-                                title: 'Making History Notes',
-                                subtitle: '20 hours progress',
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              ActiveProjectsCard(
-                                cardColor: LightColors.kDarkYellow,
-                                loadingPercent: 0.45,
-                                title: 'Sports App',
-                                subtitle: '5 hours progress',
-                              ),
-                              SizedBox(width: 20.0),
-                              ActiveProjectsCard(
-                                cardColor: LightColors.kBlue,
-                                loadingPercent: 0.9,
-                                title: 'Online Flutter Course',
-                                subtitle: '23 hours progress',
-                              ),
-                            ],
-                          ),
-                        ],
+                        children: recItems
                       ),
                     ),
                   ],

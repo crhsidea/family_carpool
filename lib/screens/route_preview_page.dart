@@ -13,21 +13,24 @@ import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 
-class RoutePage extends StatefulWidget {
+class RoutePreviewPage extends StatefulWidget {
 
   final bool isFirst;
   final String name;
   final String description;
   final List<String> addrList;
   final String base;
+  final bool isRoute;
+  final bool isViewer;
 
-  const RoutePage({Key key, this.isFirst, this.base, this.name, this.description, this.addrList}) : super(key: key);
+
+  const RoutePreviewPage({Key key, this.isFirst, this.base, this.name, this.description, this.addrList, this.isRoute, this.isViewer}) : super(key: key);
 
   @override
-  _RoutePageState createState() => _RoutePageState();
+  _RoutePreviewPageState createState() => _RoutePreviewPageState();
 }
 
-class _RoutePageState extends State<RoutePage> {
+class _RoutePreviewPageState extends State<RoutePreviewPage> {
 
 
   List<LatLng> route = new List<LatLng>();
@@ -35,12 +38,9 @@ class _RoutePageState extends State<RoutePage> {
   GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(apiKey: 'AIzaSyCMg5dMbyzuuuBArqp7A0BArFxH80f2BJQ');
   Dio dio = new Dio();
   String estimated = '';
-  List<String> addresses = ['2800 Post Oak Blvd, Houston, TX 77056', '600 Travis St, Houston, TX 77002', '1500 McKinney St, Houston, TX 77010', '6100 Main St, Houston, TX 77005', 'NRG Pkwy, Houston, TX 77054'];
-  double nlat;
-  double nlong;
-
-  double endlat = 0;
-  double endlng = 0;
+  //List<String> addresses = ['2800 Post Oak Blvd, Houston, TX 77056', '600 Travis St, Houston, TX 77002', '1500 McKinney St, Houston, TX 77010', '6100 Main St, Houston, TX 77005', 'NRG Pkwy, Houston, TX 77054'];
+  double nlat = 0;
+  double nlong = 0;
 
   createRoute(LatLng origin, LatLng destination) async {
     if(origin!=null&&destination!=null) {
@@ -85,7 +85,7 @@ class _RoutePageState extends State<RoutePage> {
         'description':widget.description,
         'eta':estimated,
       };
-      await http.get(widget.base+endlat.toString()+"/"+endlng.toString()+"/"+json.encode(routeJson));
+      await http.get(widget.base+nlat.toString()+"/"+nlong.toString()+"/"+json.encode(routeJson));
     }
 
 
@@ -121,16 +121,16 @@ class _RoutePageState extends State<RoutePage> {
       await getETA();
       setState(() {
         nlat = polyline.last.points[polyline.last.points.length-1].latitude;
-        nlat = polyline.last.points[polyline.last.points.length-1].longitude;
+        nlong = polyline.last.points[polyline.last.points.length-1].longitude;
       });
     }
   }
 
   @override
   void initState() {
-    for(int i=0;i<addresses.length-1;i++) {
-      createRouteAddress(addresses[i], addresses[i+1], i);
-      print('created route: ${addresses[i]} to ${addresses[i+1]}');
+    for(int i=0;i<widget.addrList.length-1;i++) {
+      createRouteAddress(widget.addrList[i], widget.addrList[i+1], i);
+      print('created route: ${widget.addrList[i]} to ${widget.addrList[i+1]}');
     }
     super.initState();
   }
@@ -148,6 +148,8 @@ class _RoutePageState extends State<RoutePage> {
                 children: <Widget>[
                   polyline != null ? RouteViewer(
                     routes: polyline,
+                    isRoute: widget.isRoute,
+                    isViewer: widget.isViewer,
                   ) : Container(),
                   GestureDetector(
                     onTap: () {

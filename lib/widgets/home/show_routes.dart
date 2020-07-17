@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +8,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:geocoder/geocoder.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 class RouteViewer extends StatefulWidget {
 
-  Set<Polyline> routes;
+  final Set<Polyline> routes;
+  final bool isRoute;
+  final String driver;
+  final bool isViewer;
 
-  RouteViewer({this.routes});
+  RouteViewer({this.routes, this.isRoute, this.driver, this.isViewer});
 
   @override
   _RouteViewerState createState() => _RouteViewerState();
@@ -23,27 +28,29 @@ class _RouteViewerState extends State<RouteViewer> {
 
   LatLng location = LatLng(30, -95);
   // ignore: close_sinks
+
   StreamController<double> controller;
   Stream stream;
   Dio dio = new Dio();
 
+  bool zoomin = true;
 
   Locator() async {
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if(position!=null) {
-      if(!isViewer)
+      if(!widget.isViewer)
         setState(() {
           location = new LatLng(position.latitude, position.longitude);
           print(location.toString());
         });
 
-      /*if(false) {
+      if(zoomin) {
         mapController.animateCamera(
             CameraUpdate.newCameraPosition(new CameraPosition(
                 target: location,
                 zoom: 19.00
             )));
-      }*/
+      }
 
     }
 
@@ -73,9 +80,57 @@ class _RouteViewerState extends State<RouteViewer> {
 
   GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
 
   bool streaming = false;
+
+  String baseaddr = "http://192.168.0.12:8080/";
+
+
+  String uname = "";
+
+  Future<String> getCurUser() async {
+    String val = "";
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/language.txt');
+      String temp = await file.readAsString();
+      val = temp;
+    } catch (e) {
+      print("Couldn't read file");
+    }
+    return val;
+  }
+
+  Stream<Map<String, dynamic>> streamLocation() async* {
+
+    String tmp = await getCurUser();
+    uname = tmp;
+
+    if (!widget.isViewer)
+      while (true) {
+        if (location!=null){
+          await Future.delayed(Duration(milliseconds: 2000));
+          await http.get(baseaddr+"users/coords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
+          print(baseaddr+"users/coords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
+          yield {'lat':location.latitude, 'long':location.longitude};
+        }
+      }
+    else{
+      while (true) {
+        if (location!=null){
+          await Future.delayed(Duration(milliseconds: 2000));
+          var h = await http.get(baseaddr+"users/byname/"+widget.driver);
+
+          setState(() {
+            location = LatLng(json.decode(h.body)["lat"], json.decode(h.body)["lng"]);
+          });
+          yield {'lat':location.latitude, 'long':location.longitude};
+        }
+      }
+    }
+
+  }
 
   _onMapCreated(GoogleMapController controller) {
     setState(() {
@@ -89,22 +144,19 @@ class _RouteViewerState extends State<RouteViewer> {
     });
   }
 
-  String password = "12345678";
-  String userdata = "{rating:4}";
-  String name = "Prasann";
-
-  bool isViewer = false;
-
   @override
   void initState() {
 
-    Locator();
-    controller = StreamController<double>();
-    stream = controller.stream;
+
+    if(widget.isRoute){
+      Locator();
+      controller = StreamController<double>();
+      stream = controller.stream;
+    }
+
+
 
     super.initState();
-
-
 
   }
 
@@ -116,6 +168,10 @@ class _RouteViewerState extends State<RouteViewer> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.isRoute){
+      controller = StreamController<double>();
+      stream = controller.stream;
+    }
     Locator();
     if(location!=null) {
       print('it\'s this');
@@ -137,9 +193,7 @@ class _RouteViewerState extends State<RouteViewer> {
       return Scaffold(
         body: Container(
           child: Center(
-            child: Text(
-                'no'
-            ),
+            child: CircularProgressIndicator(),
           ),
         ),
       );

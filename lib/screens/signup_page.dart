@@ -37,7 +37,14 @@ class _SignUpPageState extends State<SignUpPage> {
     final File file = File('${directory.path}/language.txt');
     await file.writeAsString(name.text.toString());
 
-    await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+"{email:${email.text.toString()}}"+"/"+json.encode([]));
+    var tmp = {
+      'description':descript.text.toString(),
+      'years':int.parse(years.text.toString()),
+      'email':email.text.toString(),
+      'age':int.parse(age.text.toString())
+    };
+
+    await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode([]).toString());
 
 
 
@@ -125,6 +132,8 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+
+
   Widget _loginAccountLabel() {
     return InkWell(
       onTap: () {
@@ -182,12 +191,19 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+
+  TextEditingController descript = new TextEditingController();
+  TextEditingController years = new TextEditingController();
+  TextEditingController age = new TextEditingController();
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
         _entryField("Name", name),
         _entryField("Email id", email),
         _entryField("Password", password, isPassword: true),
+        _entryField("Description", descript),
+        _entryField("Years Driving", years),
+        _entryField("Age", age,),
       ],
     );
   }

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:faker/faker.dart';
 import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:family_carpool/screens/profile_page.dart';
+import 'package:family_carpool/screens/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'themes/colors.dart';
 import 'package:http/http.dart' as http;
@@ -103,7 +104,7 @@ class MyApp extends StatelessWidget {
             displayColor: LightColors.kDarkBlue,
             fontFamily: 'Poppins'),
       ),
-      home: IntroScreen(),
+      home: SignUpPage(),
       debugShowCheckedModeBanner: false,
     );
   }

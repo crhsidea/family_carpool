@@ -2,14 +2,14 @@ import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class CommunityPage extends StatelessWidget {
-  Widget getContainer(String name, String address, String image) {
+  Widget getContainer(String name, String address, String image, Color color) {
     return Padding(
       padding: const EdgeInsets.only(left: 7.0, right: 7.0),
       child: Container(
         width: 450.0,
         height: 70.0,
         decoration: new BoxDecoration(
-          color: LightColors.kLightYellow2,
+          color: color,
           borderRadius: new BorderRadius.only(
               topLeft: const Radius.circular(25.0),
               topRight: const Radius.circular(25.0),
@@ -18,8 +18,8 @@ class CommunityPage extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: LightColors.kRed,
-              spreadRadius: 1,
-              blurRadius: 7,
+              spreadRadius: 0.1,
+              blurRadius: 0,
               offset: Offset(0, 0), // changes position of shadow
             ),
           ],
@@ -60,8 +60,9 @@ class CommunityPage extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.map,
-              color: Colors.pink,
+              color: LightColors.kGreen,
             ),
+            onPressed: () {},
           ),
         ]),
       ),
@@ -70,7 +71,6 @@ class CommunityPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData _theme = Theme.of(context);
     return Scaffold(
       backgroundColor: LightColors.kLightYellow,
       appBar: AppBar(
@@ -98,7 +98,7 @@ class CommunityPage extends StatelessWidget {
               " Carpools",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 35.0,
+                fontSize: 40.0,
               ),
             ),
             SizedBox(
@@ -112,12 +112,12 @@ class CommunityPage extends StatelessWidget {
                   children: <Widget>[
                     TabBar(
                       unselectedLabelColor: Colors.grey,
-                      labelColor: _theme.primaryColor,
+                      labelColor: LightColors.DarkYellow,
                       labelStyle: TextStyle(
-                        fontSize: 15.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
-                      indicatorColor: _theme.primaryColor,
+                      indicatorColor: LightColors.DarkYellow,
                       tabs: <Widget>[
                         Tab(
                           text: "Group Chats",
@@ -141,23 +141,43 @@ class CommunityPage extends StatelessWidget {
                               SizedBox(
                                 height: 10.0,
                               ),
-                              getContainer('Morning Gym', "12345 fish rd",
-                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                              getContainer(
+                                  'Morning Gym',
+                                  "12345 fish rd",
+                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                  LightColors.kLightRed),
                               SizedBox(
                                 height: 15.0,
                               ),
-                              getContainer('Robotics Trip', "12345 fish rd",
-                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                              getContainer(
+                                  'Robotics Trip',
+                                  "12345 fish rd",
+                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                  LightColors.kSuperLightGreen),
                               SizedBox(
                                 height: 15.0,
                               ),
-                              getContainer('Marine Trip', "12345 fish rd",
-                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                              getContainer(
+                                  'Marine Tour',
+                                  "12345 fish rd",
+                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                  LightColors.kLightBlue),
                               SizedBox(
                                 height: 15.0,
                               ),
-                              getContainer('Beach Trip', "12345 fish rd",
-                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                              getContainer(
+                                  'Beach Party',
+                                  "12345 fish rd",
+                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                  LightColors.kLightSand),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              getContainer(
+                                  'School Event',
+                                  "12345 fish rd",
+                                  'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                  LightColors.kLightPurple),
                             ],
                           ),
                           Container(
@@ -166,23 +186,43 @@ class CommunityPage extends StatelessWidget {
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Morning Gym',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightRed),
                                 SizedBox(
                                   height: 15.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Robotics Trip',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kSuperLightGreen),
                                 SizedBox(
                                   height: 15.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Marine Tour',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightBlue),
                                 SizedBox(
                                   height: 15.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Beach Party',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightSand),
+                                SizedBox(
+                                  height: 15.0,
+                                ),
+                                getContainer(
+                                    'School Event',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightPurple),
                               ],
                             ),
                           ),
@@ -192,23 +232,43 @@ class CommunityPage extends StatelessWidget {
                                 SizedBox(
                                   height: 10.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Morning Gym',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightRed),
                                 SizedBox(
                                   height: 15.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Robotics Trip',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kSuperLightGreen),
                                 SizedBox(
                                   height: 15.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Marine Tour',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightBlue),
                                 SizedBox(
                                   height: 15.0,
                                 ),
-                                getContainer('Gym', "12345 fish rd",
-                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png'),
+                                getContainer(
+                                    'Beach Party',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightSand),
+                                SizedBox(
+                                  height: 15.0,
+                                ),
+                                getContainer(
+                                    'School Event',
+                                    "12345 fish rd",
+                                    'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
+                                    LightColors.kLightPurple),
                               ],
                             ),
                           ),

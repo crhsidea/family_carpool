@@ -38,9 +38,24 @@ class HomePage extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          TopContainer(
+          Container(
             height: 200,
             width: width,
+            decoration: new BoxDecoration(
+              color: LightColors.kMidYellow,
+              borderRadius: new BorderRadius.only(
+                  bottomLeft: const Radius.circular(60.0),
+                  bottomRight: const Radius.circular(60.0)),
+              boxShadow: [
+                BoxShadow(
+                  color: LightColors.kDarkYellow,
+                  spreadRadius: 3,
+                  blurRadius:1,
+                  offset: Offset(0, 0), // changes position of shadow
+                ),
+              ],
+            ),
+
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -67,7 +82,7 @@ class HomePage extends StatelessWidget {
                           percent: 0.75,
                           circularStrokeCap: CircularStrokeCap.round,
                           progressColor: LightColors.kRed,
-                          backgroundColor: LightColors.kDarkYellow,
+                          backgroundColor: LightColors.kLightYellow,
                           center: CircleAvatar(
                             backgroundColor: LightColors.kBlue,
                             radius: 35.0,
@@ -84,7 +99,7 @@ class HomePage extends StatelessWidget {
                                 'Obama',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  fontSize: 22.0,
+                                  fontSize: 25.0,
                                   color: LightColors.kDarkBlue,
                                   fontWeight: FontWeight.w800,
                                 ),

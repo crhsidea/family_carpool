@@ -26,8 +26,9 @@ class _BottomBarState extends State<BottomBar> {
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: LightColors.kLightYellow2,
+          backgroundColor: LightColors.kDarkYellow,
           onTap: onTabTabbed,
+          selectedItemColor: Colors.white,
           currentIndex: _currentIndex,
           items: [
             BottomNavigationBarItem(
@@ -39,7 +40,7 @@ class _BottomBarState extends State<BottomBar> {
                 title: Text("Calendar")
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.location_city),
+                icon: Icon(Icons.people),
                 title: Text("Community")
             ),
           ],

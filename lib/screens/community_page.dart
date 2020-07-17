@@ -73,27 +73,15 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: LightColors.kLightYellow,
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              // do something
-            },
-          )
-        ],
-        backgroundColor: LightColors.kLightYellow,
-        automaticallyImplyLeading: false,
-        elevation: 0.0,
-      ),
+
       body: Container(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            SizedBox(
+              height: 30.0,
+            ),
             Text(
               " Carpools",
               style: TextStyle(

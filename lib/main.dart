@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:faker/faker.dart';
 import 'package:family_carpool/screens/onBoarding.dart';
+import 'package:family_carpool/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'themes/colors.dart';
 import 'package:http/http.dart' as http;
@@ -70,6 +71,7 @@ Future loadDBRoutes() async {
       'description':descriptions,
       'years':Random().nextInt(15),
       'email':email,
+      'age':25+Random().nextInt(35)
     };
 
     await http.get(baseaddr +

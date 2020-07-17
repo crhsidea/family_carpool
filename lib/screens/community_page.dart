@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_carpool/screens/chat_page.dart';
+import 'package:family_carpool/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -83,6 +84,8 @@ class _CommunityPageState extends State<CommunityPage> {
 
   List<Widget> friends = [];
 
+  List<dynamic> friendsData = [];
+
   Future getFriends() async {
     //Route Data Receive Here
     var username = await getCurUser();
@@ -93,7 +96,6 @@ class _CommunityPageState extends State<CommunityPage> {
     print(h.body.toString());
 
     userJson = json.decode(h.body);
-
 
     for (String friend in json.decode(userJson['friends'])) {
       setState(() {
@@ -168,6 +170,12 @@ class _CommunityPageState extends State<CommunityPage> {
               context,
               MaterialPageRoute(builder: (context) => ChatScreen(chatId: id,user: userJson['name'],)),
             );
+          else{
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage(user: userJson['name'],)),
+            );
+          }
         },
         child: Container(
           width: 450.0,

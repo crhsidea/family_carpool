@@ -1,7 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
 
+import 'package:http/http.dart' as http;
+
+
 class ProfilePage extends StatefulWidget {
+
+  final String user;
+
+  const ProfilePage({Key key, this.user}) : super(key: key);
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 
@@ -10,6 +20,15 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final color = LightColors.kDarkYellow;
+  
+  dynamic userdata;
+  String baseaddr = "http://192.168.0.12:8080/";
+  
+  Future getUserData() async{
+    var h = await http.get(baseaddr + "users/byname/" + widget.user);
+    
+    userdata = json.decode(h.body);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,33 +51,26 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Column(
         children: <Widget>[
           buildTop(height, width),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      buildOption(Icons.pie_chart, 'Leaders', false),
-                      buildOption(Icons.show_chart, 'Level Up', false),
-                      buildOption(Icons.card_giftcard, 'Gifts', false),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      buildOption(Icons.code, 'QR Code', false),
-                      buildOption(Icons.pie_chart, 'Daily bonus', false),
-                      buildOption(Icons.remove_red_eye, 'Visitors', false),
-                    ],
-                  ),
-                ],
-              ),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(
+                      json.decode(userdata['userdata'])['description']),
+                ),
+              ],
             ),
-          )
+          ),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  title:
+                  Text(json.decode(userdata['userdata'])['email']),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -88,12 +100,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Familiar',
+                        'Age',
                         style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(height: 5.0),
                       Text(
-                        '12',
+                        userdata['age'],
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -121,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       SizedBox(height: 15.0),
                       Text(
-                        'ID: 142563225',
+                        'ID: '+userdata['id'],
                         style: TextStyle(color: Colors.white70),
                       )
                     ],
@@ -133,12 +145,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Fallowing',
+                        "Years Driving",
                         style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(height: 5.0),
                       Text(
-                        '18',
+                        userdata['years'],
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -155,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
             alignment: Alignment.center,
             padding: EdgeInsets.all(16.0),
             child: Text(
-              "Javier González Rodríguez",
+              userdata['name'],
               style: TextStyle(
                 fontSize: 25.0,
                 color: Colors.white,
@@ -169,9 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 buildOption(Icons.group_add, "Friends", true),
-                buildOption(Icons.group, "Groups", true),
-                buildOption(Icons.videocam, "Videos", true),
-                buildOption(Icons.favorite, "Likes", true),
+                buildOption(Icons.group, "Carpools", true),
               ],
             ),
           ),

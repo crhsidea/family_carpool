@@ -11,6 +11,7 @@ import 'package:family_carpool/widgets/home/task_column.dart';
 import 'package:family_carpool/widgets/home/actice_project_card.dart';
 import 'package:family_carpool/widgets/home/top_container.dart';
 import 'package:http/http.dart' as http;
+import 'package:simple_gravatar/simple_gravatar.dart';
 
 class HomePage extends StatefulWidget {
   static CircleAvatar calendarIcon() {
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final Directory directory = await getApplicationDocumentsDirectory();
-      final File file = File('${directory.path}/language.txt');
+      final File file = File('${directory.path}/user.txt');
       String temp = await file.readAsString();
       val = temp;
     } catch (e) {
@@ -184,12 +185,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future getRoutes() async {
+
+
     //Route Data Receive Here
     var username = await getCurUser();
 
     setState(() {
       uname = username;
     });
+    loadGravatar();
 
     var u = await http.get(baseaddr + "users/byname/" + username);
 
@@ -217,7 +221,23 @@ class _HomePageState extends State<HomePage> {
   }
   
   BuildContext cont;
-  
+
+  bool gravloaded = false;
+
+  String gravurl;
+
+  void loadGravatar(){
+    var gravatar = Gravatar(uname);
+    setState(() {
+      gravurl = gravatar.imageUrl(
+        size: 100,
+        defaultImage: GravatarImage.retro,
+        rating: GravatarRating.pg,
+        fileExtension: true,
+      );
+      gravloaded = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                           center: CircleAvatar(
                             backgroundColor: LightColors.kBlue,
                             radius: 35.0,
-                            backgroundImage: AssetImage(
+                            backgroundImage:AssetImage(
                               'assets/images/Obama.PNG',
                             ),
                           ),

@@ -32,9 +32,9 @@ class _SignUpPageState extends State<SignUpPage> {
   String baseaddr = "http://192.168.0.12:8080/";
 
   setUser(BuildContext context) async{
-    print("changing language");
+    print("changing username");
     final Directory directory = await getApplicationDocumentsDirectory();
-    final File file = File('${directory.path}/language.txt');
+    final File file = File('${directory.path}/user.txt');
     await file.writeAsString(name.text.toString());
 
     var tmp = {

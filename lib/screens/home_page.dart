@@ -56,6 +56,9 @@ class _HomePageState extends State<HomePage> {
 
     super.initState();
 
+    addNotification();
+    addEndNotification();
+
     getRoutes();
   }
 
@@ -70,6 +73,25 @@ class _HomePageState extends State<HomePage> {
       bool exists = false;
       for(int e=0;i<notified.length;i++) {
         if(json.decode(personal[i]['dates'])[0]==notified[e]) {
+          exists = true;
+          break;
+        }
+      }
+      if(!exists) {
+        notifyUser(json.decode(personal[i]['routedata'])['title'], json.decode(personal[i]['routedata'])['description'], DateTime(json.decode(personal[i]['dates'])[0]));
+      }
+    }
+  }
+
+  Future addEndNotification() async {
+    List<DateTime> notified = new List<DateTime>();
+    for(int i=0;i<(await FlutterLocalNotificationsPlugin().pendingNotificationRequests()).length;i++) {
+      notified.add(DateTime.parse((await FlutterLocalNotificationsPlugin().pendingNotificationRequests())[i].payload));
+    }
+    for(int i=0;i<personal.length;i++) {
+      bool exists = false;
+      for(int e=0;i<notified.length;i++) {
+        if(json.decode(personal[i]['dates'])[1]==notified[e]) {
           exists = true;
           break;
         }

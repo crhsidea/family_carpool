@@ -1,15 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/screens/calendar_Page.dart';
 import 'package:family_carpool/themes/colors.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:family_carpool/widgets/home/task_column.dart';
 import 'package:family_carpool/widgets/home/actice_project_card.dart';
 import 'package:family_carpool/widgets/home/top_container.dart';
 import 'package:http/http.dart' as http;
+
+import '../notification_initializer.dart';
 
 class HomePage extends StatefulWidget {
   static CircleAvatar calendarIcon() {
@@ -42,9 +49,101 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState(){
+
+    _requestIOSPermissions();
+    _configureDidReceiveLocalNotificationSubject();
+    _configureSelectNotificationSubject();
+
     super.initState();
 
     getRoutes();
+  }
+
+  Dio dio = new Dio();
+
+  Future addNotification() async {
+    List<DateTime> notified = new List<DateTime>();
+    for(int i=0;i<(await FlutterLocalNotificationsPlugin().pendingNotificationRequests()).length;i++) {
+      notified.add(DateTime.parse((await FlutterLocalNotificationsPlugin().pendingNotificationRequests())[i].payload));
+    }
+    for(int i=0;i<personal.length;i++) {
+      bool exists = false;
+      for(int e=0;i<notified.length;i++) {
+        if(json.decode(personal[i]['dates'])[0]==notified[e]) {
+          exists = true;
+          break;
+        }
+      }
+      if(!exists) {
+        notifyUser(json.decode(personal[i]['routedata'])['title'], json.decode(personal[i]['routedata'])['description'], DateTime(json.decode(personal[i]['dates'])[0]));
+      }
+    }
+  }
+
+  final MethodChannel platform =
+  MethodChannel('crossingthestreams.io/resourceResolver');
+
+  void _requestIOSPermissions() {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  void _configureDidReceiveLocalNotificationSubject() {
+    didReceiveLocalNotificationSubject.stream
+        .listen((ReceivedNotification receivedNotification) async {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: receivedNotification.title != null
+              ? Text(receivedNotification.title)
+              : null,
+          content: receivedNotification.body != null
+              ? Text(receivedNotification.body)
+              : null,
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text('Ok'),
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+                //todo: put page to navigate to here
+              },
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationSubject.stream.listen((String payload) async {
+      //todo: put page to navigate to here
+    });
+  }
+
+  @override
+  void dispose() {
+    didReceiveLocalNotificationSubject.close();
+    selectNotificationSubject.close();
+    super.dispose();
+  }
+
+  Future<void> notifyUser(String title, String body, DateTime time) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+        0, title, body, time, platformChannelSpecifics,
+        payload: 'item x');
   }
 
   List<dynamic> suggested = [];

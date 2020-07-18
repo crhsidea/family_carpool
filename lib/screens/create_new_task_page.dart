@@ -28,7 +28,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
   double lat = 0;
   double lng = 0;
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  String baseaddr = "http://192.168.0.1:8080/";
 
   int combinetime(TimeOfDay t) {
     return DateTime(_date.year, _date.month, _date.day, t.hour, t.minute)
@@ -73,7 +73,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
   Future submitRoute(BuildContext context) async {
     var timelist = [combinetime(initTime), combinetime(endTime)];
-    var namelist = [await getUserName()];
+    var namelist = ['*${await getUserName()}'];
     var addrlist = [
       startController.text.toString(),
       endController.text.toString()
@@ -88,7 +88,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
         json.encode(addrlist).toString() +
         "/";
     //await http.get(baseaddr+"routes/add/1/"+json.encode(timelist).toString()+"/"+json.encode(namelist).toString()+"/"+json.encode(addrlist).toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
-
+    String username = await getUserName();
     Navigator.push(
       context,
       MaterialPageRoute(

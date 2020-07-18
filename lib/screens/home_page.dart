@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
 
   List<dynamic> personal = [];
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  String baseaddr = "http://192.168.0.1:8080/";
 
   Future<String> getCurUser() async {
     String val = "";

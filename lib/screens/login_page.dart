@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  String baseaddr = "http://192.168.0.1:8080/";
 
   Future authenticate(BuildContext context) async{
     var h = await http.get(baseaddr+"users/byname/"+email.text.toString());

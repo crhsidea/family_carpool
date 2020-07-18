@@ -29,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
 
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  String baseaddr = "http://192.168.0.1:8080/";
 
   setUser(BuildContext context) async{
     print("changing language");

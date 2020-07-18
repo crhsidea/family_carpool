@@ -242,52 +242,54 @@ class FinalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.orangeAccent,
-        child: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  AvatarGlow(
-                    endRadius: 150,
-                    duration: Duration(seconds: 2),
-                    glowColor: Colors.white24,
-                    repeat: true,
-                    repeatPauseDuration: Duration(seconds: 1),
-                    startDelay: Duration(seconds: 1),
-                    child: Material(
-                        elevation: 25.0,
-                        shape: CircleBorder(),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey[100],
-                          child: FlutterLogo(
-                            size: 100.0,
-                          ),
-                          radius: 100.0,
-                        )),
-                  ),
-                  //SizedBox(height: 100,),
-                  Center(
-                    child: Text(
-                        'Start your chatter today',
-                        style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
+    return Scaffold(
+      body: Container(
+          color: Colors.orangeAccent,
+          child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    AvatarGlow(
+                      endRadius: 150,
+                      duration: Duration(seconds: 2),
+                      glowColor: Colors.white24,
+                      repeat: true,
+                      repeatPauseDuration: Duration(seconds: 1),
+                      startDelay: Duration(seconds: 1),
+                      child: Material(
+                          elevation: 25.0,
+                          shape: CircleBorder(),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey[100],
+                            child: FlutterLogo(
+                              size: 100.0,
+                            ),
+                            radius: 100.0,
+                          )),
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  IconButton(
-                    color: Colors.white,
-                    icon: Icon(Icons.arrow_forward_ios),
-                    iconSize: 40,
-                    onPressed:(){
-                      checkSso(context);
-                    }
-    )
-    ])));
+                    //SizedBox(height: 100,),
+                    Center(
+                      child: Text(
+                          'Start your chatter today',
+                          style: TextStyle(
+                              fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    IconButton(
+                        color: Colors.white,
+                        icon: Icon(Icons.arrow_forward_ios),
+                        iconSize: 40,
+                        onPressed:(){
+                          checkSso(context);
+                        }
+                    )
+                  ]))),
+    );
     }
 
 

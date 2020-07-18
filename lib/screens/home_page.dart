@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:family_carpool/widgets/load_data.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/screens/calendar_Page.dart';
 import 'package:family_carpool/themes/colors.dart';
@@ -9,7 +10,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:family_carpool/widgets/home/task_column.dart';
 import 'package:family_carpool/widgets/home/actice_project_card.dart';
-import 'package:family_carpool/widgets/home/top_container.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_gravatar/simple_gravatar.dart';
 
@@ -232,6 +232,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  dynamic udata;
+
   Future getRoutes() async {
 
     await getIP();
@@ -246,6 +248,8 @@ class _HomePageState extends State<HomePage> {
 
     var u = await http.get(baseaddr + "users/byname/" + username);
 
+
+    udata = json.decode(u.body);
 
     var h = await http.get(baseaddr + "routes/name/" + username);
 
@@ -325,6 +329,17 @@ class _HomePageState extends State<HomePage> {
                         icon: Icon(Icons.menu,
                             color: LightColors.kDarkBlue, size: 30.0),
                         onPressed: _diplayIPChange,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add,
+                            color: LightColors.kDarkBlue, size: 30.0),
+                          // Within the `FirstRoute` widget
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoadDataPage(userdata: udata,)),
+                            );
+                          },
                       ),
                     ],
                   ),

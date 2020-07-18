@@ -18,6 +18,7 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreen extends State<IntroScreen> {
+  String baseaddr;
 
 
 
@@ -39,8 +40,9 @@ class _IntroScreen extends State<IntroScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     getIP();
+    super.initState();
+
   }
   @override
   Widget build(BuildContext context) {

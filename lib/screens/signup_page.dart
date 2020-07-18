@@ -28,8 +28,29 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController password = new TextEditingController();
 
 
+  @override
+  void initState(){
 
-  String baseaddr = "http://192.168.0.12:8080/";
+    super.initState();
+    getIP();
+  }
+
+
+  String baseaddr;
+  Future getIP()async{
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ip.txt');
+      String temp = await file.readAsString();
+      setState(() {
+        baseaddr = temp;
+      });
+      print(temp);
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
 
   setUser(BuildContext context) async{
     print("changing username");

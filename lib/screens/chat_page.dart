@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:family_carpool/widgets/receivedmessagewidget.dart';
 import 'package:family_carpool/widgets/sentmessagewidget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 bool wasCorrect;
 
@@ -35,10 +37,28 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  String baseaddr ;
+  Future getIP()async{
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ip.txt');
+      String temp = await file.readAsString();
+      setState(() {
+        baseaddr = temp;
+      });
+      print(temp);
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
+
 
   Stream<List<dynamic>> streamChat() async* {
     while (true) {
+      if(baseaddr==""){
+        await getIP();
+      }
       await Future.delayed(Duration(milliseconds: 1000));
       var chat = await http.get(baseaddr + "messages/name/" + widget.chatId);
       print("getting messages");

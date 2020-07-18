@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:faker/faker.dart';
@@ -6,6 +7,7 @@ import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:family_carpool/screens/profile_page.dart';
 import 'package:family_carpool/screens/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'themes/colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +20,8 @@ String baseaddr = "http://192.168.0.12:8080/";
 int fakedata = 15;
 String password = '12345678';
 String descriptions = 'default database-loaded user';
+
+
 
 
 Future loadDBUsers() async {
@@ -104,7 +108,7 @@ class MyApp extends StatelessWidget {
             displayColor: LightColors.kDarkBlue,
             fontFamily: 'Poppins'),
       ),
-      home: SignUpPage(),
+      home: IntroScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

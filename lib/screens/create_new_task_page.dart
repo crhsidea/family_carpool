@@ -25,7 +25,22 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
   double lat = 0;
   double lng = 0;
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  Future getIP()async{
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ip.txt');
+      String temp = await file.readAsString();
+      setState(() {
+        baseaddr = temp;
+      });
+      print(temp);
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
+
+  String baseaddr ;
 
   int combinetime(TimeOfDay t) {
     return DateTime(_date.year, _date.month, _date.day, t.hour, t.minute)
@@ -62,6 +77,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
   @override
   void initState() {
     super.initState();
+    getIP();
     startController = new TextEditingController();
     endController = new TextEditingController();
     descriptController = new TextEditingController();

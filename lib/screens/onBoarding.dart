@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:family_carpool/main.dart';
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/screens/welcome_page.dart';
 import 'package:family_carpool/widgets/bottom_bar.dart';
@@ -17,6 +18,30 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreen extends State<IntroScreen> {
+
+
+
+  Future getIP()async{
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ip.txt');
+      String temp = await file.readAsString();
+      setState(() {
+        baseaddr = temp;
+      });
+      print(temp);
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getIP();
+  }
   @override
   Widget build(BuildContext context) {
     final onboardPages = [

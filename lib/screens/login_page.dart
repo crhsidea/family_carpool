@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'signup_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:family_carpool/widgets/login/bezier_container.dart';
@@ -22,7 +24,29 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController email = new TextEditingController();
   TextEditingController password = new TextEditingController();
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  String baseaddr ;
+
+  @override
+  void initState(){
+    super.initState();
+    getIP();
+  }
+
+  Future getIP()async{
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ip.txt');
+      String temp = await file.readAsString();
+      setState(() {
+        baseaddr = temp;
+      });
+      print(temp);
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
+
 
   Future authenticate(BuildContext context) async{
     var h = await http.get(baseaddr+"users/byname/"+email.text.toString());

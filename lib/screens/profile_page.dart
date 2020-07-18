@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -19,11 +21,35 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getIP();
+    super.initState();
+  }
   final color = LightColors.kDarkYellow;
   
   dynamic userdata;
-  String baseaddr = "http://192.168.0.12:8080/";
-  
+  String baseaddr;
+
+
+  Future getIP()async{
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ip.txt');
+      String temp = await file.readAsString();
+      setState(() {
+        baseaddr = temp;
+      });
+      print(temp);
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
+
+
   Future getUserData() async{
     var h = await http.get(baseaddr + "users/byname/" + widget.user);
     
@@ -190,6 +216,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
 
   Widget buildOption(IconData icon, String text, bool top) {
     return Column(

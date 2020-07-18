@@ -14,17 +14,6 @@ import 'package:http/http.dart' as http;
 import 'package:simple_gravatar/simple_gravatar.dart';
 
 class HomePage extends StatefulWidget {
-  static CircleAvatar calendarIcon() {
-    return CircleAvatar(
-      radius: 25.0,
-      backgroundColor: LightColors.kGreen,
-      child: Icon(
-        Icons.calendar_today,
-        size: 20.0,
-        color: Colors.white,
-      ),
-    );
-  }
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -53,7 +42,23 @@ class _HomePageState extends State<HomePage> {
 
   List<dynamic> personal = [];
 
-  String baseaddr = "http://192.168.0.12:8080/";
+  String baseaddr;
+
+  Future getIP()async{
+
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ip.txt');
+      String temp = await file.readAsString();
+      setState(() {
+        baseaddr = temp;
+      });
+      print(temp);
+    } catch (e) {
+      print("Couldn't read file");
+    }
+  }
+
 
   Future<String> getCurUser() async {
     String val = "";
@@ -100,6 +105,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   TextEditingController addrController = TextEditingController();
+  TextEditingController ipControlller = TextEditingController();
+
+  setIP() async{
+
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final File file = File('${directory.path}/ip.txt');
+    await file.writeAsString("http://"+ipControlller.text.toString()+":8080/");
+
+    String temp = await file.readAsString();
+    print(temp);
+
+    Navigator.pop(
+      cont
+    );
+  }
 
   _displayDialog() async {
     return showDialog(
@@ -114,6 +134,34 @@ class _HomePageState extends State<HomePage> {
             actions: <Widget>[
               new FlatButton(
                 child: new Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+
+
+  _diplayIPChange() async {
+    return showDialog(
+        context: cont,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('What is the IP Address of the Running Local Computer?'),
+            content: TextField(
+              controller: ipControlller,
+              decoration: InputDecoration(hintText: "Usually found in network settings "),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('OK'),
+                onPressed:setIP
+              )
+              ,new FlatButton(
+                child: new Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -186,6 +234,7 @@ class _HomePageState extends State<HomePage> {
 
   Future getRoutes() async {
 
+    await getIP();
 
     //Route Data Receive Here
     var username = await getCurUser();
@@ -257,10 +306,11 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Icon(Icons.menu,
-                          color: LightColors.kDarkBlue, size: 30.0),
-                      Icon(Icons.search,
-                          color: LightColors.kDarkBlue, size: 25.0),
+                      IconButton(
+                        icon: Icon(Icons.menu,
+                            color: LightColors.kDarkBlue, size: 30.0),
+                        onPressed: _diplayIPChange,
+                      ),
                     ],
                   ),
                   Padding(
@@ -335,16 +385,7 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               subheading('My Carpools'),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CalendarPage()),
-                                  );
-                                },
-                                child: HomePage.calendarIcon(),
-                              ),
+
                             ],
                           ),
                           SizedBox(height: 15.0),

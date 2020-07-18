@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:family_carpool/screens/chat_page.dart';
 import 'package:family_carpool/screens/profile_page.dart';
+import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -264,6 +265,7 @@ class _CommunityPageState extends State<CommunityPage> {
     cont = context;
     final ThemeData _theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: LightColors.kLightYellow,
       floatingActionButton: FloatingActionButton(
         onPressed: _showDialog,
         child: Icon(Icons.add),
@@ -274,15 +276,18 @@ class _CommunityPageState extends State<CommunityPage> {
         elevation: 0.0,
       ),
       body: Container(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            SizedBox(
+              height: 30.0,
+            ),
             Text(
-              "Community CarPools",
+              " Carpools",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 35.0,
+                fontSize: 40.0,
               ),
             ),
             SizedBox(
@@ -296,12 +301,12 @@ class _CommunityPageState extends State<CommunityPage> {
                   children: <Widget>[
                     TabBar(
                       unselectedLabelColor: Colors.grey,
-                      labelColor: _theme.primaryColor,
+                      labelColor: LightColors.DarkYellow,
                       labelStyle: TextStyle(
-                        fontSize: 15.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
-                      indicatorColor: _theme.primaryColor,
+                      indicatorColor: LightColors.DarkYellow,
                       tabs: <Widget>[
                         Tab(
                           text: "Group Chats",

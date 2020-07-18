@@ -86,7 +86,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
   Future submitRoute(BuildContext context) async {
     var timelist = [combinetime(initTime), combinetime(endTime)];
-    var namelist = [await getUserName()];
+    var namelist = ['*${await getUserName()}'];
     var addrlist = [
       startController.text.toString(),
       endController.text.toString()
@@ -101,7 +101,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
         json.encode(addrlist).toString() +
         "/";
     //await http.get(baseaddr+"routes/add/1/"+json.encode(timelist).toString()+"/"+json.encode(namelist).toString()+"/"+json.encode(addrlist).toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
-
+    String username = await getUserName();
     Navigator.push(
       context,
       MaterialPageRoute(

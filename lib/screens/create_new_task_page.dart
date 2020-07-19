@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:async';
 
 import 'package:family_carpool/screens/route_preview_page.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,10 @@ import 'package:family_carpool/widgets/home/top_container.dart';
 import 'package:family_carpool/widgets/home/back_button.dart';
 import 'package:family_carpool/widgets/home/my_textfield.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:family_carpool/notification_initializer.dart';
 
 class CreateNewTaskPage extends StatefulWidget {
   @override
@@ -76,6 +81,9 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
   @override
   void initState() {
+    _requestIOSPermissions();
+    _configureDidReceiveLocalNotificationSubject();
+    _configureSelectNotificationSubject();
     super.initState();
     getIP();
     startController = new TextEditingController();
@@ -91,6 +99,8 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
       startController.text.toString(),
       endController.text.toString()
     ];
+
+    notifyUser(nameController.text+' at ${initTime.hour}: ${initTime.minute/10}${initTime.minute%10}', descriptController.text, DateTime(combinetime(initTime)).subtract(Duration(minutes: 15)));
 
     String b = baseaddr +
         "routes/add/1/" +
@@ -116,6 +126,72 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
   }
 
 
+
+  final MethodChannel platform =
+  MethodChannel('crossingthestreams.io/resourceResolver');
+
+  void _requestIOSPermissions() {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  void _configureDidReceiveLocalNotificationSubject() {
+    didReceiveLocalNotificationSubject.stream
+        .listen((ReceivedNotification receivedNotification) async {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: receivedNotification.title != null
+              ? Text(receivedNotification.title)
+              : null,
+          content: receivedNotification.body != null
+              ? Text(receivedNotification.body)
+              : null,
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              child: Text('Ok'),
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+                //todo: put page to navigate to here
+              },
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationSubject.stream.listen((String payload) async {
+      //todo: put page to navigate to here
+    });
+  }
+
+  @override
+  void dispose() {
+    didReceiveLocalNotificationSubject.close();
+    selectNotificationSubject.close();
+    super.dispose();
+  }
+
+  Future<void> notifyUser(String title, String body, DateTime time) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'your channel id', 'your channel name', 'your channel description',
+        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+        0, title, body, time, platformChannelSpecifics,
+        payload: '${time.toString()}');
+  }
 
   @override
   Widget build(BuildContext context) {

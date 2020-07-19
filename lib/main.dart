@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:faker/faker.dart';
+import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/screens/onBoarding.dart';
+import 'package:family_carpool/screens/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'themes/colors.dart';

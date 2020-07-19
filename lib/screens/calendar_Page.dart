@@ -218,7 +218,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 height: 58.0,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: days.length-1,
+                  itemCount: days.length,
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(
                       onTap: () {
@@ -234,10 +234,10 @@ class _CalendarPageState extends State<CalendarPage> {
                             width: 20,
                           ),
                           CalendarDates(
-                            day:  days[DateTime.now().weekday+index],
+                            day:  days[DateTime.now().weekday+index%7],
                             date: dates[index],
-                            dayColor: days[DateTime.now().weekday+index] == 'Sun' ? LightColors.kRed : Colors.black54,
-                            dateColor: days[DateTime.now().weekday+index] == 'Sun' ? LightColors.kRed : LightColors.kDarkBlue,
+                            dayColor: days[DateTime.now().weekday+index%7] == 'Sun' ? LightColors.kRed : Colors.black54,
+                            dateColor: days[DateTime.now().weekday+index%7] == 'Sun' ? LightColors.kRed : LightColors.kDarkBlue,
                           ),
                         ],
                       ),

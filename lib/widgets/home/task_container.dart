@@ -16,11 +16,11 @@ class TaskContainer extends StatelessWidget {
     return Container(
       height: size,
       width: MediaQuery.of(context).size.width-110,
-      margin: EdgeInsets.symmetric(vertical: 15.0),
-      padding: EdgeInsets.all(20.0),
+      padding: EdgeInsets.only(left:20.0, right: 20),
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
             title,
@@ -29,18 +29,6 @@ class TaskContainer extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Colors.black54,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          )
         ],
       ),
       decoration: BoxDecoration(

@@ -217,9 +217,9 @@ class _HomePageState extends State<HomePage> {
 
     _displayDialog();
 
-    List<String> users = json.decode(route['users']);
+    List<dynamic> users = json.decode(route['users']);
     users.add(uname);
-    List<String> addrs = json.decode(route['addresses']);
+    List<dynamic> addrs = json.decode(route['addresses']);
     addrs.insert(0, addrController.text.toString());
     await http.get(baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates']+"/"+json.encode(users).toString()+"/"+json.encode(addrs).toString()+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata']);
   }
@@ -291,10 +291,14 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
+  List<Widget> temp = [];
+
 
   Future getRecs() async{
     List<double> lats = [];
     List<double> lngs = [];
+
+    Set<String> uns = {};
     for (dynamic m in personal){
       lats.add(m['lat']);
       lngs.add(m['lng']);
@@ -303,8 +307,8 @@ class _HomePageState extends State<HomePage> {
     for (int i = 0; i< lats.length; i++){
       var h = await http.get(baseaddr+"routes/rec/"+lats[i].toString()+"/"+lngs[i].toString());
       for (dynamic recdata in json.decode(h.body)){
-        print(recdata.toString());
-        if (!recdata['users'].contains(uname)){
+        print(recdata.length.toString());
+        if (!recdata['users'].contains(uname)&&uns.add(recdata['id'].toString())){
           setState(() {
             suggested.add(recdata);
           });
@@ -312,44 +316,47 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
+    print("SUGGESTED"+ suggested.length.toString());
     bool on = false;
-    List<Widget> temp = [];
+
     int ind = 0;
 
-    for (dynamic item in suggested){
-      if(on){
-        temp.add(
+    for (int i = 0; i<suggested.length; i++){
+      print(temp.toString());
+      setState(() {
+        temp.insert(0,
             GestureDetector(
               onTap:(){
-                addCarpool(item);
+                addCarpool(suggested[i]);
               },
-              child: ActiveProjectsCard(
-          cardColor: colors[ind%4],
-          loadingPercent: Random().nextDouble(),
-          title: json.decode(item['routedata'])['title'],
-          subtitle:json.decode(item['routedata'])['description'],
-        ),
+              child: Flexible(
+                flex: 1,
+                child: ActiveProjectsCard(
+                  cardColor: colors[ind%4],
+                  loadingPercent: Random().nextDouble(),
+                  title: json.decode(suggested[i]['routedata'])['title'],
+                  subtitle:json.decode(suggested[i]['routedata'])['description'],
+                ),
+              ),
             ));
-        on = false;
-      }
-      else{
-        temp.add(
-            ActiveProjectsCard(
-              cardColor: colors[ind%4],
-              loadingPercent: Random().nextDouble(),
-              title: json.decode(item['routedata'])['title'],
-              subtitle:json.decode(item['routedata'])['description'],
-            ));
-        on = true;
+      });
+      if(on){
         setState(() {
-          recItems.add(Row(
-            children: temp,
+          recItems.add(Container(
+            height: 200,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: temp,
+            ),
           ));
+          temp = [];
         });
-        temp = [];
       }
+
       ind++;
+      on = !on;
     }
+
   }
 
   dynamic udata;

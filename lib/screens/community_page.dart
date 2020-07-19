@@ -7,6 +7,7 @@ import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:simple_gravatar/simple_gravatar.dart';
 
 
 class CommunityPage extends StatefulWidget {
@@ -66,6 +67,16 @@ class _CommunityPageState extends State<CommunityPage> {
   List<Widget> chats = [];
 
   List<String> friendnames = [];
+  String loadGravatar(String uname){
+    var gravatar = Gravatar(uname);
+    String gravurl = gravatar.imageUrl(
+        size: 50,
+        defaultImage: GravatarImage.retro,
+        rating: GravatarRating.pg,
+        fileExtension: true,
+      );
+    return gravurl;
+  }
 
   Future getRoutes() async {
     //Route Data Receive Here
@@ -85,8 +96,8 @@ class _CommunityPageState extends State<CommunityPage> {
             json.decode(data['addresses'])[json
                 .decode(data['addresses'])
                 .length-1],
-            'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-        data['id'].toString(), false));
+            loadGravatar(json.decode(data['routedata'])['title']),
+        data['id'].toString(), false, data));
       });
     }
 
@@ -118,8 +129,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
     for (String friend in json.decode(userJson['friends'])) {
       setState(() {
-        friends.add(getContainer(friend, "",
-            'https://i.thecartoonist.me/cartoon-face-of-white-male.png', '', true));
+        friends.add(getContainer(friend, "", loadGravatar(friend), '', true, ""));
         friendnames.add(friend);
       });
     }
@@ -179,7 +189,7 @@ class _CommunityPageState extends State<CommunityPage> {
     );
   }
 
-  Widget getContainer(String name, String address, String image, String id, bool user) {
+  Widget getContainer(String name, String address, String image, String id, bool user, dynamic chatdata) {
     return Padding(
       padding: const EdgeInsets.only(left: 7.0, right: 7.0, top: 15),
       child: GestureDetector(
@@ -187,7 +197,7 @@ class _CommunityPageState extends State<CommunityPage> {
           if(!user)
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChatScreen(chatId: id,user: userJson['name'],)),
+              MaterialPageRoute(builder: (context) => ChatScreen(chatId: id,user: userJson['name'],routedata: chatdata,)),
             );
           else{
             Navigator.push(
@@ -223,8 +233,8 @@ class _CommunityPageState extends State<CommunityPage> {
               padding: const EdgeInsets.only(left: 7.0, right: 7.0),
               child: Container(
                   alignment: Alignment.centerLeft,
-                  width: 40.0,
-                  height: 55.0,
+                  width: 50.0,
+                  height: 50.0,
                   decoration: new BoxDecoration(
                       shape: BoxShape.circle,
                       image: new DecorationImage(

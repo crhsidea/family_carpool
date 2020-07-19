@@ -6,6 +6,7 @@ import 'package:family_carpool/themes/colors.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:simple_gravatar/simple_gravatar.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -47,14 +48,36 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (e) {
       print("Couldn't read file");
     }
+
+    await getUserData();
   }
 
 
+  String loadGravatar(String uname){
+    var gravatar = Gravatar(uname);
+    String gravurl = gravatar.imageUrl(
+      size: 100,
+      defaultImage: GravatarImage.retro,
+      rating: GravatarRating.pg,
+      fileExtension: true,
+    );
+    return gravurl;
+  }
+
   Future getUserData() async{
+    print("STARTED GETTING DATA");
     var h = await http.get(baseaddr + "users/byname/" + widget.user);
     
     userdata = json.decode(h.body);
+
+    print(userdata);
+    setState(() {
+      loaded = true;
+    });
   }
+
+  bool loaded = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
           )
         ],
       ),
-      body: Column(
+      body: loaded?Column(
         children: <Widget>[
           buildTop(height, width),
           Card(
@@ -98,6 +121,8 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ],
+      ):Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
@@ -131,7 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       SizedBox(height: 5.0),
                       Text(
-                        userdata['age'],
+                        json.decode(userdata['userdata'])['age'].toString(),
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -153,13 +178,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           image: DecorationImage(
                             fit: BoxFit.fill,
                             image: new NetworkImage(
-                                "http://www.usanetwork.com/sites/usanetwork/files/styles/629x720/public/suits_cast_harvey.jpg?itok=fpTOeeBb"),
+                                loadGravatar(userdata['name'])),
                           ),
                         ),
                       ),
                       SizedBox(height: 15.0),
                       Text(
-                        'ID: '+userdata['id'],
+                        'ID: '+userdata['id'].toString(),
                         style: TextStyle(color: Colors.white70),
                       )
                     ],
@@ -176,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       SizedBox(height: 5.0),
                       Text(
-                        userdata['years'],
+                        json.decode(userdata['userdata'])['years'].toString(),
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

@@ -7,7 +7,6 @@ import 'package:family_carpool/widgets/load_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:family_carpool/screens/calendar_Page.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -398,7 +397,7 @@ class _HomePageState extends State<HomePage> {
 
   bool gravloaded = false;
 
-  String gravurl;
+  String gravurl = 'https://i.kym-cdn.com/photos/images/original/001/398/111/d5a';
 
   void loadGravatar(){
     var gravatar = Gravatar(uname);
@@ -482,8 +481,8 @@ class _HomePageState extends State<HomePage> {
                           center: CircleAvatar(
                             backgroundColor: LightColors.kBlue,
                             radius: 35.0,
-                            backgroundImage:AssetImage(
-                              'assets/images/Obama.PNG',
+                            backgroundImage: NetworkImage(
+                                gravurl
                             ),
                           ),
                         ),

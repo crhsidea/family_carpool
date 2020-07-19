@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:family_carpool/screens/profile_page.dart';
 import 'package:family_carpool/widgets/receivedmessagewidget.dart';
 import 'package:family_carpool/widgets/sentmessagewidget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:simple_gravatar/simple_gravatar.dart';
 
 bool wasCorrect;
 
@@ -15,14 +17,15 @@ class ChatScreen extends StatefulWidget {
   final String chatId;
   final String user;
 
-  const ChatScreen({Key key, this.chatId, this.user}) : super(key: key);
+  final dynamic routedata;
+
+  const ChatScreen({Key key, this.chatId, this.user, this.routedata}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  bool _showBottom = false;
   TextEditingController textInput = new TextEditingController();
 
   StreamController<double> chatcontroller;
@@ -37,7 +40,9 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  String baseaddr ;
+  bool isuserslist = true;
+
+  String baseaddr = "" ;
   Future getIP()async{
 
     try {
@@ -55,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
   Stream<List<dynamic>> streamChat() async* {
+
     while (true) {
       if(baseaddr==""){
         await getIP();
@@ -104,6 +110,82 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<Widget> messages = [];
 
+  List<Widget> users = [];
+
+  Widget getContainer(String name, String address, String image, String id, bool user) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 7.0, right: 7.0, top: 15),
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage(user: name,)),
+          );
+        },
+        child: Container(
+          width: 450.0,
+          height: 70.0,
+          decoration: new BoxDecoration(
+            color: Colors.white,
+            borderRadius: new BorderRadius.only(
+                topLeft: const Radius.circular(25.0),
+                topRight: const Radius.circular(25.0),
+                bottomLeft: const Radius.circular(25.0),
+                bottomRight: const Radius.circular(25.0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.pink.withOpacity(1),
+                spreadRadius: 1,
+                blurRadius: 7,
+                offset: Offset(0, 0), // changes position of shadow
+              ),
+            ],
+          ),
+          child: Row(children: <Widget>[
+            SizedBox(
+              width: 10.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 7.0, right: 7.0),
+              child: Container(
+                  alignment: Alignment.centerLeft,
+                  width: 50.0,
+                  height: 50.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                          alignment: Alignment.bottomLeft,
+                          fit: BoxFit.fill,
+                          image: new NetworkImage(image)))),
+            ),
+            SizedBox(
+              width: 15.0,
+            ),
+            Expanded(
+              child: Text(
+                name,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 25.0,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 80.0,
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.map,
+                color: Colors.pink,
+              ),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,16 +194,17 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         title: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             //TODO add in profile image if it makes sense
             SizedBox(width: 15),
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.chatId,
+                  json.decode(widget.routedata['routedata'])['title'],
                   style: Theme.of(context).textTheme.subhead,
                   overflow: TextOverflow.clip,
                 ),
@@ -132,11 +215,19 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                 )
               ],
+            ),
+            IconButton(
+              icon: Icon(Icons.drive_eta),
+              onPressed:(){
+                setState(() {
+                  isuserslist = !isuserslist;
+                });
+              },
             )
           ],
         ),
       ),
-      body: Stack(
+      body: isuserslist?Stack(
         children: <Widget>[
           Positioned.fill(
             child: Column(
@@ -196,7 +287,22 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
         ],
-      ),
+      ):ListView.builder(
+        itemCount: json.decode(widget.routedata['users']).length,
+          itemBuilder: ((context, ind){
+            return getContainer(json.decode(widget.routedata['users'])[ind], "", loadGravatar(json.decode(widget.routedata['users'])[ind]),"", true);
+          })),
     );
+  }
+
+  String loadGravatar(String uname){
+    var gravatar = Gravatar(uname);
+    String gravurl = gravatar.imageUrl(
+      size: 50,
+      defaultImage: GravatarImage.retro,
+      rating: GravatarRating.pg,
+      fileExtension: true,
+    );
+    return gravurl;
   }
 }

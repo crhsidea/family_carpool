@@ -161,6 +161,7 @@ class _LoadDataPageState extends State<LoadDataPage> {
         'description': descriptions,
         'years': Random().nextInt(15),
         'email': email,
+        'age':20+Random().nextInt(35)
       };
 
       await http.get(baseaddr +
@@ -179,7 +180,11 @@ class _LoadDataPageState extends State<LoadDataPage> {
     }
   }
 
+
   Future loadDBRoutes() async {
+
+    Set<String> friends = {};
+    bool add = false;
     for(int i=0;i<randomRoutes;i++) {
       DateTime curDate = DateTime.now().add(Duration(days: Random().nextInt(7), minutes: Random().nextInt(60), hours: Random().nextInt(12),));
       List<int> dates = [curDate.millisecondsSinceEpoch, curDate.add(Duration(hours: 1)).millisecondsSinceEpoch];
@@ -196,10 +201,24 @@ class _LoadDataPageState extends State<LoadDataPage> {
         'eta': '15 min',
       };
       List<String> usersList = randomUsers(addresses.length);
-      usersList.insert(0, widget.userdata['name']);
-      addresses.insert(0, addrController.text.toString());
+      if (add){
+        usersList.insert(0, widget.userdata['name']);
+        addresses.insert(0, addrController.text.toString());
+      }
+      friends.addAll(usersList);
+      add = !add;
+
       await http.get(baseaddr+'routes/add/1/'+json.encode(dates).toString()+'/'+json.encode(usersList).toString()+'/'+json.encode(addresses).toString()+'/'+latLng.latitude.toString()+'/'+latLng.longitude.toString()+'/'+json.encode(routedata).toString());
     }
+    List<String> frs = [];
+    for (String n in friends){
+      frs.add(n);
+    }
+
+    print(baseaddr+'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString());
+    await http.get(baseaddr+'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString());
+
+
   }
 
   randomAddress() {

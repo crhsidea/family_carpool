@@ -2,13 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
+import 'package:family_carpool/screens/route_preview_page.dart';
 import 'package:family_carpool/widgets/home/back_button.dart';
 import 'package:family_carpool/widgets/home/calendar_dates.dart';
 import 'package:family_carpool/widgets/home/task_container.dart';
 import 'package:flutter/material.dart';
-import 'package:google_map_polyline/google_map_polyline.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'create_new_task_page.dart';
 import 'package:family_carpool/dates_list.dart';
@@ -95,6 +93,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
 
 
+  List<dynamic> routeList = [];
+
   Future getRoutes() async{
 
     await getIP();
@@ -110,6 +110,7 @@ class _CalendarPageState extends State<CalendarPage> {
     for (var data in json.decode(h.body)){
       print(data);
       setState(() {
+        routeList.add(data);
         dateList.add(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0]));
         initTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0])));
         endTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[1])));
@@ -195,7 +196,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Productive Day, Sourav',
+                    'Ready to Travel',
                     style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.grey,
@@ -337,12 +338,28 @@ class _CalendarPageState extends State<CalendarPage> {
                                             padding: EdgeInsets.only(
                                                 top: 50*((endTimeList[i].hour)-th+((endTimeList[i].minute-tm)/60))
                                             ),
-                                            child: Container(
-                                              child: TaskContainer(
-                                                title: titleList[i],
-                                                subtitle: descriptionList[i],
-                                                boxColor: LightColors.kPalePink,
-                                                size: 50*((endTimeList[i].hour+endTimeList[i].minute/60)-(initTimeList[i].hour+initTimeList[i].minute/60)).abs(),
+                                            child: GestureDetector(
+                                              onTap: (){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => RoutePreviewPage(
+                                                    isFirst: false,
+                                                    name: json.decode(routeList[i]['routedata'])['title'],
+                                                    description: json.decode(routeList[i]['routedata'])['description'],
+                                                    isRoute: true,
+                                                    isViewer: true,
+                                                    base: baseaddr,
+                                                    addrList: json.decode(routeList[i]['addresses']),
+                                                  )),
+                                                );
+                                              },
+                                              child: Container(
+                                                child: TaskContainer(
+                                                  title: titleList[i],
+                                                  subtitle: descriptionList[i],
+                                                  boxColor: LightColors.kPalePink,
+                                                  size: 50*((endTimeList[i].hour+endTimeList[i].minute/60)-(initTimeList[i].hour+initTimeList[i].minute/60)).abs(),
+                                                ),
                                               ),
                                             ),
                                           );

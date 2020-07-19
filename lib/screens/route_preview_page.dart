@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ class RoutePreviewPage extends StatefulWidget {
   final bool isFirst;
   final String name;
   final String description;
-  final List<String> addrList;
+  final List<dynamic> addrList;
   final String base;
   final bool isRoute;
   final bool isViewer;

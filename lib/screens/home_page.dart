@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:async';
 
+import 'package:family_carpool/screens/route_preview_page.dart';
 import 'package:family_carpool/widgets/load_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -214,14 +215,25 @@ class _HomePageState extends State<HomePage> {
   List<Color> colors = [LightColors.kGreen, LightColors.kRed, LightColors.kDarkYellow, LightColors.kDarkYellow];
 
   Future addCarpool (dynamic route)async{
-
-    _displayDialog();
-
     List<dynamic> users = json.decode(route['users']);
-    users.add(uname);
+    users.insert(0, uname);
     List<dynamic> addrs = json.decode(route['addresses']);
     addrs.insert(0, addrController.text.toString());
     await http.get(baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates']+"/"+json.encode(users).toString()+"/"+json.encode(addrs).toString()+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata']);
+
+    Navigator.push(
+      cont,
+      MaterialPageRoute(builder: (context) => RoutePreviewPage(
+        isFirst: false,
+        name: json.decode(route['routedata'])['title'],
+        description: json.decode(route['routedata'])['description'],
+        isRoute: false,
+        isViewer: true,
+        base: baseaddr,
+        addrList: addrs,
+        driver: uname,
+      ))
+    );
   }
 
   TextEditingController addrController = TextEditingController();
@@ -241,7 +253,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _displayDialog() async {
+  _displayDialog(dynamic route) async {
     return showDialog(
         context: cont,
         builder: (context) {
@@ -253,11 +265,19 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: <Widget>[
               new FlatButton(
-                child: new Text('OK'),
-                onPressed: () {
+                child: new Text('CANCEL'),
+                onPressed: () async{
                   Navigator.of(context).pop();
                 },
               ),
+              new FlatButton(
+                child: new Text('OK'),
+                onPressed: () async{
+                  await addCarpool(route);
+                  Navigator.of(context).pop();
+                },
+              ),
+
             ],
           );
         });
@@ -327,7 +347,7 @@ class _HomePageState extends State<HomePage> {
         temp.insert(0,
             GestureDetector(
               onTap:(){
-                addCarpool(suggested[i]);
+                _displayDialog(suggested[i]);
               },
               child: Flexible(
                 flex: 1,

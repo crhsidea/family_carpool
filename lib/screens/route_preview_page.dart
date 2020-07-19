@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dio/dio.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:simple_gravatar/simple_gravatar.dart';
 
 
 class RoutePreviewPage extends StatefulWidget {
@@ -20,9 +21,10 @@ class RoutePreviewPage extends StatefulWidget {
   final String base;
   final bool isRoute;
   final bool isViewer;
+  final String driver;
 
 
-  const RoutePreviewPage({Key key, this.isFirst, this.base, this.name, this.description, this.addrList, this.isRoute, this.isViewer}) : super(key: key);
+  const RoutePreviewPage({Key key, this.isFirst, this.base, this.name, this.description, this.addrList, this.isRoute, this.isViewer, this.driver}) : super(key: key);
 
   @override
   _RoutePreviewPageState createState() => _RoutePreviewPageState();
@@ -95,6 +97,7 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
   }
 
   createRouteAddress(String origin, String destination, int index) async {
+    loadGravatar();
     if(origin!=null&&destination!=null) {
       print('orgin: ${origin.toString()}');
       print('destination: ${destination.toString()}');
@@ -116,12 +119,24 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
           ),
         );
       });
+      await getDriverYears();
       await getETA();
       setState(() {
         nlat = polyline.last.points[polyline.last.points.length-1].latitude;
         nlong = polyline.last.points[polyline.last.points.length-1].longitude;
       });
     }
+
+  }
+
+  int years;
+
+  Future getDriverYears() async{
+    var h = await http.get(widget.base + "users/byname/" + widget.driver);
+    setState(() {
+      years = json.decode(json.decode(h.body)['userdata'])['years'];
+    });
+
   }
 
   @override
@@ -131,6 +146,19 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
       print('created route: ${widget.addrList[i]} to ${widget.addrList[i+1]}');
     }
     super.initState();
+  }
+  String gravurl = 'https://coolbackgrounds.io/images/backgrounds/white/pure-white-background-85a2a7fd.jpg';
+
+  void loadGravatar(){
+    var gravatar = Gravatar(widget.driver);
+    setState(() {
+      gravurl = gravatar.imageUrl(
+        size: 100,
+        defaultImage: GravatarImage.retro,
+        rating: GravatarRating.pg,
+        fileExtension: true,
+      );
+    });
   }
 
   @override
@@ -218,11 +246,11 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
 
                                             fit: BoxFit.fill,
                                             image: new NetworkImage(
-                                                "https://i.thecartoonist.me/cartoon-face-of-white-male.png")
+                                                gravurl))
                                         )
-                                    )),
+                                    ),
                                 Text(
-                                  "Mr.Swift",
+                                  widget.driver,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,

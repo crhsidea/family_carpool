@@ -305,4 +305,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
     return gravurl;
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 }

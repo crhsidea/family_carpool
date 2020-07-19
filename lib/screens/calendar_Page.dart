@@ -350,6 +350,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                     isViewer: true,
                                                     base: baseaddr,
                                                     addrList: json.decode(routeList[i]['addresses']),
+                                                    driver:json.decode(routeList[i]['users'])[0]
                                                   )),
                                                 );
                                               },

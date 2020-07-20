@@ -290,9 +290,26 @@ class _ChatScreenState extends State<ChatScreen> {
       ):ListView.builder(
         itemCount: json.decode(widget.routedata['users']).length,
           itemBuilder: ((context, ind){
-            return getContainer(json.decode(widget.routedata['users'])[ind], "", loadGravatar(json.decode(widget.routedata['users'])[ind]),"", true);
+            return GestureDetector(
+              onTap: (){
+                changeDriver(ind);
+              },
+                child: getContainer(json.decode(widget.routedata['users'])[ind], "", loadGravatar(json.decode(widget.routedata['users'])[ind]),"", true));
           })),
     );
+  }
+
+  List<dynamic> switchVals(List<dynamic> input, int ind){
+    List<dynamic> temp = input;
+    temp.insert(0, temp[ind]);
+    temp.removeAt(ind+1);
+    return temp;
+  }
+
+  Future changeDriver(int ind)async{
+    List<String> users = switchVals(json.decode(widget.routedata['users']), ind);
+    List<String> addresses = switchVals(json.decode(widget.routedata['addresses']), ind);
+    await http.get(baseaddr+"routes/updatedriver/"+widget.routedata['id']+"/"+json.encode(users)+"/"+json.encode(addresses));
   }
 
   String loadGravatar(String uname){

@@ -36,6 +36,9 @@ class _RouteViewerState extends State<RouteViewer> {
   bool zoomin = true;
 
   Locator() async {
+    if(!streaming){
+      await streamData();
+    }
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if(position!=null) {
       if(!widget.isViewer)
@@ -162,6 +165,9 @@ class _RouteViewerState extends State<RouteViewer> {
   }
 
   Future streamData() async {
+    setState(() {
+      streaming = true;
+    });
 
     String tmp = await getCurUser();
     uname = tmp;
@@ -259,7 +265,8 @@ class _RouteViewerState extends State<RouteViewer> {
 
   @override
   void dispose() {
-    controller.close(); //Streams must be closed when not needed
+    controller.close();
+    subscription.cancel();//Streams must be closed when not needed
     super.dispose();
   }
 }

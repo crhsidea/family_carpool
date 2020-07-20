@@ -102,7 +102,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
     notifyUser(nameController.text+' at ${initTime.hour}: ${initTime.minute/10}${initTime.minute%10}', descriptController.text, DateTime(combinetime(initTime)).subtract(Duration(minutes: 15)));
 
-    String b = baseaddr +
+    String b = 'http://localhost:8080/' +
         "routes/add/1/" +
         json.encode(timelist).toString() +
         "/" +
@@ -122,6 +122,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                 name: nameController.text.toString(),
                 addrList: addrlist,
             driver: username,
+            isRoute: true,
               )),
     );
   }
@@ -202,7 +203,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
       color: Colors.black54,
     );
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.pink,
         onPressed: () {

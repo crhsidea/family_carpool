@@ -257,7 +257,6 @@ class _CalendarPageState extends State<CalendarPage> {
                           flex: 1,
                           child: ListView.builder(
                             itemCount: time.length,
-                            shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) =>
                             Padding(
@@ -267,6 +266,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   '${time[index]} ${index == 0 || index > 11 && index < 24 ? 'PM' : 'AM'}',
+                                  maxLines: 1,
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: Colors.black54,

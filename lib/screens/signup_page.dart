@@ -65,7 +65,15 @@ class _SignUpPageState extends State<SignUpPage> {
       'age':int.parse(age.text.toString())
     };
 
-    await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode([]).toString());
+    try {
+      print(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode([]).toString());
+      var h = await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode(["hello"]).toString()+"/");
+      print(h.body.toString());
+    }
+    catch (e) {
+      print('NOoOOOOoOOOOOoOOO');
+      print(e.toString());
+    }
 
 
 

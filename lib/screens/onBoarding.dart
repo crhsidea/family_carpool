@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:family_carpool/main.dart';
 import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/screens/welcome_page.dart';
 import 'package:family_carpool/widgets/bottom_bar.dart';
@@ -18,32 +17,6 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreen extends State<IntroScreen> {
-  String baseaddr;
-
-
-
-  Future getIP()async{
-
-    try {
-      final Directory directory = await getApplicationDocumentsDirectory();
-      final File file = File('${directory.path}/ip.txt');
-      String temp = await file.readAsString();
-      setState(() {
-        baseaddr = temp;
-      });
-      print(temp);
-    } catch (e) {
-      print("Couldn't read file");
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    getIP();
-    super.initState();
-
-  }
   @override
   Widget build(BuildContext context) {
     final onboardPages = [
@@ -54,8 +27,8 @@ class _IntroScreen extends State<IntroScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.blue[400],
-                  Colors.blue[600]
+                  Colors.blue[300],
+                  Colors.blue[700]
                 ])),
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -103,8 +76,8 @@ class _IntroScreen extends State<IntroScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.deepPurple[300],
-                  Colors.deepPurple[500]
+                  Colors.blue[300],
+                  Colors.blue[600]
                 ])),
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -161,8 +134,8 @@ class _IntroScreen extends State<IntroScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.orange[300],
-                  Colors.orange[500]
+                  Colors.blue[200],
+                  Colors.blue[500]
                 ])),
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -247,7 +220,7 @@ class FinalScreen extends StatelessWidget {
 
     try {
       final Directory directory = await getApplicationDocumentsDirectory();
-      final File file = File('${directory.path}/user.txt');
+      final File file = File('${directory.path}/language.txt');
       String temp = await file.readAsString();
       val = temp;
     } catch (e) {
@@ -269,54 +242,52 @@ class FinalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          color: Colors.orangeAccent,
-          child: Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    AvatarGlow(
-                      endRadius: 150,
-                      duration: Duration(seconds: 2),
-                      glowColor: Colors.white24,
-                      repeat: true,
-                      repeatPauseDuration: Duration(seconds: 1),
-                      startDelay: Duration(seconds: 1),
-                      child: Material(
-                          elevation: 25.0,
-                          shape: CircleBorder(),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.grey[100],
-                            child: FlutterLogo(
-                              size: 100.0,
-                            ),
-                            radius: 100.0,
-                          )),
+    return Container(
+        color: Colors.lightBlueAccent,
+        child: Padding(
+            padding: const EdgeInsets.all(40.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  AvatarGlow(
+                    endRadius: 150,
+                    duration: Duration(seconds: 2),
+                    glowColor: Colors.white24,
+                    repeat: true,
+                    repeatPauseDuration: Duration(seconds: 1),
+                    startDelay: Duration(seconds: 1),
+                    child: Material(
+                        elevation: 25.0,
+                        shape: CircleBorder(),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey[100],
+                          child: FlutterLogo(
+                            size: 100.0,
+                          ),
+                          radius: 100.0,
+                        )),
+                  ),
+                  //SizedBox(height: 100,),
+                  Center(
+                    child: Text(
+                        'Start your chatter today',
+                        style: TextStyle(
+                            fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                     ),
-                    //SizedBox(height: 100,),
-                    Center(
-                      child: Text(
-                          'Start your chatter today',
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    IconButton(
-                        color: Colors.white,
-                        icon: Icon(Icons.arrow_forward_ios),
-                        iconSize: 40,
-                        onPressed:(){
-                          checkSso(context);
-                        }
-                    )
-                  ]))),
-    );
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    icon: Icon(Icons.arrow_forward_ios),
+                    iconSize: 40,
+                    onPressed:(){
+                      checkSso(context);
+                    }
+    )
+    ])));
     }
 
 
@@ -344,21 +315,21 @@ class _FirstScreen extends State<FirstScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.green[300],
-                  Colors.green[700]
+                  Colors.blue[400],
+                  Colors.blue[800]
                 ])),
         child: Container(
           width: 400,
           child: Column(
             children: [
               SizedBox(height: 200,),
-              Image.asset('assets/images/kidnap.PNG',
+              Image.asset('assets/images/bluecar.png',
                 height: 300,
                 width: 300,
               ),
               SizedBox(height: 100),
               Text(
-                  'Enter the text you want prasann',
+                  'Welcome to Tidepool',
                   style: TextStyle(
                       fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white, fontStyle: FontStyle.italic)
               ),

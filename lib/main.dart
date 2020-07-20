@@ -1,25 +1,39 @@
 import 'dart:convert';
 
-import 'package:family_carpool/screens/home_page.dart';
-import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:family_carpool/screens/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'themes/colors.dart';
 import 'package:http/http.dart' as http;
 
 
-void debugHttp() async {
-  var h = await http.get('http://192.168.0.101:8080/users');
-  print('this'+ json.decode(h.body).toString());
-}
 
 void main() {
   //DBLoad();
-  debugHttp();
+  testStreams().then((strm){
+
+    print("STARTED");
+    strm.listen((event) {
+      print(event.toString());
+    });
+  });
   return runApp(MyApp());
 }
 
 
+Future<Stream<dynamic>>testStreams()async{
+
+  print("started request");
+  String url = "http://192.168.0.12:8080/users/locstream";
+
+
+  var client = http.Client();
+  var streamedResponse = await client.send(
+      http.Request('get', Uri.parse(url))
+  );
+  //var request = await http.get("http://192.168.0.12:8080/users/locstream");
+  //print(request.body.toString());
+  return streamedResponse.stream.transform(utf8.decoder);
+}
 
 class MyApp extends StatelessWidget {
 // This widget is the root of your application.
@@ -37,7 +51,7 @@ class MyApp extends StatelessWidget {
             displayColor: LightColors.kDarkBlue,
             fontFamily: 'Poppins'),
       ),
-      home: IntroScreen(),
+      home: SignUpPage(),
       debugShowCheckedModeBanner: false,
     );
   }

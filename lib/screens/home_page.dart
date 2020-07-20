@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     return Text(
       title,
       style: TextStyle(
-          color: LightColors.kDarkBlue,
+          color: Colors.black,
           fontSize: 20.0,
           fontWeight: FontWeight.w700,
           letterSpacing: 1.2),
@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
         isViewer: true,
         base: baseaddr,
         addrList: addrs,
-        driver: uname,
+        driver: json.decode(route['users'])[0],
       ))
     );
   }
@@ -452,13 +452,13 @@ class _HomePageState extends State<HomePage> {
             height: 200,
             width: width,
             decoration: new BoxDecoration(
-              color: LightColors.kMidYellow,
+              color: LightColors.kDarkBlue,
               borderRadius: new BorderRadius.only(
                   bottomLeft: const Radius.circular(60.0),
                   bottomRight: const Radius.circular(60.0)),
               boxShadow: [
                 BoxShadow(
-                  color: LightColors.kDarkYellow,
+                  color: LightColors.kDarkBlue,
                   spreadRadius: 3,
                   blurRadius:1,
                   offset: Offset(0, 0), // changes position of shadow
@@ -503,8 +503,8 @@ class _HomePageState extends State<HomePage> {
                           animation: true,
                           percent: 0.75,
                           circularStrokeCap: CircularStrokeCap.round,
-                          progressColor: LightColors.kRed,
-                          backgroundColor: LightColors.kLightYellow,
+                          progressColor: LightColors.kWhite,
+                          backgroundColor: Colors.black,
                           center: CircleAvatar(
                             backgroundColor: LightColors.kBlue,
                             radius: 35.0,
@@ -522,7 +522,7 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 25.0,
-                                  color: LightColors.kDarkBlue,
+                                  color: LightColors.kWhite,
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
@@ -533,7 +533,7 @@ class _HomePageState extends State<HomePage> {
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 16.0,
-                                  color: Colors.black45,
+                                  color: Colors.white70,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),

@@ -202,7 +202,7 @@ class _CommunityPageState extends State<CommunityPage> {
           else{
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfilePage(user: userJson['name'],)),
+              MaterialPageRoute(builder: (context) => ProfilePage(user:name,)),
             );
           }
         },
@@ -311,12 +311,12 @@ class _CommunityPageState extends State<CommunityPage> {
                   children: <Widget>[
                     TabBar(
                       unselectedLabelColor: Colors.grey,
-                      labelColor: LightColors.DarkYellow,
+                      labelColor: Colors.black,
                       labelStyle: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
-                      indicatorColor: LightColors.DarkYellow,
+                      indicatorColor: Colors.black,
                       tabs: <Widget>[
                         Tab(
                           text: "Group Chats",

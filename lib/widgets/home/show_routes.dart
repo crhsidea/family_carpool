@@ -36,6 +36,9 @@ class _RouteViewerState extends State<RouteViewer> {
   bool zoomin = true;
 
   Locator() async {
+    if(!streaming){
+      await streamData();
+    }
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if(position!=null) {
       if(!widget.isViewer)
@@ -118,32 +121,74 @@ class _RouteViewerState extends State<RouteViewer> {
     return val;
   }
 
-  Stream<Map<String, dynamic>> streamLocation() async* {
+  Future<Stream<dynamic>>testStreams()async{
+
+    print("started request");
+    String url = "http://192.168.0.12:8080/users/locstream";
+
+
+    var client = http.Client();
+    var streamedResponse = await client.send(
+        http.Request('get', Uri.parse(url))
+    );
+    //var request = await http.get("http://192.168.0.12:8080/users/locstream");
+    //print(request.body.toString());
+    return streamedResponse.stream.transform(utf8.decoder);
+  }
+
+  Future<Stream<dynamic>>streamLoc()async{
+
+    print("started request");
+    String url = "http://192.168.0.12:8080/users/locstream";
+
+
+    var client = http.Client();
+    var streamedResponse = await client.send(
+        http.Request('get', Uri.parse(url))
+    );
+    //var request = await http.get("http://192.168.0.12:8080/users/locstream");
+    //print(request.body.toString());
+    return streamedResponse.stream.transform(utf8.decoder);
+  }
+
+  var subscription;
+
+  Stream<Map<String, dynamic>> streamLocation() async*{
+    while (true) {
+      if (location!=null){
+        await Future.delayed(Duration(milliseconds: 2000));
+        await http.get(baseaddr+"users/updatecoords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
+        print(baseaddr+"users/updatecoords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
+        yield {'lat':location.latitude, 'long':location.longitude};
+      }
+    }
+  }
+
+  Future streamData() async {
+    setState(() {
+      streaming = true;
+    });
 
     String tmp = await getCurUser();
     uname = tmp;
 
-    if (!widget.isViewer)
-      while (true) {
-        if (location!=null){
-          await Future.delayed(Duration(milliseconds: 2000));
-          await http.get(baseaddr+"users/coords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
-          print(baseaddr+"users/coords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
-          yield {'lat':location.latitude, 'long':location.longitude};
-        }
-      }
+    if (widget.driver==uname){
+      subscription = streamLocation().listen((event) {
+        print(event.toString());
+      });
+    }
     else{
-      while (true) {
-        if (location!=null){
-          await Future.delayed(Duration(milliseconds: 2000));
-          var h = await http.get(baseaddr+"users/byname/"+widget.driver);
-
-          setState(() {
-            location = LatLng(json.decode(h.body)["lat"], json.decode(h.body)["lng"]);
-          });
-          yield {'lat':location.latitude, 'long':location.longitude};
-        }
-      }
+      subscription = await testStreams().then((strm){
+        print("STARTED");
+        strm.listen((event) {
+          print(event.toString());
+          if(json.decode(event.toString())['drivername']==widget.driver){
+            setState(() {
+              location = LatLng(json.decode(event.toString())["lat"], json.decode(event.toString())["lng"]);
+            });
+          }
+        });
+      });
     }
 
   }
@@ -220,7 +265,8 @@ class _RouteViewerState extends State<RouteViewer> {
 
   @override
   void dispose() {
-    controller.close(); //Streams must be closed when not needed
+    controller.close();
+    subscription.cancel();//Streams must be closed when not needed
     super.dispose();
   }
 }

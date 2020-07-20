@@ -1,3 +1,4 @@
+import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:flutter/material.dart';
 import 'themes/colors.dart';
 import 'widgets/bottom_bar.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: BottomBar(),
+      home: IntroScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

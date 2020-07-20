@@ -21,13 +21,13 @@ class _BottomBarState extends State<BottomBar> {
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
           height: MediaQuery.of(context).size.height / 13,
-          buttonBackgroundColor: LightColors.kDarkYellow,
-          color: LightColors.kDarkYellow,
-          backgroundColor: LightColors.kLightYellow,
+          buttonBackgroundColor: LightColors.kBlue,
+          color: LightColors.kDarkBlue,
+          backgroundColor: LightColors.kWhite,
           items: <Widget>[
-            Icon(Icons.home, size: 30),
-            Icon(Icons.calendar_today, size: 30),
-            Icon(Icons.people, size: 30),
+            Icon(Icons.home, size: 30, color: Colors.white,),
+            Icon(Icons.calendar_today, size: 30, color: Colors.white,),
+            Icon(Icons.people, size: 30, color: Colors.white,),
           ],
           onTap: (index) {
             onTabTabbed(index);

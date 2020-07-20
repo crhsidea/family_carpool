@@ -100,12 +100,12 @@ class CommunityPage extends StatelessWidget {
                   children: <Widget>[
                     TabBar(
                       unselectedLabelColor: Colors.grey,
-                      labelColor: LightColors.DarkYellow,
+                      labelColor: Colors.black,
                       labelStyle: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
-                      indicatorColor: LightColors.DarkYellow,
+                      indicatorColor: Colors.black,
                       tabs: <Widget>[
                         Tab(
                           text: "Group Chats",
@@ -133,7 +133,7 @@ class CommunityPage extends StatelessWidget {
                                   'Morning Gym',
                                   "12345 fish rd",
                                   'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                  LightColors.kLightRed),
+                                  LightColors.kRed),
                               SizedBox(
                                 height: 15.0,
                               ),
@@ -141,7 +141,7 @@ class CommunityPage extends StatelessWidget {
                                   'Robotics Trip',
                                   "12345 fish rd",
                                   'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                  LightColors.kSuperLightGreen),
+                                  LightColors.kLavender),
                               SizedBox(
                                 height: 15.0,
                               ),
@@ -149,7 +149,7 @@ class CommunityPage extends StatelessWidget {
                                   'Marine Tour',
                                   "12345 fish rd",
                                   'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                  LightColors.kLightBlue),
+                                  LightColors.kBlue),
                               SizedBox(
                                 height: 15.0,
                               ),
@@ -157,7 +157,7 @@ class CommunityPage extends StatelessWidget {
                                   'Beach Party',
                                   "12345 fish rd",
                                   'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                  LightColors.kLightSand),
+                                  LightColors.kLightRed),
                               SizedBox(
                                 height: 15.0,
                               ),
@@ -165,7 +165,7 @@ class CommunityPage extends StatelessWidget {
                                   'School Event',
                                   "12345 fish rd",
                                   'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                  LightColors.kLightPurple),
+                                  LightColors.kLightBlue),
                             ],
                           ),
                           Container(
@@ -178,7 +178,7 @@ class CommunityPage extends StatelessWidget {
                                     'Morning Gym',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightRed),
+                                    LightColors.kRed),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -186,7 +186,7 @@ class CommunityPage extends StatelessWidget {
                                     'Robotics Trip',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kSuperLightGreen),
+                                    LightColors.kLavender),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -194,7 +194,7 @@ class CommunityPage extends StatelessWidget {
                                     'Marine Tour',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightBlue),
+                                    LightColors.kBlue),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -202,7 +202,7 @@ class CommunityPage extends StatelessWidget {
                                     'Beach Party',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightSand),
+                                    LightColors.kLightRed),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -210,7 +210,7 @@ class CommunityPage extends StatelessWidget {
                                     'School Event',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightPurple),
+                                    LightColors.kLightBlue),
                               ],
                             ),
                           ),
@@ -224,7 +224,7 @@ class CommunityPage extends StatelessWidget {
                                     'Morning Gym',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightRed),
+                                    LightColors.kRed),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -232,7 +232,7 @@ class CommunityPage extends StatelessWidget {
                                     'Robotics Trip',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kSuperLightGreen),
+                                    LightColors.kLavender),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -240,7 +240,7 @@ class CommunityPage extends StatelessWidget {
                                     'Marine Tour',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightBlue),
+                                    LightColors.kBlue),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -248,7 +248,7 @@ class CommunityPage extends StatelessWidget {
                                     'Beach Party',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightSand),
+                                    LightColors.kLightRed),
                                 SizedBox(
                                   height: 15.0,
                                 ),
@@ -256,7 +256,7 @@ class CommunityPage extends StatelessWidget {
                                     'School Event',
                                     "12345 fish rd",
                                     'https://i.thecartoonist.me/cartoon-face-of-white-male.png',
-                                    LightColors.kLightPurple),
+                                    LightColors.kLightBlue),
                               ],
                             ),
                           ),

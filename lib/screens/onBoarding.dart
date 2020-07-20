@@ -27,8 +27,8 @@ class _IntroScreen extends State<IntroScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.blue[400],
-                  Colors.blue[600]
+                  Colors.blue[300],
+                  Colors.blue[700]
                 ])),
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -76,8 +76,8 @@ class _IntroScreen extends State<IntroScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.deepPurple[300],
-                  Colors.deepPurple[500]
+                  Colors.blue[300],
+                  Colors.blue[600]
                 ])),
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -134,8 +134,8 @@ class _IntroScreen extends State<IntroScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.orange[300],
-                  Colors.orange[500]
+                  Colors.blue[200],
+                  Colors.blue[500]
                 ])),
         child: Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -243,7 +243,7 @@ class FinalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.orangeAccent,
+        color: Colors.lightBlueAccent,
         child: Padding(
             padding: const EdgeInsets.all(40.0),
             child: Column(
@@ -315,21 +315,21 @@ class _FirstScreen extends State<FirstScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.green[300],
-                  Colors.green[700]
+                  Colors.blue[400],
+                  Colors.blue[800]
                 ])),
         child: Container(
           width: 400,
           child: Column(
             children: [
               SizedBox(height: 200,),
-              Image.asset('assets/images/kidnap.PNG',
+              Image.asset('assets/images/bluecar.png',
                 height: 300,
                 width: 300,
               ),
               SizedBox(height: 100),
               Text(
-                  'Enter the text you want prasann',
+                  'Welcome to Tidepool',
                   style: TextStyle(
                       fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white, fontStyle: FontStyle.italic)
               ),

@@ -310,6 +310,9 @@ class _ChatScreenState extends State<ChatScreen> {
     List<String> users = switchVals(json.decode(widget.routedata['users']), ind);
     List<String> addresses = switchVals(json.decode(widget.routedata['addresses']), ind);
     await http.get(baseaddr+"routes/updatedriver/"+widget.routedata['id']+"/"+json.encode(users)+"/"+json.encode(addresses));
+    setState(() {
+      isuserslist = !isuserslist;
+    });
   }
 
   String loadGravatar(String uname){

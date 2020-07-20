@@ -202,7 +202,7 @@ class _CommunityPageState extends State<CommunityPage> {
           else{
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProfilePage(user: userJson['name'],)),
+              MaterialPageRoute(builder: (context) => ProfilePage(user:name,)),
             );
           }
         },

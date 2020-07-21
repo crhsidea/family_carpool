@@ -94,13 +94,13 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
   Future submitRoute(BuildContext context) async {
     var timelist = [combinetime(initTime), combinetime(endTime)];
-    var namelist = ['*${await getUserName()}'];
+    var namelist = ['${await getUserName()}'];
     var addrlist = [
       startController.text.toString(),
       endController.text.toString()
     ];
 
-    notifyUser(nameController.text+' at ${initTime.hour}: ${initTime.minute/10}${initTime.minute%10}', descriptController.text, DateTime(combinetime(initTime)).subtract(Duration(minutes: 15)));
+    notifyUser(nameController.text+' at ${initTime.hour.toString()}: ${(initTime.minute/10).toString()}${(initTime.minute%10).toString()}', descriptController.text.toString(), _date.add(Duration(hours: initTime.hour, minutes: initTime.minute)).subtract(Duration(minutes: 15)));
 
     String b = baseaddr +
         "routes/add/1/" +
@@ -358,21 +358,26 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                   ),
                   SizedBox(height: 20),
                   InkWell(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width-50,
-                      height: 50,
-                      child: Center(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    child: GestureDetector(
+                      onTap: (){
+                        submitRoute(context);
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width-50,
+                        height: 50,
+                        child: Center(
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.blueAccent,
-                        borderRadius: BorderRadius.circular(10)
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
                       ),
                     ),
                   ),

@@ -47,7 +47,7 @@ class _RouteViewerState extends State<RouteViewer> {
           print(location.toString());
         });
 
-      if(zoomin) {
+      if(zoomin&&mapController!=null) {
         mapController.animateCamera(
             CameraUpdate.newCameraPosition(new CameraPosition(
                 target: location,

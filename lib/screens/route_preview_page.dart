@@ -134,7 +134,12 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
   Future getDriverYears() async{
     var h = await http.get(widget.base + "users/byname/" + widget.driver);
     setState(() {
-      years = json.decode(json.decode(h.body)['userdata'])['years'];
+      try{
+        years = json.decode(json.decode(h.body)['userdata'])['years'];
+      }
+      catch(e){
+        print("some error happened");
+      }
     });
 
   }

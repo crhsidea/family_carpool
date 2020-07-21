@@ -236,8 +236,8 @@ class _CalendarPageState extends State<CalendarPage> {
                           CalendarDates(
                             day:  days[DateTime.now().weekday+index%7],
                             date: dates[index],
-                            dayColor: days[DateTime.now().weekday+index%7] == 'Sun' ? LightColors.kRed : Colors.black54,
-                            dateColor: days[DateTime.now().weekday+index%7] == 'Sun' ? LightColors.kRed : LightColors.kDarkBlue,
+                            dayColor: days[DateTime.now().weekday+index%7] == 'Sun' ? Colors.redAccent : Colors.black54,
+                            dateColor: days[DateTime.now().weekday+index%7] == 'Sun' ? Colors.redAccent : LightColors.kDarkBlue,
                           ),
                         ],
                       ),
@@ -248,6 +248,7 @@ class _CalendarPageState extends State<CalendarPage> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
+                    height: 1270,
                     padding: EdgeInsets.symmetric(vertical: 20.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -349,7 +350,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                     isRoute: true,
                                                     isViewer: true,
                                                     base: baseaddr,
-                                                    addrList: json.decode(routeList[i]['addresses']),
+                                                    addrList: json.decode(routeList[i]['routedata'])['addresses'],
                                                     driver:json.decode(routeList[i]['users'])[0]
                                                   )),
                                                 );

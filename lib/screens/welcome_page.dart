@@ -35,7 +35,7 @@ class _WelcomePageState extends State<WelcomePage> {
             color: Colors.white),
         child: Text(
           'Login',
-          style: TextStyle(fontSize: 20, color: Color(0xfff7892b)),
+          style: TextStyle(fontSize: 20, color: Colors.blueAccent),
         ),
       ),
     );
@@ -63,52 +63,15 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget _label() {
-    return Container(
-        margin: EdgeInsets.only(top: 40, bottom: 20),
-        child: Column(
-          children: <Widget>[
-            Text(
-              'Quick login with Touch ID',
-              style: TextStyle(color: Colors.white, fontSize: 17),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Icon(Icons.fingerprint, size: 90, color: Colors.white),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Touch ID',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ],
-        ));
-  }
-
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: 'd',
-          style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.display1,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
+          text: 'Tide',
+          style: TextStyle(color: Colors.white, fontSize: 30),
           children: [
             TextSpan(
-              text: 'ev',
-              style: TextStyle(color: Colors.black, fontSize: 30),
-            ),
-            TextSpan(
-              text: 'rnz',
+              text: 'Pool',
               style: TextStyle(color: Colors.white, fontSize: 30),
             ),
           ]),
@@ -134,7 +97,7 @@ class _WelcomePageState extends State<WelcomePage> {
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0xfffbb448), Color(0xffe46b10)])),
+                  colors: [Color.fromRGBO(108, 159, 206, 1), Colors.blueAccent])),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +114,6 @@ class _WelcomePageState extends State<WelcomePage> {
               SizedBox(
                 height: 20,
               ),
-              _label()
             ],
           ),
         ),

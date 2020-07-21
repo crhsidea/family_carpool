@@ -122,6 +122,8 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                 name: nameController.text.toString(),
                 addrList: addrlist,
                 driver: username,
+                isRoute: true,
+                isViewer: false,
               )),
     );
   }
@@ -203,13 +205,6 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
     );
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.pink,
-        onPressed: () {
-          submitRoute(context);
-        },
-        child: Icon(Icons.navigate_next),
-      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -228,7 +223,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                       Text(
                         'Schedule New Trip',
                         style: TextStyle(
-                            fontSize: 30.0, fontWeight: FontWeight.w700),
+                            fontSize: 30.0, fontWeight: FontWeight.w700, color: Colors.white),
                       ),
                     ],
                   ),
@@ -240,6 +235,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                       MyTextField(
                         label: 'Title',
                         controller: nameController,
+                        color: Colors.white,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -247,12 +243,19 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                         children: <Widget>[
                           Expanded(
                             child: Text(_date != null
-                                ? _date.toIso8601String().toString()
-                                : "Date"),
+                                ? '${_date.month}/${_date.day}/${_date.year}'
+                                : "Date",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: _date != null
+                                    ? 30
+                                    : 15
+                              ),
+                            ),
                           ),
                           IconButton(
-                              icon: Icon(Icons.calendar_today),
-                              onPressed: () {
+                              icon: Icon(Icons.calendar_today, color: Colors.white,),
+                              onPressed: () async {
                                 showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
@@ -269,17 +272,23 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                                               minute: DateTime.now().minute))
                                       .then((value) {
                                     setState(() {
+                                      print('initTime: ' + value.toString());
                                       initTime = value;
                                     });
-                                  });
-                                  showTimePicker(
-                                          context: context,
-                                          initialTime: TimeOfDay(
-                                              hour: DateTime.now().hour,
-                                              minute: DateTime.now().minute))
-                                      .then((value) {
-                                    setState(() {
-                                      endTime = value;
+                                    showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay(
+                                            hour: DateTime
+                                                .now()
+                                                .hour,
+                                            minute: DateTime
+                                                .now()
+                                                .minute))
+                                        .then((value) {
+                                      setState(() {
+                                        print('endTime: ' + value.toString());
+                                        endTime = value;
+                                      });
                                     });
                                   });
                                 });
@@ -302,12 +311,26 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                       Expanded(
                           child: Text(initTime != null
                               ? initTime.format(context).toString()
-                              : "Start Time")),
+                              : "Start Time",
+                            style: TextStyle(
+                              fontSize: initTime != null
+                                  ? 30
+                                  : 15,
+                              color: Colors.black
+                            ),
+                          )),
                       SizedBox(width: 40),
                       Expanded(
                         child: Text(endTime != null
                             ? endTime.format(context).toString()
-                            : "End Time"),
+                            : "End Time",
+                          style: TextStyle(
+                            fontSize: endTime != null
+                                ? 30
+                                : 15,
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -317,67 +340,41 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
                     minLines: 3,
                     maxLines: 3,
                     controller: startController,
+                    color: Colors.black,
                   ),
                   MyTextField(
                     label: 'End Address',
                     minLines: 3,
                     maxLines: 3,
                     controller: endController,
+                    color: Colors.black,
                   ),
                   MyTextField(
                     label: 'Description',
                     minLines: 3,
                     maxLines: 3,
                     controller: descriptController,
+                    color: Colors.black,
                   ),
                   SizedBox(height: 20),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Category',
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width-50,
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Submit',
                           style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black54,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          //direction: Axis.vertical,
-                          alignment: WrapAlignment.start,
-                          verticalDirection: VerticalDirection.down,
-                          runSpacing: 0,
-                          //textDirection: TextDirection.rtl,
-                          spacing: 10.0,
-                          children: <Widget>[
-                            Chip(
-                              label: Text("SPORT APP"),
-                              backgroundColor: LightColors.kRed,
-                              labelStyle: TextStyle(color: Colors.white),
-                            ),
-                            Chip(
-                              label: Text("MEDICAL APP"),
-                            ),
-                            Chip(
-                              label: Text("RENT APP"),
-                            ),
-                            Chip(
-                              label: Text("NOTES"),
-                            ),
-                            Chip(
-                              label: Text("GAMING PLATFORM APP"),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.blueAccent,
+                        borderRadius: BorderRadius.circular(10)
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 300,
-                    width: width,
-                    child: Text("I'm the Map"),
                   ),
                 ],
               ),

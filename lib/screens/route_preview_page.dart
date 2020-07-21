@@ -292,7 +292,7 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
                                       ),
                                       child: Row(
                                         children: <Widget>[
-                                          Expanded(
+                                          polyline.length!=null ? Expanded(
                                             child: FutureBuilder(
                                               future: Geocoder.local.findAddressesFromCoordinates(Coordinates(polyline.last.points[polyline.last.points.length-1].latitude, polyline.last.points[polyline.last.points.length-1].longitude)),
                                               builder: (context, snapshots) {
@@ -318,7 +318,7 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
                                                 }
                                               },
                                             ),
-                                          ),
+                                          ) : Container(),
                                         ],
                                       ),
                                     ),

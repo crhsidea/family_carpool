@@ -274,7 +274,6 @@ class _HomePageState extends State<HomePage> {
                 child: new Text('OK'),
                 onPressed: () async{
                   await addCarpool(route);
-                  Navigator.of(context).pop();
                 },
               ),
 

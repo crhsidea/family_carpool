@@ -67,7 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     try {
       print(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode([]).toString());
-      var h = await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode(["hello"]).toString()+"/");
+      var h = await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode([]).toString()+"/");
       print(h.body.toString());
     }
     catch (e) {
@@ -149,7 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+                colors: [Color.fromRGBO(108, 159, 206, 1), Colors.blueAccent])),
         child: Text(
           'Register Now',
           style: TextStyle(fontSize: 20, color: Colors.white),
@@ -186,7 +186,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Text(
               'Login',
               style: TextStyle(
-                  color: Color(0xfff79c4f),
+                  color: Colors.blue,
                   fontSize: 13,
                   fontWeight: FontWeight.w600),
             ),
@@ -200,21 +200,12 @@ class _SignUpPageState extends State<SignUpPage> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: 'd',
-          style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.display1,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Color(0xffe46b10),
-          ),
+          text: 'Tide',
+          style: TextStyle(color: Color.fromRGBO(48, 79, 254, 1), fontSize: 30),
           children: [
             TextSpan(
-              text: 'ev',
-              style: TextStyle(color: Colors.black, fontSize: 30),
-            ),
-            TextSpan(
-              text: 'rnz',
-              style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
+              text: 'Pool',
+              style: TextStyle(color: Color.fromRGBO(128, 214, 255, 1), fontSize: 30),
             ),
           ]),
     );

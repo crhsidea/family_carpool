@@ -310,9 +310,57 @@ class _FirstScreen extends State<FirstScreen> {
   bool _buttonVisible = true;
   bool _textVisible = false;
 
+  TextEditingController ipController = new TextEditingController();
+
+  setIP() async{
+
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final File file = File('${directory.path}/ip.txt');
+    await file.writeAsString("http://"+ipController.text.toString()+":8080/");
+
+    String temp = await file.readAsString();
+    print(temp);
+
+    Navigator.pop(
+        cont
+    );
+  }
+
+
+  _diplayIPChange() async {
+    return showDialog(
+        context: cont,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('What is the IP Address of the Running Local Computer?'),
+            content: TextField(
+              controller: ipController,
+              decoration: InputDecoration(hintText: "Usually found in network settings "),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                  child: new Text('OK'),
+                  onPressed:setIP
+              )
+              ,new FlatButton(
+                child: new Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+  BuildContext cont;
   @override
   Widget build(BuildContext context) {
+    cont = context;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: _diplayIPChange,
+        child: Icon(Icons.menu),
+      ),
       body: Container(
         decoration: BoxDecoration(
             gradient: LinearGradient(

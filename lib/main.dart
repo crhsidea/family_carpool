@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:family_carpool/screens/home_page.dart';
 import 'package:family_carpool/screens/onBoarding.dart';
 import 'package:family_carpool/screens/signup_page.dart';
+import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'themes/colors.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
             displayColor: LightColors.kDarkBlue,
             fontFamily: 'Poppins'),
       ),
-      home: SignUpPage(),
+      home: BottomBar(),
       debugShowCheckedModeBanner: false,
     );
   }

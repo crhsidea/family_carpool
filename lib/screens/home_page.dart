@@ -348,15 +348,12 @@ class _HomePageState extends State<HomePage> {
               onTap:(){
                 _displayDialog(suggested[i]);
               },
-              child: Flexible(
-                flex: 1,
-                child: ActiveProjectsCard(
+              child:ActiveProjectsCard(
                   cardColor: colors[ind%4],
                   loadingPercent: Random().nextDouble(),
                   title: json.decode(suggested[i]['routedata'])['title'],
                   subtitle:json.decode(suggested[i]['routedata'])['description'],
                 ),
-              ),
             ));
       });
       if(on){
@@ -371,9 +368,28 @@ class _HomePageState extends State<HomePage> {
           temp = [];
         });
       }
-
       ind++;
       on = !on;
+    }
+    if (temp.length==1){
+      temp.insert(1,
+          ActiveProjectsCard(
+              cardColor: Colors.transparent,
+              loadingPercent: 0,
+              title: "                                  ",
+              subtitle:"",
+            ),
+          );
+      setState(() {
+        recItems.add(Container(
+          height: 200,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: temp,
+          ),
+        ));
+        temp = [];
+      });
     }
 
   }

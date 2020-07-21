@@ -307,7 +307,8 @@ class _ChatScreenState extends State<ChatScreen> {
     print(users.toString());
     List<dynamic> addresses = switchVals(json.decode(widget.routedata['addresses']), ind);
     print(addresses.toString());
-    await http.get(baseaddr+"routes/updatedriver/"+widget.routedata['id'].toString()+"/"+json.encode(users)+"/"+json.encode(addresses));
+    var h = await http.get(baseaddr+"routes/update/"+widget.routedata['id'].toString()+"/"+widget.routedata['dates']+"/"+json.encode(users).toString()+"/"+json.encode(addresses).toString()+"/"+widget.routedata['lat'].toString()+"/"+widget.routedata['lng'].toString()+"/"+widget.routedata['routedata']);
+    print(h.body.toString());
     print(widget.routedata['id']);
     setState(() {
       isuserslist = !isuserslist;

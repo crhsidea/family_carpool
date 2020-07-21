@@ -1,3 +1,4 @@
+import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class SentMessageWidget extends StatelessWidget {
@@ -27,7 +28,7 @@ class SentMessageWidget extends StatelessWidget {
                 maxWidth: MediaQuery.of(context).size.width * .6),
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
-              color: Colors.orangeAccent,
+              color: LightColors.kDarkBlue,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
                 topRight: Radius.circular(25),

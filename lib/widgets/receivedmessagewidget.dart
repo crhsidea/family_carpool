@@ -1,3 +1,4 @@
+import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class ReceivedMessagesWidget extends StatelessWidget {
@@ -27,7 +28,7 @@ class ReceivedMessagesWidget extends StatelessWidget {
                     maxWidth: MediaQuery.of(context).size.width * .6),
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                  color: Colors.black26,
+                  color:LightColors.kDarkYellow,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(25),
                     bottomLeft: Radius.circular(25),
@@ -37,7 +38,7 @@ class ReceivedMessagesWidget extends StatelessWidget {
                 child: Text(
                   message,
                   style: Theme.of(context).textTheme.body1.apply(
-                    color: Colors.black87,
+                    color: Colors.white,
                   ),
                 ),
               ),

@@ -72,9 +72,6 @@ class HomePage extends StatelessWidget {
                           center: CircleAvatar(
                             backgroundColor: LightColors.kBlue,
                             radius: 35.0,
-                            backgroundImage: AssetImage(
-                              'assets/images/Obama.PNG',
-                            ),
                           ),
                         ),
                         Column(

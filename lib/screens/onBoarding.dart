@@ -50,12 +50,12 @@ class _IntroScreen extends State<IntroScreen> {
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
                               children: <Widget>[
-                                Text('Face off against our Ai',
+                                Text("Share your TidePool account with other parents",
                                     style: TextStyle(
                                         fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
                                 Text(
-                                    'and score more points that your opponent!',
+                                    "from your child's after school activities",
                                     style: TextStyle(
                                         fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
@@ -106,12 +106,12 @@ class _IntroScreen extends State<IntroScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                    'Get points by determining',
+                                    'Then start sharing driving duties amongst eachother,',
                                     style: TextStyle(
                                         fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
                                 Text(
-                                    'if your opponent is real or not',
+                                    'with other people that you trust.',
                                     style: TextStyle(
                                         fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
@@ -153,12 +153,12 @@ class _IntroScreen extends State<IntroScreen> {
                             child: Column(children: <Widget>[
                               SizedBox(height: 180,),
                               Text(
-                                  'Conquer the leaderboards',
+                                  'We give you a calendar and directions to keep track',
                                   style: TextStyle(
                                       fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                               ),
                               Text(
-                                  'and become the champion!',
+                                  'so you can start saving time today.',
                                   style: TextStyle(
                                       fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)
                               ),
@@ -234,7 +234,7 @@ class FinalScreen extends StatelessWidget {
                   //SizedBox(height: 100,),
                   Center(
                     child: Text(
-                        'Start your chatter today',
+                        'Begin taking advantage of TidePool today!',
                         style: TextStyle(
                             fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                     ),
@@ -294,7 +294,7 @@ class _FirstScreen extends State<FirstScreen> {
               ),
               SizedBox(height: 100),
               Text(
-                  'Enter the text you want prasann',
+                  'Welcome to TidePool.',
                   style: TextStyle(
                       fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white, fontStyle: FontStyle.italic)
               ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'themes/colors.dart';
 import 'screens/profile_page.dart';
 import 'widgets/bottom_bar.dart';
+import 'screens/home_page.dart';
+import 'screens/onBoarding.dart';
 
 void main() {
   return runApp(MyApp());
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Poppins'
         ),
       ),
-      home: ProfilePage(),
+      home: IntroScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

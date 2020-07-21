@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
             displayColor: LightColors.kDarkBlue,
             fontFamily: 'Poppins'),
       ),
-      home: IntroScreen(),
+      home: SignUpPage(),
       debugShowCheckedModeBanner: false,
     );
   }

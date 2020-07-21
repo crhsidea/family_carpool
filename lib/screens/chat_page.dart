@@ -117,14 +117,8 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget getContainer(String name, String address, String image, String id, bool user) {
     return Padding(
       padding: const EdgeInsets.only(left: 7.0, right: 7.0, top: 15),
-      child: GestureDetector(
-        onTap: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage(user: name,)),
-          );
-        },
-        child: Container(
+      child:
+        Container(
           width: 450.0,
           height: 70.0,
           decoration: new BoxDecoration(
@@ -136,7 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 bottomRight: const Radius.circular(25.0)),
             boxShadow: [
               BoxShadow(
-                color: Colors.pink.withOpacity(1),
+                color: Colors.blue.withOpacity(0.25),
                 spreadRadius: 1,
                 blurRadius: 7,
                 offset: Offset(0, 0), // changes position of shadow
@@ -184,7 +178,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ]),
         ),
-      ),
     );
   }
 
@@ -309,12 +302,17 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future changeDriver(int ind)async{
-    List<String> users = switchVals(json.decode(widget.routedata['users']), ind);
-    List<String> addresses = switchVals(json.decode(widget.routedata['addresses']), ind);
-    await http.get(baseaddr+"routes/updatedriver/"+widget.routedata['id']+"/"+json.encode(users)+"/"+json.encode(addresses));
+    print("CHANGING DRIVER");
+    List<dynamic> users = switchVals(json.decode(widget.routedata['users']), ind);
+    print(users.toString());
+    List<dynamic> addresses = switchVals(json.decode(widget.routedata['addresses']), ind);
+    print(addresses.toString());
+    await http.get(baseaddr+"routes/updatedriver/"+widget.routedata['id'].toString()+"/"+json.encode(users)+"/"+json.encode(addresses));
+    print(widget.routedata['id']);
     setState(() {
       isuserslist = !isuserslist;
     });
+
   }
 
   String loadGravatar(String uname){

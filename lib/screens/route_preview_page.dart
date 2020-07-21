@@ -139,14 +139,23 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
 
   }
 
-  @override
-  void initState() {
-    print("Hello");
-    print("aDDRILST"+widget.addrList.length.toString());
+  Future createAddresses() async{
     for(int i=0;i<widget.addrList.length-1;i++) {
-      createRouteAddress(widget.addrList[i], widget.addrList[i+1], i);
+      await createRouteAddress(widget.addrList[i], widget.addrList[i+1], i);
       print('created route: ${widget.addrList[i]} to ${widget.addrList[i+1]}');
     }
+    setState(() {
+      addrsloaded = true;
+    });
+  }
+
+  bool addrsloaded = false;
+
+
+  @override
+  void initState() {
+    createAddresses();
+
     super.initState();
   }
   String gravurl = 'https://coolbackgrounds.io/images/backgrounds/white/pure-white-background-85a2a7fd.jpg';
@@ -169,7 +178,7 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
+        child: addrsloaded?Column(
           children: <Widget>[
             Expanded(
               child: Stack(
@@ -342,6 +351,8 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
               ),
             ),
           ],
+        ):Center(
+          child: CircularProgressIndicator(),
         ),
       ),
     );

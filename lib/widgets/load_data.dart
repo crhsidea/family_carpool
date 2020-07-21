@@ -114,6 +114,8 @@ class _LoadDataPageState extends State<LoadDataPage> {
   String dates;
   List<String> users;
 
+  int randseed = 10;
+
 
   Future DBLoad() async{
 
@@ -159,9 +161,9 @@ class _LoadDataPageState extends State<LoadDataPage> {
 
       var tmp = {
         'description': descriptions,
-        'years': Random().nextInt(15),
+        'years': Random(randseed).nextInt(15),
         'email': email,
-        'age':20+Random().nextInt(35)
+        'age':20+Random(randseed).nextInt(35)
       };
 
       await http.get(baseaddr +
@@ -186,12 +188,12 @@ class _LoadDataPageState extends State<LoadDataPage> {
     Set<String> friends = {};
     bool add = false;
     for(int i=0;i<randomRoutes;i++) {
-      DateTime curDate = DateTime.now().add(Duration(days: Random().nextInt(7), minutes: Random().nextInt(60), hours: Random().nextInt(12),));
+      DateTime curDate = DateTime.now().add(Duration(days: Random(randseed).nextInt(7), minutes: Random(randseed).nextInt(60), hours: Random(randseed).nextInt(12),));
       List<int> dates = [curDate.millisecondsSinceEpoch, curDate.add(Duration(hours: 1)).millisecondsSinceEpoch];
       List<String> addresses = [];
       LatLng latLng;
-      for(int i=0;i<Random().nextInt(4)+1;i++) {
-        int random = Random().nextInt(addressList.length-1);
+      for(int i=0;i<Random(randseed).nextInt(4)+1;i++) {
+        int random = Random(randseed).nextInt(addressList.length-1);
         addresses.add(addressList[random]);
         latLng = latlngList[random];
       }
@@ -223,8 +225,8 @@ class _LoadDataPageState extends State<LoadDataPage> {
 
   randomAddress() {
     List<String> addresses = [];
-    for(int i=0;i<Random().nextInt(4)+1;i++) {
-      int random = Random().nextInt(addressList.length-1);
+    for(int i=0;i<Random(randseed).nextInt(4)+1;i++) {
+      int random = Random(randseed).nextInt(addressList.length-1);
       addresses.add(addressList[random]);
     }
   }
@@ -232,7 +234,7 @@ class _LoadDataPageState extends State<LoadDataPage> {
   randomUsers(int length) {
     List<String> usersList = [];
     for(int i=0;i<length;i++) {
-      usersList.add(users[Random().nextInt(users.length-1)]);
+      usersList.add(users[Random(randseed).nextInt(users.length-1)]);
     }
     return usersList;
   }

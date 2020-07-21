@@ -218,7 +218,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 bottomRight: const Radius.circular(25.0)),
             boxShadow: [
               BoxShadow(
-                color: Colors.pink.withOpacity(1),
+                color: Colors.blue.withOpacity(0.25),
                 spreadRadius: 1,
                 blurRadius: 7,
                 offset: Offset(0, 0), // changes position of shadow
@@ -280,18 +280,13 @@ class _CommunityPageState extends State<CommunityPage> {
         onPressed: _showDialog,
         child: Icon(Icons.add),
       ),
-      appBar: AppBar(
-        backgroundColor: _theme.scaffoldBackgroundColor,
-        automaticallyImplyLeading: false,
-        elevation: 0.0,
-      ),
       body: Container(
         padding: EdgeInsets.all(5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: 30.0,
+              height: 70.0,
             ),
             Text(
               " Carpools",

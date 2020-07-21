@@ -341,6 +341,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                             ),
                                             child: GestureDetector(
                                               onTap: (){
+                                                print(routeList[i].toString());
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(builder: (context) => RoutePreviewPage(
@@ -350,7 +351,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                     isRoute: true,
                                                     isViewer: true,
                                                     base: baseaddr,
-                                                    addrList: json.decode(routeList[i]['routedata'])['addresses'],
+                                                    addrList: json.decode(routeList[i]['addresses']),
                                                     driver:json.decode(routeList[i]['users'])[0]
                                                   )),
                                                 );
@@ -359,7 +360,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                                 child: TaskContainer(
                                                   title: titleList[i],
                                                   subtitle: descriptionList[i],
-                                                  boxColor: LightColors.kPalePink,
+                                                  boxColor: LightColors.kDarkBlue,
                                                   size: 50*((endTimeList[i].hour+endTimeList[i].minute/60)-(initTimeList[i].hour+initTimeList[i].minute/60)).abs(),
                                                 ),
                                               ),

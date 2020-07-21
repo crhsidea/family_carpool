@@ -473,12 +473,12 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       IconButton(
                         icon: Icon(Icons.menu,
-                            color: LightColors.kDarkBlue, size: 30.0),
+                            color: Colors.white, size: 30.0),
                         onPressed: _diplayIPChange,
                       ),
                       IconButton(
                         icon: Icon(Icons.add,
-                            color: LightColors.kDarkBlue, size: 30.0),
+                            color: Colors.white, size: 30.0),
                           // Within the `FirstRoute` widget
                           onPressed: () {
                             Navigator.push(

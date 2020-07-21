@@ -30,12 +30,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   StreamController<double> chatcontroller;
 
+  var subscription ;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    streamChat().listen((value){
+    subscription = streamChat().listen((value){
       print(value);
     });
   }
@@ -329,6 +331,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
+    subscription.close();
     super.dispose();
   }
 }

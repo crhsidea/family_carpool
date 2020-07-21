@@ -141,6 +141,8 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
 
   @override
   void initState() {
+    print("Hello");
+    print("aDDRILST"+widget.addrList.length.toString());
     for(int i=0;i<widget.addrList.length-1;i++) {
       createRouteAddress(widget.addrList[i], widget.addrList[i+1], i);
       print('created route: ${widget.addrList[i]} to ${widget.addrList[i+1]}');
@@ -235,10 +237,13 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
                           height: 190.0,
                           child: Column(
                               children: <Widget>[
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Container(
                                     alignment: Alignment.centerLeft,
-                                    width: 50.0,
-                                    height: 75.0,
+                                    width: 60.0,
+                                    height: 60.0,
                                     decoration: new BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: new DecorationImage(

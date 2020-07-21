@@ -25,6 +25,7 @@ class TaskContainer extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
+              color: Colors.white,
               fontSize: 16.0,
               fontWeight: FontWeight.w700,
             ),

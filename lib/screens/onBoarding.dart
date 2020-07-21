@@ -56,12 +56,12 @@ class _IntroScreen extends State<IntroScreen> {
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
                               children: <Widget>[
-                                Text('A carpooling app',
+                                Text("Share your TidePool account with other parents",
                                     style: TextStyle(
                                         fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
                                 Text(
-                                    'for both children and adults!',
+                                    "from your child's after school activities",
                                     style: TextStyle(
                                         fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
@@ -112,13 +112,12 @@ class _IntroScreen extends State<IntroScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                    'Register your carpooling route',
+                                    'Then start sharing driving duties amongst eachother,',
                                     style: TextStyle(
                                         fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
                                 Text(
-                                    'through the \"Add Route\" button in the calendar page',
-                                    textAlign: TextAlign.center,
+                                    'with other people that you trust.',
                                     style: TextStyle(
                                         fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)
                                 ),
@@ -149,7 +148,7 @@ class _IntroScreen extends State<IntroScreen> {
                         child: skipButton(context),
                       ),
                       SizedBox(height: 100,),
-                      Image.asset('assets/images/chat.png',
+                      Image.asset('assets/images/Calendar.PNG',
                         height: 200,
                         width: 200,
                       ),
@@ -160,13 +159,12 @@ class _IntroScreen extends State<IntroScreen> {
                             child: Column(children: <Widget>[
                               SizedBox(height: 180,),
                               Text(
-                                  'Chat with people',
+                                  'We give you a calendar and directions to keep track',
                                   style: TextStyle(
                                       fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                               ),
                               Text(
-                                  'about assigning drivers, changing schedule, and etc.',
-                                  textAlign: TextAlign.center,
+                                  'so you can start saving time today.',
                                   style: TextStyle(
                                       fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)
                               ),
@@ -274,7 +272,7 @@ class FinalScreen extends StatelessWidget {
                     //SizedBox(height: 100,),
                     Center(
                       child: Text(
-                          'Start your chatter today',
+                          'Begin taking advantage of TidePool today!',
                           style: TextStyle(
                               fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white)
                       ),
@@ -381,7 +379,7 @@ class _FirstScreen extends State<FirstScreen> {
               ),
               SizedBox(height: 100),
               Text(
-                  'Welcome to Tidepool',
+                  'Welcome to TidePool.',
                   style: TextStyle(
                       fontSize: 25.0, fontWeight: FontWeight.bold, color: Colors.white, fontStyle: FontStyle.italic)
               ),

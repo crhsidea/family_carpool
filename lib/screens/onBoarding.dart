@@ -166,6 +166,7 @@ class _IntroScreen extends State<IntroScreen> {
                               ),
                               Text(
                                   'about assigning drivers, changing schedule, and etc.',
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.white)
                               ),

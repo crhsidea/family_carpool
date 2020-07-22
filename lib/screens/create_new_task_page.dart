@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:family_carpool/screens/route_preview_page.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:family_carpool/widgets/home/top_container.dart';
@@ -29,6 +30,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
   TextEditingController nameController;
   double lat = 0;
   double lng = 0;
+
 
   Future getIP()async{
 
@@ -104,11 +106,11 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
     String b = baseaddr +
         "routes/add/1/" +
-        json.encode(timelist).toString() +
+        RequestConvert.convertTo(json.encode(timelist).replaceAll('[', '{').replaceAll(']', '}')) +
         "/" +
-        json.encode(namelist).toString() +
+        RequestConvert.convertTo(json.encode(namelist).replaceAll('[', '{').replaceAll(']', '}') )+
         "/" +
-        json.encode(addrlist).toString() +
+        RequestConvert.convertTo(json.encode(addrlist).replaceAll('[', '{').replaceAll(']', '}') )+
         "/";
     //await http.get(baseaddr+"routes/add/1/"+json.encode(timelist).toString()+"/"+json.encode(namelist).toString()+"/"+json.encode(addrlist).toString()+"/"+lat.toString()+"/"+lng.toString()+"/"+getRouteJson());
     String username = await getUserName();
@@ -118,6 +120,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
           builder: (context) => RoutePreviewPage(
                 isFirst: true,
                 base: b,
+                baseaddr: baseaddr,
                 description: descriptController.text.toString(),
                 name: nameController.text.toString(),
                 addrList: addrlist,

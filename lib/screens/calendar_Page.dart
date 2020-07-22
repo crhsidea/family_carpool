@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_carpool/screens/route_preview_page.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:family_carpool/widgets/home/back_button.dart';
 import 'package:family_carpool/widgets/home/calendar_dates.dart';
 import 'package:family_carpool/widgets/home/task_container.dart';
@@ -111,14 +112,14 @@ class _CalendarPageState extends State<CalendarPage> {
       print(data);
       setState(() {
         routeList.add(data);
-        dateList.add(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'].replaceAll('{', '[').replaceAll('}', ']'))[0]));
-        initTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'].replaceAll('{', '[').replaceAll('}', ']'))[0])));
-        endTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'].replaceAll('{', '[').replaceAll('}', ']'))[1])));
-        startAddressList.add(json.decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))[0]);
-        endAddressList.add(json.decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))[1]);
-        titleList.add(json.decode(data['routedata'])['title']);
-        descriptionList.add(json.decode(data['routedata'])['description']);
-        namesList.add(data['users'].replaceAll('{', '[').replaceAll('}', ']').toString());
+        dateList.add(DateTime.fromMillisecondsSinceEpoch(json.decode(RequestConvert.convertFrom(data['dates']).replaceAll('{', '[').replaceAll('}', ']'))[0]));
+        initTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(RequestConvert.convertFrom(data['dates']).replaceAll('{', '[').replaceAll('}', ']'))[0])));
+        endTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(RequestConvert.convertFrom(data['dates']).replaceAll('{', '[').replaceAll('}', ']'))[1])));
+        startAddressList.add(json.decode(RequestConvert.convertFrom(data['addresses']).replaceAll('{', '[').replaceAll('}', ']'))[0]);
+        endAddressList.add(json.decode(RequestConvert.convertFrom(data['addresses']).replaceAll('{', '[').replaceAll('}', ']'))[1]);
+        titleList.add(json.decode(RequestConvert.convertFrom(data['routedata']))['title']);
+        descriptionList.add(json.decode(RequestConvert.convertFrom(data['routedata']))['description']);
+        namesList.add(RequestConvert.convertFrom(data['users']).replaceAll('{', '[').replaceAll('}', ']').toString());
         latList.add(data['lat']);
         lngList.add(data['lng']);
       });
@@ -346,13 +347,13 @@ class _CalendarPageState extends State<CalendarPage> {
                                                   context,
                                                   MaterialPageRoute(builder: (context) => RoutePreviewPage(
                                                     isFirst: false,
-                                                    name: json.decode(routeList[i]['routedata'])['title'],
-                                                    description: json.decode(routeList[i]['routedata'])['description'],
+                                                    name: json.decode(RequestConvert.convertFrom(routeList[i]['routedata']))['title'],
+                                                    description: json.decode(RequestConvert.convertFrom(routeList[i]['routedata']))['description'],
                                                     isRoute: true,
                                                     isViewer: true,
                                                     base: baseaddr,
-                                                    addrList: json.decode(routeList[i]['addresses'].replaceAll('{', '[').replaceAll('}', ']')),
-                                                    driver:json.decode(routeList[i]['users'].replaceAll('{', '[').replaceAll('}', ']'))[0]
+                                                    addrList: json.decode(RequestConvert.convertFrom(routeList[i]['addresses']).replaceAll('{', '[').replaceAll('}', ']')),
+                                                    driver:json.decode(RequestConvert.convertFrom(routeList[i]['users']).replaceAll('{', '[').replaceAll('}', ']'))[0]
                                                   )),
                                                 );
                                               },

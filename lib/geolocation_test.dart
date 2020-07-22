@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -116,7 +117,7 @@ class _GeoLocatorState extends State<GeoLocator> {
       while (true) {
         if (location!=null){
           await Future.delayed(Duration(milliseconds: 2000));
-          await http.get(baseaddr+"users/update/1/"+name+"/"+password+"/"+location.latitude.toString()+"/"+location.longitude.toString()+"/"+userdata);
+          await http.get(baseaddr+"users/update/1/"+name+"/"+password+"/"+location.latitude.toString()+"/"+location.longitude.toString()+"/"+RequestConvert.convertTo(userdata));
           print(baseaddr+"users/update/1/"+name+"/"+password+"/"+location.latitude.toString()+"/"+location.longitude.toString()+"/"+userdata);
           yield {'lat':location.latitude, 'long':location.longitude};
         }
@@ -128,7 +129,7 @@ class _GeoLocatorState extends State<GeoLocator> {
           var h = await http.get(baseaddr+"users/byname/"+name);
 
           setState(() {
-            location = LatLng(json.decode(h.body)["lat"], json.decode(h.body)["lng"]);
+            location = LatLng(json.decode(RequestConvert.convertFrom(h.body))["lat"], json.decode(RequestConvert.convertFrom(h.body))["lng"]);
           });
           yield {'lat':location.latitude, 'long':location.longitude};
         }

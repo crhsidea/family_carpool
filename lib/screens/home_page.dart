@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:async';
 
 import 'package:family_carpool/screens/route_preview_page.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:family_carpool/widgets/load_data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -220,7 +221,7 @@ class _HomePageState extends State<HomePage> {
     List<dynamic> addrs = json.decode(route['addresses'].replaceAll('{', '[').replaceAll('}', ']'));
     addrs.insert(0, addrController.text.toString());
     String req = baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates'].replaceAll('{', '[').replaceAll('}', ']')+"/"+json.encode(users).toString()+"/"+json.encode(addrs).toString()+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata'];
-    await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
+    await http.get(RequestConvert.convertTo(req.replaceAll('[', '{').replaceAll(']', '}')));
 
     Navigator.push(
       cont,
@@ -326,8 +327,9 @@ class _HomePageState extends State<HomePage> {
 
     for (int i = 0; i< lats.length; i++){
       var h = await http.get(baseaddr+"routes/rec/"+lats[i].toString()+"/"+lngs[i].toString());
-      for (dynamic recdata in json.decode(h.body)){
+      for (dynamic recdata in json.decode((h.body))){
         print(recdata.length.toString());
+        recdata['users'] = RequestConvert.convertFrom(recdata['users']);
         if (!recdata['users'].replaceAll('{', '[').replaceAll('}', ']').contains(uname)&&uns.add(recdata['id'].toString())){
           setState(() {
             suggested.add(recdata);
@@ -352,8 +354,8 @@ class _HomePageState extends State<HomePage> {
               child:ActiveProjectsCard(
                   cardColor: colors[ind%4],
                   loadingPercent: Random().nextDouble(),
-                  title: json.decode(suggested[i]['routedata'])['title'],
-                  subtitle:json.decode(suggested[i]['routedata'])['description'],
+                  title: json.decode(RequestConvert.convertFrom(suggested[i]['routedata']))['title'],
+                  subtitle:json.decode(RequestConvert.convertFrom(suggested[i]['routedata']))['description'],
                 ),
             ));
       });
@@ -417,12 +419,16 @@ class _HomePageState extends State<HomePage> {
     var h = await http.get(baseaddr + "routes/name/" + username);
 
     print(h.body.toString());
-    for (var data in json.decode(h.body)) {
+    for (var data in json.decode((h.body))) {
       print(data);
-      if(json.decode(data['users'].replaceAll('{', '[').replaceAll('}', ']')).length>1)
-        pools++;
+      if(json.decode(RequestConvert.convertFrom(data['users']).replaceAll('{', '[').replaceAll('}', ']')).length>1)
+        setState(() {
+          pools++;
+        });
       else
-        indivs++;
+        setState(() {
+          indivs++;
+        });
       setState(() {
         personal.add(data);
       });

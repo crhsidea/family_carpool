@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:family_carpool/screens/chat_page.dart';
 import 'package:family_carpool/screens/profile_page.dart';
 import 'package:family_carpool/themes/colors.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -89,14 +90,13 @@ class _CommunityPageState extends State<CommunityPage> {
 
 
     print(h.body.toString());
-    for (var data in json.decode(h.body)) {
-      print(data);
+    for (var data in json.decode((h.body))) {
       setState(() {
-        chats.add(getContainer(json.decode(data['routedata'])['title'],
-            json.decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))[json
-                .decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))
+        chats.add(getContainer(json.decode(RequestConvert.convertFrom(data['routedata']))['title'],
+            json.decode(RequestConvert.convertFrom(data['addresses']).replaceAll('{', '[').replaceAll('}', ']'))[json
+                .decode(RequestConvert.convertFrom(data['addresses']).replaceAll('{', '[').replaceAll('}', ']'))
                 .length-1],
-            loadGravatar(json.decode(data['routedata'])['title']),
+            loadGravatar(json.decode(RequestConvert.convertFrom(data['routedata']))['title']),
         data['id'].toString(), false, data));
       });
     }
@@ -127,7 +127,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
     userJson = json.decode(h.body);
 
-    for (String friend in json.decode(userJson['friends'].replaceAll('{', '[').replaceAll('}', ']'))) {
+    for (String friend in json.decode(RequestConvert.convertFrom(userJson['friends']).replaceAll('{', '[').replaceAll('}', ']'))) {
       setState(() {
         friends.add(getContainer(friend, "", loadGravatar(friend), '', true, ""));
         friendnames.add(friend);
@@ -149,8 +149,8 @@ class _CommunityPageState extends State<CommunityPage> {
     await http.get(
         baseaddr + "users/update/" + userJson['id'].toString() + "/" + userJson['name'] +
             "/" + userJson['password'] + "/" + userJson['lat'].toString() +"/"+userJson['lng'].toString()+
-            "/" + userJson['userdata'] + "/" +
-            json.encode(friendnames).toString());
+            "/" + RequestConvert.convertTo(userJson['userdata'] + "/" +
+            json.encode(friendnames).toString().replaceAll('[', '{').replaceAll(']', '}')));
   }
 
   TextEditingController newFriendController;

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_carpool/screens/home_page.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/widgets/login/bezier_container.dart';
@@ -67,7 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     try {
       print(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode({}).toString());
-      var h = await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode({}).toString()+"/");
+      var h = await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+RequestConvert.convertTo(json.encode(tmp).toString()+"/"+json.encode({}).toString()+"/"));
       print(h.body.toString());
     }
     catch (e) {

@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
             displayColor: LightColors.kDarkBlue,
             fontFamily: 'Poppins'),
       ),
-      home: IntroScreen(),
+      home: BottomBar(),
       debugShowCheckedModeBanner: false,
     );
   }

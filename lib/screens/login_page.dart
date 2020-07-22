@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_carpool/screens/home_page.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -50,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future authenticate(BuildContext context) async{
     var h = await http.get(baseaddr+"users/byname/"+email.text.toString());
-    if (json.decode(h.body)["password"]==password.text.toString()){
+    if (json.decode(RequestConvert.convertFrom(h.body))["password"]==password.text.toString()){
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => BottomBar()),

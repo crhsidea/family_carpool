@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:family_carpool/themes/colors.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:family_carpool/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/widgets/home/show_routes.dart';
@@ -23,8 +24,9 @@ class RoutePreviewPage extends StatefulWidget {
   final bool isViewer;
   final String driver;
 
+  final String baseaddr;
 
-  const RoutePreviewPage({Key key, this.isFirst, this.base, this.name, this.description, this.addrList, this.isRoute, this.isViewer, this.driver}) : super(key: key);
+  const RoutePreviewPage({Key key, this.isFirst, this.base, this.name, this.description, this.addrList, this.isRoute, this.isViewer, this.driver, this.baseaddr}) : super(key: key);
 
   @override
   _RoutePreviewPageState createState() => _RoutePreviewPageState();
@@ -85,7 +87,8 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
         'description':widget.description,
         'eta':estimated,
       };
-      await http.get(widget.base+nlat.toString()+"/"+nlong.toString()+"/"+json.encode(routeJson));
+      print(widget.base+nlat.toString()+"/"+nlong.toString()+"/"+RequestConvert.convertTo(json.encode(routeJson)));
+      await http.get(widget.base+nlat.toString()+"/"+nlong.toString()+"/"+RequestConvert.convertTo(json.encode(routeJson)));
     }
 
 
@@ -132,10 +135,10 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
   int years;
 
   Future getDriverYears() async{
-    var h = await http.get(widget.base + "users/byname/" + widget.driver);
+    var h = await http.get( widget.baseaddr+ "users/byname/" + widget.driver);
     setState(() {
       try{
-        years = json.decode(json.decode(h.body)['userdata'])['years'];
+        years = json.decode(json.decode(RequestConvert.convertFrom(h.body))['userdata'])['years'];
       }
       catch(e){
         print("some error happened");

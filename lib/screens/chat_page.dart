@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_carpool/screens/profile_page.dart';
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:family_carpool/widgets/receivedmessagewidget.dart';
 import 'package:family_carpool/widgets/sentmessagewidget.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future sendMessage() async {
     print("SENDING MESSAGE");
     //TODO just make a request to the endpoint
-    await http.get(baseaddr+"messages/add/"+messages.length.toString()+"/"+textInput.text.toString()+"/"+widget.user+"/"+widget.chatId+"/"+DateTime.now().millisecondsSinceEpoch.toString()+"/{}");
+    await http.get(baseaddr+"messages/add/"+RequestConvert.convertTo(messages.length.toString()+"/"+textInput.text.toString()+"/"+widget.user+"/"+widget.chatId+"/"+DateTime.now().millisecondsSinceEpoch.toString()+"/{}"));
     textInput.clear();
   }
 
@@ -315,8 +316,8 @@ class _ChatScreenState extends State<ChatScreen> {
     print(addresses.toString());
 
 
-    String s = baseaddr+"routes/update/"+widget.routedata['id'].toString()+"/"+widget.routedata['dates'].replaceAll('{', '[').replaceAll('}', ']')+"/"+json.encode(users).toString()+"/"+json.encode(addresses).toString()+"/"+widget.routedata['lat'].toString()+"/"+widget.routedata['lng'].toString()+"/"+widget.routedata['routedata'].toString();
-    var h = await http.get(s.replaceAll('[', '{').replaceAll(']', '}'));
+    String s = "routes/update/"+widget.routedata['id'].toString()+"/"+widget.routedata['dates']+"/"+json.encode(users).toString()+"/"+json.encode(addresses).toString()+"/"+widget.routedata['lat'].toString()+"/"+widget.routedata['lng'].toString()+"/"+widget.routedata['routedata'].toString();
+    var h = await http.get(baseaddr+RequestConvert.convertTo(s.replaceAll('[', '{').replaceAll(']', '}')));
     print(h.body.toString());
     print(widget.routedata['id']);
     setState(() {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:family_carpool/utils/requestconvert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -164,7 +165,7 @@ class _LoadDataPageState extends State<LoadDataPage> {
         'email': email,
         'age':20+Random().nextInt(35)
       };
-      String req = baseaddr +
+      String req =
           "users/add/1/" +
           names[i] +
           "/" +
@@ -177,7 +178,7 @@ class _LoadDataPageState extends State<LoadDataPage> {
           json.encode(tmp).toString() +
           "/" +
           json.encode(names).toString();
-      await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
+      await http.get(baseaddr+RequestConvert.convertTo(req.replaceAll('[', '{').replaceAll(']', '}')));
     }
   }
 
@@ -209,17 +210,17 @@ class _LoadDataPageState extends State<LoadDataPage> {
       friends.addAll(usersList);
       add = !add;
 
-      String req = baseaddr+'routes/add/1/'+json.encode(dates).toString()+'/'+json.encode(usersList).toString()+'/'+json.encode(addresses).toString()+'/'+latLng.latitude.toString()+'/'+latLng.longitude.toString()+'/'+json.encode(routedata).toString();
-      await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
+      String req = 'routes/add/1/'+json.encode(dates).toString()+'/'+json.encode(usersList).toString()+'/'+json.encode(addresses).toString()+'/'+latLng.latitude.toString()+'/'+latLng.longitude.toString()+'/'+json.encode(routedata).toString();
+      await http.get(baseaddr+RequestConvert.convertTo(req.replaceAll('[', '{').replaceAll(']', '}')));
     }
     List<String> frs = [];
     for (String n in friends){
       frs.add(n);
     }
 
-    String req = baseaddr+'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString();
+    String req = 'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString();
     print(baseaddr+'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString());
-    await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
+    await http.get(baseaddr+RequestConvert.convertTo(req.replaceAll('[', '{').replaceAll(']', '}')));
 
 
   }

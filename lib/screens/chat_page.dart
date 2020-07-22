@@ -290,13 +290,14 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ):ListView.builder(
-        itemCount: json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']')).length,
+          physics: const NeverScrollableScrollPhysics(),
+        itemCount: json.decode(RequestConvert.convertFrom(widget.routedata['users']).replaceAll('{', '[').replaceAll('}', ']')).length,
           itemBuilder: ((context, ind){
             return GestureDetector(
               onTap: (){
                 changeDriver(ind);
               },
-                child: getContainer(json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']'))[ind], "", loadGravatar(json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']'))[ind]),"", true));
+                child: getContainer(json.decode(RequestConvert.convertFrom(widget.routedata['users']).replaceAll('{', '[').replaceAll('}', ']'))[ind], "", loadGravatar(json.decode(RequestConvert.convertFrom(widget.routedata['users']).replaceAll('{', '[').replaceAll('}', ']'))[ind]),"", true));
           })),
     );
   }
@@ -310,9 +311,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future changeDriver(int ind)async{
     print("CHANGING DRIVER");
-    List<dynamic> users = switchVals(json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']')), ind);
+    List<dynamic> users = switchVals(json.decode(RequestConvert.convertFrom(widget.routedata['users']).replaceAll('{', '[').replaceAll('}', ']')), ind);
     print(users.toString());
-    List<dynamic> addresses = switchVals(json.decode(widget.routedata['addresses'].replaceAll('{', '[').replaceAll('}', ']')), ind);
+    List<dynamic> addresses = switchVals(json.decode(RequestConvert.convertFrom(widget.routedata['addresses']).replaceAll('{', '[').replaceAll('}', ']')), ind);
     print(addresses.toString());
 
 

@@ -224,10 +224,8 @@ class _RouteViewerState extends State<RouteViewer> {
 
   _onMapCreated(GoogleMapController controller) {
     setState(() {
-      if(stopadded){
         addStops();
-        stopadded= true;
-      }
+
 
       print('1');
       mapController = controller;

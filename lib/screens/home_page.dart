@@ -216,24 +216,26 @@ class _HomePageState extends State<HomePage> {
   List<Color> colors = [LightColors.kGreen, LightColors.kRed, LightColors.kDarkYellow, LightColors.kDarkYellow];
 
   Future addCarpool (dynamic route)async{
-    List<dynamic> users = json.decode(route['users'].replaceAll('{', '[').replaceAll('}', ']'));
+
+    print(route.toString());
+    List<dynamic> users = json.decode(RequestConvert.convertFrom(route['users']).replaceAll('{', '[').replaceAll('}', ']'));
     users.insert(0, uname);
-    List<dynamic> addrs = json.decode(route['addresses'].replaceAll('{', '[').replaceAll('}', ']'));
+    List<dynamic> addrs = json.decode(RequestConvert.convertFrom(route['addresses']).replaceAll('{', '[').replaceAll('}', ']'));
     addrs.insert(0, addrController.text.toString());
-    String req = baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates'].replaceAll('{', '[').replaceAll('}', ']')+"/"+json.encode(users).toString()+"/"+json.encode(addrs).toString()+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata'];
-    await http.get(RequestConvert.convertTo(req.replaceAll('[', '{').replaceAll(']', '}')));
+    String req = baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates']+"/"+RequestConvert.convertTo(json.encode(users).replaceAll('[', '{').replaceAll(']', '}'))+"/"+RequestConvert.convertTo(json.encode(addrs).replaceAll('[', '{').replaceAll(']', '}'))+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata'];
+    await http.get(req);
 
     Navigator.push(
       cont,
       MaterialPageRoute(builder: (context) => RoutePreviewPage(
         isFirst: false,
-        name: json.decode(route['routedata'])['title'],
-        description: json.decode(route['routedata'])['description'],
+        name: json.decode(RequestConvert.convertFrom(route['routedata']))['title'],
+        description:json.decode(RequestConvert.convertFrom(route['routedata']))['description'],
         isRoute: false,
         isViewer: true,
         base: baseaddr,
         addrList: addrs,
-        driver: json.decode(route['users'].replaceAll('{', '[').replaceAll('}', ']'))[0],
+        driver: json.decode(RequestConvert.convertFrom(route['users']).replaceAll('{', '[').replaceAll('}', ']'))[0],
       ))
     );
   }

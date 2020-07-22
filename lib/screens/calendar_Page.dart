@@ -111,14 +111,14 @@ class _CalendarPageState extends State<CalendarPage> {
       print(data);
       setState(() {
         routeList.add(data);
-        dateList.add(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0]));
-        initTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[0])));
-        endTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'])[1])));
-        startAddressList.add(json.decode(data['addresses'])[0]);
-        endAddressList.add(json.decode(data['addresses'])[1]);
+        dateList.add(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'].replaceAll('{', '[').replaceAll('}', ']'))[0]));
+        initTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'].replaceAll('{', '[').replaceAll('}', ']'))[0])));
+        endTimeList.add(TimeOfDay.fromDateTime(DateTime.fromMillisecondsSinceEpoch(json.decode(data['dates'].replaceAll('{', '[').replaceAll('}', ']'))[1])));
+        startAddressList.add(json.decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))[0]);
+        endAddressList.add(json.decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))[1]);
         titleList.add(json.decode(data['routedata'])['title']);
         descriptionList.add(json.decode(data['routedata'])['description']);
-        namesList.add(data['users'].toString());
+        namesList.add(data['users'].replaceAll('{', '[').replaceAll('}', ']').toString());
         latList.add(data['lat']);
         lngList.add(data['lng']);
       });
@@ -351,8 +351,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                                     isRoute: true,
                                                     isViewer: true,
                                                     base: baseaddr,
-                                                    addrList: json.decode(routeList[i]['addresses']),
-                                                    driver:json.decode(routeList[i]['users'])[0]
+                                                    addrList: json.decode(routeList[i]['addresses'].replaceAll('{', '[').replaceAll('}', ']')),
+                                                    driver:json.decode(routeList[i]['users'].replaceAll('{', '[').replaceAll('}', ']'))[0]
                                                   )),
                                                 );
                                               },

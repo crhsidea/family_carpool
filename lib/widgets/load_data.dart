@@ -164,8 +164,7 @@ class _LoadDataPageState extends State<LoadDataPage> {
         'email': email,
         'age':20+Random().nextInt(35)
       };
-
-      await http.get(baseaddr +
+      String req = baseaddr +
           "users/add/1/" +
           names[i] +
           "/" +
@@ -177,7 +176,8 @@ class _LoadDataPageState extends State<LoadDataPage> {
           "/" +
           json.encode(tmp).toString() +
           "/" +
-          json.encode(names).toString());
+          json.encode(names).toString();
+      await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
     }
   }
 
@@ -209,15 +209,17 @@ class _LoadDataPageState extends State<LoadDataPage> {
       friends.addAll(usersList);
       add = !add;
 
-      await http.get(baseaddr+'routes/add/1/'+json.encode(dates).toString()+'/'+json.encode(usersList).toString()+'/'+json.encode(addresses).toString()+'/'+latLng.latitude.toString()+'/'+latLng.longitude.toString()+'/'+json.encode(routedata).toString());
+      String req = baseaddr+'routes/add/1/'+json.encode(dates).toString()+'/'+json.encode(usersList).toString()+'/'+json.encode(addresses).toString()+'/'+latLng.latitude.toString()+'/'+latLng.longitude.toString()+'/'+json.encode(routedata).toString();
+      await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
     }
     List<String> frs = [];
     for (String n in friends){
       frs.add(n);
     }
 
+    String req = baseaddr+'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString();
     print(baseaddr+'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString());
-    await http.get(baseaddr+'users/update/'+widget.userdata['id'].toString()+'/'+widget.userdata['name']+'/'+widget.userdata['password']+'/'+widget.userdata['lat'].toString()+'/'+widget.userdata['lng'].toString()+'/'+widget.userdata['userdata']+'/'+json.encode(frs).toString());
+    await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
 
 
   }

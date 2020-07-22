@@ -93,8 +93,8 @@ class _CommunityPageState extends State<CommunityPage> {
       print(data);
       setState(() {
         chats.add(getContainer(json.decode(data['routedata'])['title'],
-            json.decode(data['addresses'])[json
-                .decode(data['addresses'])
+            json.decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))[json
+                .decode(data['addresses'].replaceAll('{', '[').replaceAll('}', ']'))
                 .length-1],
             loadGravatar(json.decode(data['routedata'])['title']),
         data['id'].toString(), false, data));
@@ -127,7 +127,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
     userJson = json.decode(h.body);
 
-    for (String friend in json.decode(userJson['friends'])) {
+    for (String friend in json.decode(userJson['friends'].replaceAll('{', '[').replaceAll('}', ']'))) {
       setState(() {
         friends.add(getContainer(friend, "", loadGravatar(friend), '', true, ""));
         friendnames.add(friend);

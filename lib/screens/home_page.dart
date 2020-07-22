@@ -63,13 +63,13 @@ class _HomePageState extends State<HomePage> {
     for(int i=0;i<personal.length;i++) {
       bool exists = false;
       for(int e=0;i<notified.length;i++) {
-        if(json.decode(personal[i]['dates'])[0]==notified[e]) {
+        if(json.decode(personal[i]['dates'].replaceAll('{', '[').replaceAll('}', ']'))[0]==notified[e]) {
           exists = true;
           break;
         }
       }
       if(!exists) {
-        notifyUser(json.decode(personal[i]['routedata'])['title'], json.decode(personal[i]['routedata'])['description'], DateTime(json.decode(personal[i]['dates'])[0]));
+        notifyUser(json.decode(personal[i]['routedata'])['title'], json.decode(personal[i]['routedata'])['description'], DateTime(json.decode(personal[i]['dates'].replaceAll('{', '[').replaceAll('}', ']'))[0]));
       }
     }
   }
@@ -82,13 +82,13 @@ class _HomePageState extends State<HomePage> {
     for(int i=0;i<personal.length;i++) {
       bool exists = false;
       for(int e=0;i<notified.length;i++) {
-        if(json.decode(personal[i]['dates'])[1]==notified[e]) {
+        if(json.decode(personal[i]['dates'].replaceAll('{', '[').replaceAll('}', ']'))[1]==notified[e]) {
           exists = true;
           break;
         }
       }
       if(!exists) {
-        notifyUser(json.decode(personal[i]['routedata'])['title'], json.decode(personal[i]['routedata'])['description'], DateTime(json.decode(personal[i]['dates'])[0]));
+        notifyUser(json.decode(personal[i]['routedata'])['title'], json.decode(personal[i]['routedata'])['description'], DateTime(json.decode(personal[i]['dates'].replaceAll('{', '[').replaceAll('}', ']'))[0]));
       }
     }
   }
@@ -215,11 +215,12 @@ class _HomePageState extends State<HomePage> {
   List<Color> colors = [LightColors.kGreen, LightColors.kRed, LightColors.kDarkYellow, LightColors.kDarkYellow];
 
   Future addCarpool (dynamic route)async{
-    List<dynamic> users = json.decode(route['users']);
+    List<dynamic> users = json.decode(route['users'].replaceAll('{', '[').replaceAll('}', ']'));
     users.insert(0, uname);
-    List<dynamic> addrs = json.decode(route['addresses']);
+    List<dynamic> addrs = json.decode(route['addresses'].replaceAll('{', '[').replaceAll('}', ']'));
     addrs.insert(0, addrController.text.toString());
-    await http.get(baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates']+"/"+json.encode(users).toString()+"/"+json.encode(addrs).toString()+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata']);
+    String req = baseaddr+"routes/update/"+route['id'].toString()+"/"+route['dates'].replaceAll('{', '[').replaceAll('}', ']')+"/"+json.encode(users).toString()+"/"+json.encode(addrs).toString()+"/"+route['lat'].toString()+"/"+route['lng'].toString()+"/"+route['routedata'];
+    await http.get(req.replaceAll('[', '{').replaceAll(']', '}'));
 
     Navigator.push(
       cont,
@@ -231,7 +232,7 @@ class _HomePageState extends State<HomePage> {
         isViewer: true,
         base: baseaddr,
         addrList: addrs,
-        driver: json.decode(route['users'])[0],
+        driver: json.decode(route['users'].replaceAll('{', '[').replaceAll('}', ']'))[0],
       ))
     );
   }
@@ -327,7 +328,7 @@ class _HomePageState extends State<HomePage> {
       var h = await http.get(baseaddr+"routes/rec/"+lats[i].toString()+"/"+lngs[i].toString());
       for (dynamic recdata in json.decode(h.body)){
         print(recdata.length.toString());
-        if (!recdata['users'].contains(uname)&&uns.add(recdata['id'].toString())){
+        if (!recdata['users'].replaceAll('{', '[').replaceAll('}', ']').contains(uname)&&uns.add(recdata['id'].toString())){
           setState(() {
             suggested.add(recdata);
           });
@@ -418,7 +419,7 @@ class _HomePageState extends State<HomePage> {
     print(h.body.toString());
     for (var data in json.decode(h.body)) {
       print(data);
-      if(json.decode(data['users']).length>1)
+      if(json.decode(data['users'].replaceAll('{', '[').replaceAll('}', ']')).length>1)
         pools++;
       else
         indivs++;

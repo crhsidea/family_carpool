@@ -289,13 +289,13 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ):ListView.builder(
-        itemCount: json.decode(widget.routedata['users']).length,
+        itemCount: json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']')).length,
           itemBuilder: ((context, ind){
             return GestureDetector(
               onTap: (){
                 changeDriver(ind);
               },
-                child: getContainer(json.decode(widget.routedata['users'])[ind], "", loadGravatar(json.decode(widget.routedata['users'])[ind]),"", true));
+                child: getContainer(json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']'))[ind], "", loadGravatar(json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']'))[ind]),"", true));
           })),
     );
   }
@@ -309,11 +309,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future changeDriver(int ind)async{
     print("CHANGING DRIVER");
-    List<dynamic> users = switchVals(json.decode(widget.routedata['users']), ind);
+    List<dynamic> users = switchVals(json.decode(widget.routedata['users'].replaceAll('{', '[').replaceAll('}', ']')), ind);
     print(users.toString());
-    List<dynamic> addresses = switchVals(json.decode(widget.routedata['addresses']), ind);
+    List<dynamic> addresses = switchVals(json.decode(widget.routedata['addresses'].replaceAll('{', '[').replaceAll('}', ']')), ind);
     print(addresses.toString());
-    var h = await http.get(baseaddr+"routes/update/"+widget.routedata['id'].toString()+"/"+widget.routedata['dates']+"/"+json.encode(users).toString()+"/"+json.encode(addresses).toString()+"/"+widget.routedata['lat'].toString()+"/"+widget.routedata['lng'].toString()+"/"+widget.routedata['routedata']);
+
+
+    String s = baseaddr+"routes/update/"+widget.routedata['id'].toString()+"/"+widget.routedata['dates'].replaceAll('{', '[').replaceAll('}', ']')+"/"+json.encode(users).toString()+"/"+json.encode(addresses).toString()+"/"+widget.routedata['lat'].toString()+"/"+widget.routedata['lng'].toString()+"/"+widget.routedata['routedata'].toString();
+    var h = await http.get(s.replaceAll('[', '{').replaceAll(']', '}'));
     print(h.body.toString());
     print(widget.routedata['id']);
     setState(() {

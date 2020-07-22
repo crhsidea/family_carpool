@@ -25,10 +25,10 @@ class Routes {
 
   factory Routes.fromJson(Map<String, dynamic> json) {
     return Routes(
-      dates: json['dates'] as String,
+      dates: json['dates'].replaceAll('{', '[').replaceAll('}', ']') as String,
       names: json['names'] as String,
-      addresses: json['addresses'] as String,
-      users: json['users'] as String,
+      addresses: json['addresses'].replaceAll('{', '[').replaceAll('}', ']') as String,
+      users: json['users'].replaceAll('{', '[').replaceAll('}', ']') as String,
       lat: json['lat'] as double,
       lng: json['lng'] as double,
       routedata: json['routedata'] as String,

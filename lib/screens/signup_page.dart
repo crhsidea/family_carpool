@@ -66,8 +66,8 @@ class _SignUpPageState extends State<SignUpPage> {
     };
 
     try {
-      print(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode([]).toString());
-      var h = await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode([]).toString()+"/");
+      print(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode({}).toString());
+      var h = await http.get(baseaddr+"users/add/1/"+name.text.toString()+"/"+password.text.toString()+"/"+0.toString()+"/"+0.toString()+"/"+json.encode(tmp).toString()+"/"+json.encode({}).toString()+"/");
       print(h.body.toString());
     }
     catch (e) {

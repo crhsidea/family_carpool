@@ -1,0 +1,10 @@
+org\acme\reactive\crud\UserResource.class
+org\acme\reactive\crud\Chat.class
+org\acme\reactive\crud\User.class
+org\acme\reactive\crud\MessageResource.class
+org\acme\reactive\crud\Location.class
+org\acme\reactive\crud\Route.class
+org\acme\reactive\crud\UserService.class
+org\acme\reactive\crud\Message.class
+org\acme\reactive\crud\RouteResource.class
+org\acme\reactive\crud\ChatResource.class

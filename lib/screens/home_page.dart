@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:family_carpool/themes/colors.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:family_carpool/widgets/home/task_column.dart';
@@ -41,20 +41,20 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState(){
 
-    _requestIOSPermissions();
+   /* _requestIOSPermissions();
     _configureDidReceiveLocalNotificationSubject();
     _configureSelectNotificationSubject();
-
+*/
     super.initState();
 
-    addNotification();
-    addEndNotification();
+    //addNotification();
+    //addEndNotification();
 
     getRoutes();
   }
 
   Dio dio = new Dio();
-
+/*
   Future addNotification() async {
     List<DateTime> notified = new List<DateTime>();
     for(int i=0;i<(await FlutterLocalNotificationsPlugin().pendingNotificationRequests()).length;i++) {
@@ -92,10 +92,10 @@ class _HomePageState extends State<HomePage> {
       }
     }
   }
-
+*/
   final MethodChannel platform =
   MethodChannel('crossingthestreams.io/resourceResolver');
-
+/*
   void _requestIOSPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -135,19 +135,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _configureSelectNotificationSubject() {
-    selectNotificationSubject.stream.listen((String payload) async {
+    /*selectNotificationSubject.stream.listen((String payload) async {
       //todo: put page to navigate to here
-    });
-  }
+    });*/
+  }*/
 
   @override
   void dispose() {
-    didReceiveLocalNotificationSubject.close();
-    selectNotificationSubject.close();
+    //didReceiveLocalNotificationSubject.close();
+    //selectNotificationSubject.close();
     super.dispose();
   }
 
-  Future<void> notifyUser(String title, String body, DateTime time) async {
+  /*Future<void> notifyUser(String title, String body, DateTime time) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
         importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
     await flutterLocalNotificationsPlugin.schedule(
         0, title, body, time, platformChannelSpecifics,
         payload: 'item x');
-  }
+  }*/
 
   List<dynamic> suggested = [];
 

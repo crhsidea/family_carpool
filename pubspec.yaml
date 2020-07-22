@@ -36,7 +36,7 @@ dependencies:
   google_map_polyline:
   dio:
   validators:
-  flutter_local_notifications:
+  #flutter_local_notifications: ^1.4.4+2
   rxdart:
   geocoder:
   faker: ^1.2.1

@@ -174,11 +174,11 @@ class _RouteViewerState extends State<RouteViewer> {
     return streamedResponse.stream.transform(utf8.decoder);
   }
 
-  var subscription;
+  StreamSubscription subscription;
 
   Stream<Map<String, dynamic>> streamLocation() async*{
     while (true) {
-      if (location!=null){
+      if (location!=null&&mounted){
         await Future.delayed(Duration(milliseconds: 2000));
         await http.get(baseaddr+"users/updatecoords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
         print(baseaddr+"users/updatecoords/"+uname+"/"+location.latitude.toString()+"/"+location.longitude.toString());
@@ -186,6 +186,8 @@ class _RouteViewerState extends State<RouteViewer> {
       }
     }
   }
+
+
 
   Future streamData() async {
     setState(() {
@@ -197,15 +199,17 @@ class _RouteViewerState extends State<RouteViewer> {
 
     if (widget.driver==uname){
       subscription = streamLocation().listen((event) {
+
+
         print(event.toString());
       });
     }
     else{
-      subscription = await testStreams().then((strm){
+      await testStreams().then((strm){
         print("STARTED");
-        strm.listen((event) {
+        subscription = strm.listen((event) {
           print(event.toString());
-          if(json.decode(event.toString())['drivername']==widget.driver){
+          if(json.decode(event.toString())['drivername']==widget.driver &&mounted){
             setState(() {
               location = LatLng(json.decode(event.toString())["lat"], json.decode(event.toString())["lng"]);
             });
@@ -258,22 +262,29 @@ class _RouteViewerState extends State<RouteViewer> {
 
 
 
+
   @override
   Widget build(BuildContext context) {
 
-    Set<Circle> circles = Set.from([Circle(
-      circleId: CircleId("curlocation"),
-      center: location,
-      radius: 20,
-      fillColor: Colors.blue.withOpacity(.25)
-    )]);
 
-    if(widget.isRoute){
-      controller = StreamController<double>();
-      stream = controller.stream;
+    Set<Circle> circles;
+    if(mounted&&ModalRoute.of(context).isCurrent){
+      circles = Set.from([Circle(
+          circleId: CircleId("curlocation"),
+          center: location,
+          radius: 20,
+          fillColor: Colors.blue.withOpacity(.25)
+      )]);
+
+      if(widget.isRoute){
+        controller = StreamController<double>();
+        stream = controller.stream;
+      }
+      Locator();
     }
-    Locator();
-    if(location!=null) {
+    if(location!=null&&mounted&&ModalRoute.of(context).isCurrent) {
+
+
       print('it\'s this');
       return Scaffold(
         body: GoogleMap(

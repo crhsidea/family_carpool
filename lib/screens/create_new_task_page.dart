@@ -9,7 +9,7 @@ import 'package:family_carpool/widgets/home/top_container.dart';
 import 'package:family_carpool/widgets/home/back_button.dart';
 import 'package:family_carpool/widgets/home/my_textfield.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:family_carpool/notification_initializer.dart';
@@ -81,9 +81,9 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
 
   @override
   void initState() {
-    _requestIOSPermissions();
+    /*_requestIOSPermissions();
     _configureDidReceiveLocalNotificationSubject();
-    _configureSelectNotificationSubject();
+    _configureSelectNotificationSubject();*/
     super.initState();
     getIP();
     startController = new TextEditingController();
@@ -133,6 +133,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
   final MethodChannel platform =
   MethodChannel('crossingthestreams.io/resourceResolver');
 
+  /*
   void _requestIOSPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -170,20 +171,23 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
       );
     });
   }
+  */
+
+  /*
 
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen((String payload) async {
       //todo: put page to navigate to here
     });
-  }
+  }*/
 
   @override
   void dispose() {
-    didReceiveLocalNotificationSubject.close();
-    selectNotificationSubject.close();
+    //didReceiveLocalNotificationSubject.close();
+    //selectNotificationSubject.close();
     super.dispose();
   }
-
+/*
   Future<void> notifyUser(String title, String body, DateTime time) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'your channel id', 'your channel name', 'your channel description',
@@ -194,7 +198,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
     await flutterLocalNotificationsPlugin.schedule(
         0, title, body, time, platformChannelSpecifics,
         payload: '${time.toString()}');
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

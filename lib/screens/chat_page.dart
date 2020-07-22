@@ -30,7 +30,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   StreamController<double> chatcontroller;
 
-  var subscription ;
+  StreamSubscription subscription ;
+
 
   @override
   void initState() {
@@ -64,31 +65,37 @@ class _ChatScreenState extends State<ChatScreen> {
   Stream<List<dynamic>> streamChat() async* {
 
     while (true) {
-      if(baseaddr==""){
-        await getIP();
-      }
-      await Future.delayed(Duration(milliseconds: 1000));
-      var chat = await http.get(baseaddr + "messages/name/" + widget.chatId);
-      print("getting messages");
+      if (mounted && ModalRoute.of(cont).isCurrent){
+        if(baseaddr==""){
+          await getIP();
+        }
+        await Future.delayed(Duration(milliseconds: 1000));
+        var chat = await http.get(baseaddr + "messages/name/" + widget.chatId);
+        print("getting messages");
 
-      List<Widget> temp = [];
-      for (var c in json.decode(chat.body)){
-        if(c['sender']==widget.user){
-          temp.add(SentMessageWidget(message: c['text'],));
+        List<Widget> temp = [];
+        for (var c in json.decode(chat.body)){
+          if(c['sender']==widget.user){
+            temp.add(SentMessageWidget(message: c['text'],));
+          }
+          else{
+            temp.add(ReceivedMessagesWidget(
+              message: c['text'],
+              sender: c['sender'],
+            ));
+          }
         }
-        else{
-          temp.add(ReceivedMessagesWidget(
-            message: c['text'],
-            sender: c['sender'],
-          ));
-        }
+        if (mounted && ModalRoute.of(cont).isCurrent)
+          setState(() {
+            messages = temp;
+          });
+        yield json.decode(chat.body);
       }
-      setState(() {
-        messages = temp;
-      });
-      yield json.decode(chat.body);
+
     }
   }
+
+  BuildContext cont;
 
   Future sendMessage() async {
     print("SENDING MESSAGE");
@@ -183,6 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    cont = context;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -327,8 +335,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
+    print("DISPOSING");
     // TODO: implement dispose
-    subscription.close();
+    subscription.cancel();
     super.dispose();
   }
 }

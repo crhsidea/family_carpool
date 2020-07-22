@@ -181,7 +181,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         },
                         child: Center(
                           child: Text(
-                            'Add task',
+                            'Add trip',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,

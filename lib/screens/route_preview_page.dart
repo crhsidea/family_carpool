@@ -240,7 +240,7 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
                                 bottomRight:const Radius.circular(25.0) ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.pink.withOpacity(1),
+                                color: Colors.blue.withOpacity(.25),
                                 spreadRadius: 2,
                                 blurRadius: 7,
                                 offset: Offset(0, 0), // changes position of shadow

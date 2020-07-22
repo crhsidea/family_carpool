@@ -90,11 +90,11 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Future sendMessage(String message) async {
+  Future sendMessage() async {
     print("SENDING MESSAGE");
-    textInput.clear();
     //TODO just make a request to the endpoint
-    await http.get(baseaddr+"messages/add/1/"+message+"/"+widget.user+"/"+widget.chatId+"/"+DateTime.now().millisecondsSinceEpoch.toString()+"/{}");
+    await http.get(baseaddr+"messages/add/"+messages.length.toString()+"/"+textInput.text.toString()+"/"+widget.user+"/"+widget.chatId+"/"+DateTime.now().millisecondsSinceEpoch.toString()+"/{}");
+    textInput.clear();
   }
 
   ScrollController scrollController = ScrollController();
@@ -267,9 +267,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               IconButton(
                                   icon: Icon(Icons.send),
-                                  onPressed: () {
-                                    sendMessage(textInput.text);
-                                  }),
+                                  onPressed:sendMessage),
                             ],
                           ),
                         ),

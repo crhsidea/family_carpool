@@ -33,6 +33,9 @@ class _RouteViewerState extends State<RouteViewer> {
   Stream stream;
   Dio dio = new Dio();
 
+
+
+
   bool zoomin = true;
 
   Locator() async {
@@ -41,11 +44,12 @@ class _RouteViewerState extends State<RouteViewer> {
     }
     Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     if(position!=null) {
-      if(!widget.isViewer)
+      if(widget.isViewer)
         setState(() {
           location = new LatLng(position.latitude, position.longitude);
           print(location.toString());
         });
+        //updateMarks();
 
       if(zoomin&&mapController!=null) {
         mapController.animateCamera(
@@ -78,6 +82,25 @@ class _RouteViewerState extends State<RouteViewer> {
           position: widget.routes.last.points[widget.routes.last.points.length-1]
         ),
       );
+    });
+  }
+
+  void updateMarks(){
+    print(location.longitude);
+    Set<Marker> temp = {};
+    int i = 0;
+    temp.add(Marker(
+      markerId: MarkerId('curloc'),
+      position: location,
+      icon: BitmapDescriptor.fromAsset('Obama.PNG')
+    ));
+    for (Marker m in stops){
+      if (i!=0)
+        temp.add(m);
+      i++;
+    }
+    setState(() {
+      stops = temp;
     });
   }
 
@@ -192,10 +215,16 @@ class _RouteViewerState extends State<RouteViewer> {
     }
 
   }
+  bool stopadded = false;
+
 
   _onMapCreated(GoogleMapController controller) {
     setState(() {
-      addStops();
+      if(stopadded){
+        addStops();
+        stopadded= true;
+      }
+
       print('1');
       mapController = controller;
 
@@ -231,6 +260,14 @@ class _RouteViewerState extends State<RouteViewer> {
 
   @override
   Widget build(BuildContext context) {
+
+    Set<Circle> circles = Set.from([Circle(
+      circleId: CircleId("curlocation"),
+      center: location,
+      radius: 20,
+      fillColor: Colors.blue.withOpacity(.25)
+    )]);
+
     if(widget.isRoute){
       controller = StreamController<double>();
       stream = controller.stream;
@@ -245,10 +282,11 @@ class _RouteViewerState extends State<RouteViewer> {
           polylines: widget.routes,
           initialCameraPosition: CameraPosition(
             target: widget.routes.first.points[widget.routes.first.points.length~/2],
-            zoom: 20,
+            zoom: 10,
           ),
           mapType: MapType.normal,
           buildingsEnabled: true,
+          circles: circles,
         ),
       );
     }

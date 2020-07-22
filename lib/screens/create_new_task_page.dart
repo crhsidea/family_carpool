@@ -100,7 +100,7 @@ class _CreateNewTaskPageState extends State<CreateNewTaskPage> {
       endController.text.toString()
     ];
 
-    notifyUser(nameController.text+' at ${initTime.hour.toString()}: ${(initTime.minute/10).toString()}${(initTime.minute%10).toString()}', descriptController.text.toString(), _date.add(Duration(hours: initTime.hour, minutes: initTime.minute)).subtract(Duration(minutes: 15)));
+    //notifyUser(nameController.text+' at ${initTime.hour.toString()}: ${(initTime.minute/10).toString()}${(initTime.minute%10).toString()}', descriptController.text.toString(), _date.add(Duration(hours: initTime.hour, minutes: initTime.minute)).subtract(Duration(minutes: 15)));
 
     String b = baseaddr +
         "routes/add/1/" +

@@ -208,7 +208,7 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  json.decode(widget.routedata['routedata'])['title'],
+                  json.decode(RequestConvert.convertFrom(widget.routedata['routedata']))['title'],
                   style: Theme.of(context).textTheme.subhead,
                   overflow: TextOverflow.clip,
                 ),

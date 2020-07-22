@@ -135,7 +135,7 @@ class _RoutePreviewPageState extends State<RoutePreviewPage> {
   int years;
 
   Future getDriverYears() async{
-    var h = await http.get( widget.baseaddr+ "users/byname/" + widget.driver);
+    var h = await http.get( widget.baseaddr==null?widget.base:widget.baseaddr+ "users/byname/" + widget.driver);
     setState(() {
       try{
         years = json.decode(json.decode(RequestConvert.convertFrom(h.body))['userdata'])['years'];

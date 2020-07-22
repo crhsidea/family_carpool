@@ -210,7 +210,7 @@ class _CalendarPageState extends State<CalendarPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '${month[DateTime.now().month]}, ${DateTime.now().year}',
+                  '${month[DateTime.now().month-1]}, ${DateTime.now().year}',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
                 ),
               ),
@@ -235,10 +235,10 @@ class _CalendarPageState extends State<CalendarPage> {
                             width: 20,
                           ),
                           CalendarDates(
-                            day:  days[DateTime.now().weekday+index%7],
+                            day:  days[DateTime.now().weekday+index%7-1],
                             date: dates[index],
-                            dayColor: days[DateTime.now().weekday+index%7] == 'Sun' ? Colors.redAccent : Colors.black54,
-                            dateColor: days[DateTime.now().weekday+index%7] == 'Sun' ? Colors.redAccent : LightColors.kDarkBlue,
+                            dayColor: toInt(dates[index]) == SelectedDate ? Colors.redAccent : Colors.black54,
+                            dateColor:toInt(dates[index])== SelectedDate ? Colors.redAccent : LightColors.kDarkBlue,
                           ),
                         ],
                       ),
